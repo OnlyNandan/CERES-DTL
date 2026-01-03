@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CERES - Smart Farming Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .gradient-header {
+            background: linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%);
+        }
+        
+        .weather-icon { width: 80px; height: 80px; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .table-row:nth-child(even) { background-color: #f9fafb; }
+        
+        .recommendation-card {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid #10b981;
+        }
+        
+        .confidence-bar { transition: width 0.5s ease-out; }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e5e7eb;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #059669;
+            cursor: pointer;
+        }
+        
+        .tab-btn { transition: all 0.2s; }
+        .tab-btn.active { background: #059669; color: white; }
+        
+        .alert-high { border-left: 4px solid #dc2626; background: #fef2f2; }
+        .alert-medium { border-left: 4px solid #f59e0b; background: #fffbeb; }
+        .alert-low { border-left: 4px solid #3b82f6; background: #eff6ff; }
+        
+        .scheme-card { transition: transform 0.2s; }
+        .scheme-card:hover { transform: translateY(-2px); }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-20 md:pb-0">
+    <!-- Mobile Bottom Navigation -->
+    <div class="md:hidden bottom-nav px-2 py-2">
+        <div class="flex justify-around">
+            <button onclick="scrollToSection('weather-section')" class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                <span class="text-xs">Weather</span>
+            </button>
+            <button onclick="scrollToSection('market-section')" class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span class="text-xs">Prices</span>
+            </button>
+            <button onclick="scrollToSection('recommend-section')" class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                <span class="text-xs">Crops</span>
+            </button>
+            <button onclick="scrollToSection('tools-section')" class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span class="text-xs">Tools</span>
+            </button>
+        </div>
+    </div>
+
+    <nav class="gradient-header text-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-xl font-bold hidden md:block" data-i18n="app_name">CERES</h1>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <select id="language-selector" onchange="changeLanguage(this.value)" class="bg-white/20 border border-white/30 rounded-lg px-3 py-2 text-white text-sm focus:outline-none">
+                        <option value="en" class="text-gray-900">English</option>
+                        <option value="hi" class="text-gray-900">हिंदी</option>
+                        <option value="kn" class="text-gray-900">ಕನ್ನಡ</option>
+                        <option value="te" class="text-gray-900">తెలుగు</option>
+                        <option value="ta" class="text-gray-900">தமிழ்</option>
+                        <option value="mr" class="text-gray-900">मराठी</option>
+                    </select>
+                    
+                    <div class="flex items-center gap-2 text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        </svg>
+                        <span id="user-location" class="hidden md:inline">{{ user.city or user.district }}, {{ user.state }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Weather Alerts Section -->
+        <div id="alerts-container" class="mb-6 space-y-2"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Weather Section -->
+                <div id="weather-section" class="card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-gray-900" data-i18n="current_weather">Current Weather</h2>
+                        <button onclick="refreshWeather()" class="text-green-600 hover:text-green-700 p-2 hover:bg-green-50 rounded-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div id="weather-loading" class="space-y-4">
+                        <div class="flex items-center gap-6">
+                            <div class="skeleton w-20 h-20 rounded-xl"></div>
+                            <div class="space-y-2">
+                                <div class="skeleton h-8 w-24 rounded"></div>
+                                <div class="skeleton h-4 w-32 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="weather-content" class="hidden">
+                        <div class="flex flex-col md:flex-row md:items-center gap-6 mb-6">
+                            <div class="flex items-center gap-4">
+                                <img id="weather-icon" class="weather-icon" src="" alt="Weather">
+                                <div>
+                                    <div class="flex items-baseline gap-2">
+                                        <span id="temperature" class="text-5xl font-bold text-gray-900">--</span>
+                                        <span class="text-2xl text-gray-500">°C</span>
+                                    </div>
+                                    <p id="weather-description" class="text-gray-600 capitalize"></p>
+                                    <p id="weather-city" class="text-sm text-gray-500"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex-1 grid grid-cols-2 gap-2 text-sm">
+                                <div class="flex items-center gap-2 text-gray-600">
+                                    <span>🌅</span>
+                                    <span data-i18n="sunrise">Sunrise:</span>
+                                    <span id="sunrise" class="font-medium">--:--</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-600">
+                                    <span>🌇</span>
+                                    <span data-i18n="sunset">Sunset:</span>
+                                    <span id="sunset" class="font-medium">--:--</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                            <div class="bg-blue-50 rounded-xl p-3 text-center">
+                                <p class="text-xs text-gray-500 mb-1" data-i18n="humidity">Humidity</p>
+                                <p id="humidity" class="text-lg font-bold text-blue-600">--%</p>
+                            </div>
+                            <div class="bg-cyan-50 rounded-xl p-3 text-center">
+                                <p class="text-xs text-gray-500 mb-1" data-i18n="wind_speed">Wind</p>
+                                <p id="wind-speed" class="text-lg font-bold text-cyan-600">-- km/h</p>
+                            </div>
+                            <div class="bg-orange-50 rounded-xl p-3 text-center">
+                                <p class="text-xs text-gray-500 mb-1" data-i18n="feels_like">Feels</p>
+                                <p id="feels-like" class="text-lg font-bold text-orange-600">--°C</p>
+                            </div>
+                            <div class="bg-indigo-50 rounded-xl p-3 text-center">
+                                <p class="text-xs text-gray-500 mb-1" data-i18n="rainfall">Rain</p>
+                                <p id="rainfall" class="text-lg font-bold text-indigo-600">-- mm</p>
+                            </div>
+                            <div class="bg-purple-50 rounded-xl p-3 text-center">
+                                <p class="text-xs text-gray-500 mb-1" data-i18n="uv_index">UV</p>
+                                <p id="uv-index" class="text-lg font-bold text-purple-600">--</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="weather-error" class="hidden text-center py-8">
+                        <p class="text-gray-600" data-i18n="error_weather">Unable to fetch weather data.</p>
+                        <button onclick="refreshWeather()" class="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Retry</button>
+                    </div>
+                </div>
+
+                <!-- Forecast Section -->
+                <div id="forecast-section" class="card p-6 hidden">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4" data-i18n="forecast">7-Day Forecast</h3>
+                    <div id="forecast-container" class="grid grid-cols-7 gap-2 overflow-x-auto"></div>
+                </div>
+
+                <!-- Market Prices Section -->
+                <div id="market-section" class="card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-gray-900" data-i18n="market_prices">Market Prices</h2>
+                        <button onclick="refreshMarketPrices()" class="p-2 text-green-600 hover:bg-green-50 rounded-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <select id="market-commodity-filter" onchange="filterMarketPrices()" class="w-full md:w-auto p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
+                            <option value="">All Commodities</option>
+                            <option value="Rice">Rice</option>
+                            <option value="Wheat">Wheat</option>
+                            <option value="Cotton">Cotton</option>
+                            <option value="Sugarcane">Sugarcane</option>
+                            <option value="Onion">Onion</option>
+                            <option value="Tomato">Tomato</option>
+                            <option value="Potato">Potato</option>
+                        </select>
+                    </div>
+                    
+                    <div id="market-loading" class="space-y-3">
+                        <div class="skeleton h-12 rounded"></div>
+                        <div class="skeleton h-12 rounded"></div>
+                        <div class="skeleton h-12 rounded"></div>
+                    </div>
+                    
+                    <div id="market-content" class="hidden overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b-2 border-gray-200">
+                                    <th class="text-left py-3 px-2 font-semibold text-gray-700" data-i18n="commodity">Commodity</th>
+                                    <th class="text-left py-3 px-2 font-semibold text-gray-700 hidden md:table-cell" data-i18n="market">Market</th>
+                                    <th class="text-right py-3 px-2 font-semibold text-gray-700">Min ₹</th>
+                                    <th class="text-right py-3 px-2 font-semibold text-gray-700">Max ₹</th>
+                                    <th class="text-right py-3 px-2 font-semibold text-gray-700">Modal ₹</th>
+                                </tr>
+                            </thead>
+                            <tbody id="market-table-body"></tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="market-error" class="hidden text-center py-8">
+                        <p class="text-gray-600" data-i18n="error_market">Unable to fetch market prices.</p>
+                    </div>
+                </div>
+
+                <!-- Government Schemes Section -->
+                <div id="schemes-section" class="card p-6">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="gov_schemes">Government Schemes</h2>
+                    <div id="schemes-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Crop Recommendation Section -->
+                <div id="recommend-section" class="card p-6">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="crop_recommendation">Crop Recommendation</h2>
+                    
+                    <form id="crop-form" onsubmit="getCropRecommendation(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="nitrogen">Nitrogen (N)</label>
+                            <div class="flex items-center gap-3">
+                                <input type="range" id="nitrogen" name="nitrogen" min="0" max="150" value="50" oninput="updateRangeValue('nitrogen')">
+                                <span id="nitrogen-value" class="text-lg font-bold text-green-600 w-12">50</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="phosphorus">Phosphorus (P)</label>
+                            <div class="flex items-center gap-3">
+                                <input type="range" id="phosphorus" name="phosphorus" min="0" max="150" value="50" oninput="updateRangeValue('phosphorus')">
+                                <span id="phosphorus-value" class="text-lg font-bold text-green-600 w-12">50</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="potassium">Potassium (K)</label>
+                            <div class="flex items-center gap-3">
+                                <input type="range" id="potassium" name="potassium" min="0" max="150" value="50" oninput="updateRangeValue('potassium')">
+                                <span id="potassium-value" class="text-lg font-bold text-green-600 w-12">50</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="ph_level">pH Level</label>
+                            <div class="flex items-center gap-3">
+                                <input type="range" id="ph" name="ph" min="3" max="10" step="0.1" value="6.5" oninput="updateRangeValue('ph')">
+                                <span id="ph-value" class="text-lg font-bold text-green-600 w-12">6.5</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="rainfall">Rainfall (mm)</label>
+                            <div class="flex items-center gap-3">
+                                <input type="range" id="rainfall-input" name="rainfall" min="0" max="300" value="100" oninput="updateRangeValue('rainfall-input')">
+                                <span id="rainfall-input-value" class="text-lg font-bold text-green-600 w-12">100</span>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg">
+                            <span data-i18n="get_recommendation">Get Recommendation</span>
+                        </button>
+                    </form>
+                    
+                    <div id="recommendation-loading" class="hidden mt-6">
+                        <div class="flex items-center justify-center gap-3">
+                            <div class="w-5 h-5 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                            <span class="text-gray-600" data-i18n="loading">Loading...</span>
+                        </div>
+                    </div>
+                    
+                    <div id="recommendation-result" class="hidden mt-6">
+                        <div class="recommendation-card rounded-xl p-6 text-center">
+                            <p class="text-sm text-green-700 mb-2" data-i18n="recommended_crop">Recommended Crop</p>
+                            <h3 id="recommended-crop" class="text-3xl font-bold text-green-800 mb-2"></h3>
+                            <div class="flex items-center justify-center gap-2 mb-4">
+                                <span class="text-sm text-green-600">Confidence:</span>
+                                <span id="confidence-value" class="font-bold text-green-700"></span>
+                            </div>
+                            <div class="w-full bg-green-200 rounded-full h-2">
+                                <div id="confidence-bar" class="confidence-bar bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="crop-info-panel" class="mt-4 p-4 bg-gray-50 rounded-xl hidden">
+                            <h4 class="font-semibold text-gray-700 mb-2">Crop Details</h4>
+                            <div id="crop-details" class="space-y-2 text-sm"></div>
+                        </div>
+                        
+                        <div id="top-recommendations" class="mt-4 space-y-2"></div>
+                    </div>
+                    
+                    <div id="recommendation-error" class="hidden mt-6 p-4 bg-red-50 rounded-xl text-center">
+                        <p class="text-red-600" data-i18n="error_recommendation">Unable to get crop recommendation.</p>
+                    </div>
+                </div>
+
+                <!-- Farm Tools Section -->
+                <div id="tools-section" class="card p-6">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Farm Tools</h2>
+                    
+                    <div class="space-y-3">
+                        <button onclick="openWaterCalculator()" class="w-full p-4 bg-blue-50 rounded-xl text-left hover:bg-blue-100 transition-colors flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">💧</span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900" data-i18n="water_calculator">Water Calculator</p>
+                                <p class="text-sm text-gray-600">Calculate irrigation needs</p>
+                            </div>
+                        </button>
+                        
+                        <button onclick="openFertilizerCalculator()" class="w-full p-4 bg-green-50 rounded-xl text-left hover:bg-green-100 transition-colors flex items-center gap-3">
+                            <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">🌿</span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900" data-i18n="fertilizer_calculator">Fertilizer Calculator</p>
+                                <p class="text-sm text-gray-600">NPK recommendations</p>
+                            </div>
+                        </button>
+                        
+                        <button onclick="openCropCalendar()" class="w-full p-4 bg-orange-50 rounded-xl text-left hover:bg-orange-100 transition-colors flex items-center gap-3">
+                            <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">📅</span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900" data-i18n="crop_calendar">Crop Calendar</p>
+                                <p class="text-sm text-gray-600">Sowing & harvest times</p>
+                            </div>
+                        </button>
+                        
+                        <button onclick="openFarmDiary()" class="w-full p-4 bg-purple-50 rounded-xl text-left hover:bg-purple-100 transition-colors flex items-center gap-3">
+                            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">📓</span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900" data-i18n="farm_diary">Farm Diary</p>
+                                <p class="text-sm text-gray-600">Track activities & expenses</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Air Quality Widget -->
+                <div class="card p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Air Quality</h3>
+                    <div id="air-quality-content" class="text-center">
+                        <div id="aqi-value" class="text-4xl font-bold text-gray-900 mb-2">--</div>
+                        <p id="aqi-label" class="text-sm text-gray-500 mb-4">Loading...</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="bg-gray-50 rounded-lg p-2">
+                                <p class="text-gray-500">PM2.5</p>
+                                <p id="pm25" class="font-bold">--</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-2">
+                                <p class="text-gray-500">PM10</p>
+                                <p id="pm10" class="font-bold">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Card -->
+                <div class="card p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4" data-i18n="profile">Your Profile</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-gray-600" data-i18n="select_state">State</span>
+                            <span class="font-semibold text-gray-900">{{ user.state }}</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-gray-600" data-i18n="select_soil_type">Soil</span>
+                            <span class="font-semibold text-gray-900 capitalize">{{ user.soil_type }}</span>
+                        </div>
+                    </div>
+                    <a href="/setup" class="block mt-4 text-center text-green-600 hover:text-green-700 font-semibold text-sm">
+                        <span data-i18n="settings">Settings</span> →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Water Calculator Modal -->
+    <div id="water-modal" class="modal">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4 fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-900" data-i18n="water_calculator">Water Calculator</h3>
+                <button onclick="closeModal('water-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <form onsubmit="calculateWater(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Select Crop</label>
+                    <select id="water-crop" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none">
+                        <option value="rice">Rice</option>
+                        <option value="wheat">Wheat</option>
+                        <option value="maize">Maize</option>
+                        <option value="cotton">Cotton</option>
+                        <option value="sugarcane">Sugarcane</option>
+                        <option value="groundnut">Groundnut</option>
+                        <option value="potato">Potato</option>
+                        <option value="tomato">Tomato</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="area_hectares">Area (Hectares)</label>
+                    <input type="number" id="water-area" value="1" min="0.1" step="0.1" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none">
+                </div>
+                <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors" data-i18n="calculate">Calculate</button>
+            </form>
+            <div id="water-result" class="hidden mt-4 p-4 bg-blue-50 rounded-xl">
+                <p class="text-sm text-gray-600 mb-2" data-i18n="water_needed">Water Needed:</p>
+                <p id="water-amount" class="text-2xl font-bold text-blue-700"></p>
+                <p id="water-cycles" class="text-sm text-gray-600 mt-2"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fertilizer Calculator Modal -->
+    <div id="fertilizer-modal" class="modal">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4 fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-900" data-i18n="fertilizer_calculator">Fertilizer Calculator</h3>
+                <button onclick="closeModal('fertilizer-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <form onsubmit="calculateFertilizer(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Select Crop</label>
+                    <select id="fert-crop" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
+                        <option value="rice">Rice</option>
+                        <option value="wheat">Wheat</option>
+                        <option value="maize">Maize</option>
+                        <option value="cotton">Cotton</option>
+                        <option value="sugarcane">Sugarcane</option>
+                        <option value="groundnut">Groundnut</option>
+                        <option value="potato">Potato</option>
+                        <option value="tomato">Tomato</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="area_hectares">Area (Hectares)</label>
+                    <input type="number" id="fert-area" value="1" min="0.1" step="0.1" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
+                </div>
+                <button type="submit" class="w-full py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors" data-i18n="calculate">Calculate</button>
+            </form>
+            <div id="fert-result" class="hidden mt-4 p-4 bg-green-50 rounded-xl space-y-3">
+                <p class="font-semibold text-gray-700">Required Fertilizers:</p>
+                <div id="fert-details" class="space-y-2 text-sm"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crop Calendar Modal -->
+    <div id="calendar-modal" class="modal">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 max-h-[80vh] overflow-y-auto fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-900" data-i18n="crop_calendar">Crop Calendar</h3>
+                <button onclick="closeModal('calendar-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <div id="calendar-content" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- Farm Diary Modal -->
+    <div id="diary-modal" class="modal">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 max-h-[80vh] overflow-y-auto fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-900" data-i18n="farm_diary">Farm Diary</h3>
+                <button onclick="closeModal('diary-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            
+            <form onsubmit="addDiaryEntry(event)" class="space-y-3 mb-6 p-4 bg-gray-50 rounded-xl">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Date</label>
+                        <input type="date" id="diary-date" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1" data-i18n="activity_type">Activity</label>
+                        <select id="diary-activity" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                            <option value="sowing">Sowing</option>
+                            <option value="irrigation">Irrigation</option>
+                            <option value="fertilizer">Fertilizer</option>
+                            <option value="pesticide">Pesticide</option>
+                            <option value="harvest">Harvest</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="text" id="diary-crop" placeholder="Crop name" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                <textarea id="diary-notes" placeholder="Notes" rows="2" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none"></textarea>
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="number" id="diary-expense" placeholder="Expense ₹" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                    <input type="number" id="diary-income" placeholder="Income ₹" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                </div>
+                <button type="submit" class="w-full py-2 bg-purple-600 text-white font-semibold rounded-lg text-sm hover:bg-purple-700 transition-colors" data-i18n="add_entry">Add Entry</button>
+            </form>
+            
+            <div id="diary-summary" class="grid grid-cols-3 gap-2 mb-4 text-center text-sm">
+                <div class="p-3 bg-red-50 rounded-lg">
+                    <p class="text-xs text-gray-500" data-i18n="total_expense">Expense</p>
+                    <p id="total-expense" class="font-bold text-red-600">₹0</p>
+                </div>
+                <div class="p-3 bg-green-50 rounded-lg">
+                    <p class="text-xs text-gray-500" data-i18n="total_income">Income</p>
+                    <p id="total-income" class="font-bold text-green-600">₹0</p>
+                </div>
+                <div class="p-3 bg-blue-50 rounded-lg">
+                    <p class="text-xs text-gray-500" data-i18n="profit_loss">Profit</p>
+                    <p id="profit-loss" class="font-bold text-blue-600">₹0</p>
+                </div>
+            </div>
+            
+            <div id="diary-entries" class="space-y-2 max-h-60 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        const userData = {{ user | tojson | safe }};
+    </script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

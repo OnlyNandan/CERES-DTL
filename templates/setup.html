@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CERES - Setup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        
+        .step-indicator.active {
+            background: #059669;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .step-indicator.completed {
+            background: #10b981;
+            color: white;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse-ring {
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            80%, 100% { transform: scale(2); opacity: 0; }
+        }
+        
+        .language-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .language-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .language-btn.selected {
+            border-color: #059669;
+            background: #ecfdf5;
+            transform: scale(1.02);
+        }
+        
+        .soil-card {
+            transition: all 0.2s ease;
+        }
+        
+        .soil-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+        
+        .soil-card.selected {
+            border-color: #059669;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        }
+        
+        .location-pulse {
+            animation: locationPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes locationPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        select, input {
+            font-size: 16px;
+        }
+        
+        .high-contrast {
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --bg-primary: #ffffff;
+            --border-color: #1f2937;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-2xl">
+            <div id="welcome-screen" class="glass-card rounded-3xl p-8 md:p-12 text-center slide-up">
+                <div class="mb-8">
+                    <div class="w-24 h-24 mx-auto bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-6 shadow-lg location-pulse">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4" data-i18n="welcome">Welcome to CERES</h1>
+                    <p class="text-xl text-gray-600" data-i18n="welcome_subtitle">Your intelligent farming companion</p>
+                </div>
+                
+                <div class="flex justify-center gap-3 mb-8">
+                    <span class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300">1</span>
+                    <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">2</span>
+                    <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">3</span>
+                    <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">4</span>
+                </div>
+                
+                <button onclick="startSetup()" class="w-full md:w-auto px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    <span data-i18n="setup_title">Let's Get Started</span>
+                    <svg class="inline-block ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="language-screen" class="glass-card rounded-3xl p-8 md:p-12 hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2" data-i18n="select_language">Select Your Language</h2>
+                    <p class="text-gray-600">अपनी भाषा चुनें • ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</p>
+                </div>
+                
+                <div class="flex justify-center gap-3 mb-8">
+                    <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300">2</span>
+                    <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">3</span>
+                    <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">4</span>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8" id="language-options">
+                    <button onclick="selectLanguage('en')" class="language-btn p-4 border-2 border-gray-200 rounded-xl text-center hover:border-green-500 selected" data-lang="en">
+                        <span class="text-2xl block mb-1">🇬🇧</span>
+                        <span class="font-semibold text-gray-900">English</span>
+                    </button>
+                    <button onclick="selectLanguage('hi')" class="language-btn p-4 border-2 border-gray-200 rounded-xl text-center hover:border-green-500" data-lang="hi">
+                        <span class="text-2xl block mb-1">🇮🇳</span>
+                        <span class="font-semibold text-gray-900">हिंदी</span>
+                    </button>
+                    <button onclick="selectLanguage('kn')" class="language-btn p-4 border-2 border-gray-200 rounded-xl text-center hover:border-green-500" data-lang="kn">
+                        <span class="text-2xl block mb-1">🇮🇳</span>
+                        <span class="font-semibold text-gray-900">ಕನ್ನಡ</span>
+                    </button>
+                    <button onclick="selectLanguage('te')" class="language-btn p-4 border-2 border-gray-200 rounded-xl text-center hover:border-green-500" data-lang="te">
+                        <span class="text-2xl block mb-1">🇮🇳</span>
+                        <span class="font-semibold text-gray-900">తెలుగు</span>
+                    </button>
+                    <button onclick="selectLanguage('ta')" class="language-btn p-4 border-2 border-gray-200 rounded-xl text-center hover:border-green-500" data-lang="ta">
+                        <span class="text-2xl block mb-1">🇮🇳</span>
+                        <span class="font-semibold text-gray-900">தமிழ்</span>
+                    </button>
+                    <button onclick="selectLanguage('mr')" class="language-btn p-4 border-2 border-gray-200 rounded-xl text-center hover:border-green-500" data-lang="mr">
+                        <span class="text-2xl block mb-1">🇮🇳</span>
+                        <span class="font-semibold text-gray-900">मराठी</span>
+                    </button>
+                </div>
+                
+                <button onclick="goToLocationStep()" class="w-full py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg">
+                    <span data-i18n="continue">Continue</span>
+                </button>
+            </div>
+
+            <div id="location-screen" class="glass-card rounded-3xl p-8 md:p-12 hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2" data-i18n="select_state">Select Your Location</h2>
+                </div>
+                
+                <div class="flex justify-center gap-3 mb-8">
+                    <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300">3</span>
+                    <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">4</span>
+                </div>
+
+                <div id="location-detecting" class="text-center py-8 hidden">
+                    <div class="relative w-20 h-20 mx-auto mb-4">
+                        <div class="absolute inset-0 bg-green-500 rounded-full pulse-ring"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-lg text-gray-600" data-i18n="detecting_location">Detecting your location...</p>
+                </div>
+
+                <div id="location-detected" class="hidden mb-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-green-800" data-i18n="location_detected">Location detected</p>
+                            <p class="text-green-600" id="detected-location-text"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="location-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="select_state">Select Your State</label>
+                        <select id="state-select" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900 bg-white">
+                            <option value="">-- Select State --</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="select_district">Select Your District</label>
+                        <input type="text" id="district-input" placeholder="Enter district name" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="city_name">City/Village Name</label>
+                        <input type="text" id="city-input" placeholder="Enter city or village name" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900">
+                    </div>
+                </div>
+                
+                <input type="hidden" id="latitude" value="">
+                <input type="hidden" id="longitude" value="">
+                
+                <button onclick="detectLocation()" class="w-full mt-4 py-3 border-2 border-green-600 text-green-600 font-semibold rounded-xl hover:bg-green-50 transition-all flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    </svg>
+                    <span>Auto-detect Location</span>
+                </button>
+                
+                <button onclick="goToSoilStep()" class="w-full mt-4 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg">
+                    <span data-i18n="continue">Continue</span>
+                </button>
+            </div>
+
+            <div id="soil-screen" class="glass-card rounded-3xl p-8 md:p-12 hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2" data-i18n="select_soil_type">Select Your Soil Type</h2>
+                </div>
+                
+                <div class="flex justify-center gap-3 mb-8">
+                    <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300">4</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-8" id="soil-options">
+                    <button onclick="selectSoil('alluvial')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="alluvial">
+                        <span class="text-2xl block mb-2">🌾</span>
+                        <span class="font-semibold text-gray-900 block" data-i18n="soil_alluvial">Alluvial Soil</span>
+                        <span class="text-sm text-gray-500">Best for: Rice, Wheat, Sugarcane</span>
+                    </button>
+                    <button onclick="selectSoil('black')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="black">
+                        <span class="text-2xl block mb-2">🌻</span>
+                        <span class="font-semibold text-gray-900 block" data-i18n="soil_black">Black Soil</span>
+                        <span class="text-sm text-gray-500">Best for: Cotton, Soybean</span>
+                    </button>
+                    <button onclick="selectSoil('red')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="red">
+                        <span class="text-2xl block mb-2">🥜</span>
+                        <span class="font-semibold text-gray-900 block" data-i18n="soil_red">Red Soil</span>
+                        <span class="text-sm text-gray-500">Best for: Groundnut, Millets</span>
+                    </button>
+                    <button onclick="selectSoil('laterite')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="laterite">
+                        <span class="text-2xl block mb-2">☕</span>
+                        <span class="font-semibold text-gray-900 block" data-i18n="soil_laterite">Laterite Soil</span>
+                        <span class="text-sm text-gray-500">Best for: Tea, Coffee, Cashew</span>
+                    </button>
+                    <button onclick="selectSoil('arid')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="arid">
+                        <span class="text-2xl block mb-2">🌵</span>
+                        <span class="font-semibold text-gray-900 block" data-i18n="soil_arid">Arid/Desert Soil</span>
+                        <span class="text-sm text-gray-500">Best for: Barley, Millets</span>
+                    </button>
+                    <button onclick="selectSoil('forest')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="forest">
+                        <span class="text-2xl block mb-2">🌲</span>
+                        <span class="font-semibold text-gray-900 block" data-i18n="soil_forest">Forest Soil</span>
+                        <span class="text-sm text-gray-500">Best for: Spices, Fruits</span>
+                    </button>
+                    <button onclick="selectSoil('saline')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="saline">
+                        <span class="text-2xl block mb-2">🧂</span>
+                        <span class="font-semibold text-gray-900 block" data-i18n="soil_saline">Saline Soil</span>
+                        <span class="text-sm text-gray-500">Best for: Salt-tolerant crops</span>
+                    </button>
+                    <button onclick="selectSoil('peaty')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="peaty">
+                        <span class="text-2xl block mb-2">🍚</span>
+                        <span class="font-semibold text-gray-900 block" data-i18n="soil_peaty">Peaty/Marshy Soil</span>
+                        <span class="text-sm text-gray-500">Best for: Rice, Jute</span>
+                    </button>
+                </div>
+                
+                <button onclick="completeSetup()" id="complete-btn" class="w-full py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <span data-i18n="save_preferences">Save & Continue</span>
+                </button>
+            </div>
+
+            <div id="loading-screen" class="glass-card rounded-3xl p-8 md:p-12 text-center hidden">
+                <div class="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+                <p class="text-xl text-gray-700" data-i18n="loading">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+    <script>
+        let selectedLanguage = 'en';
+        let selectedSoil = null;
+        let locationData = {};
+        let translations = {};
+
+        async function loadTranslations() {
+            try {
+                const response = await fetch('/api/translations');
+                const data = await response.json();
+                translations = data.translations;
+            } catch (error) {
+                console.error('Failed to load translations');
+            }
+        }
+
+        function updateUI() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[selectedLanguage] && translations[selectedLanguage][key]) {
+                    el.textContent = translations[selectedLanguage][key];
+                }
+            });
+        }
+
+        function startSetup() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('language-screen').classList.remove('hidden');
+            document.getElementById('language-screen').classList.add('fade-in');
+        }
+
+        function selectLanguage(lang) {
+            selectedLanguage = lang;
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`[data-lang="${lang}"]`).classList.add('selected');
+            updateUI();
+        }
+
+        async function goToLocationStep() {
+            document.getElementById('language-screen').classList.add('hidden');
+            document.getElementById('location-screen').classList.remove('hidden');
+            document.getElementById('location-screen').classList.add('fade-in');
+            
+            await loadStates();
+            detectLocation();
+        }
+
+        async function loadStates() {
+            try {
+                const response = await fetch('/api/states');
+                const data = await response.json();
+                const select = document.getElementById('state-select');
+                data.states.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state;
+                    option.textContent = state;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Failed to load states');
+            }
+        }
+
+        function detectLocation() {
+            const detectingDiv = document.getElementById('location-detecting');
+            const detectedDiv = document.getElementById('location-detected');
+            
+            detectingDiv.classList.remove('hidden');
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        
+                        document.getElementById('latitude').value = lat;
+                        document.getElementById('longitude').value = lon;
+                        
+                        try {
+                            const response = await fetch(`/api/reverse-geocode?lat=${lat}&lon=${lon}`);
+                            const data = await response.json();
+                            
+                            if (data.success) {
+                                locationData = data;
+                                
+                                if (data.state) {
+                                    const stateSelect = document.getElementById('state-select');
+                                    for (let i = 0; i < stateSelect.options.length; i++) {
+                                        if (stateSelect.options[i].value.toLowerCase().includes(data.state.toLowerCase()) ||
+                                            data.state.toLowerCase().includes(stateSelect.options[i].value.toLowerCase())) {
+                                            stateSelect.selectedIndex = i;
+                                            break;
+                                        }
+                                    }
+                                }
+                                
+                                if (data.district) {
+                                    document.getElementById('district-input').value = data.district;
+                                }
+                                if (data.city) {
+                                    document.getElementById('city-input').value = data.city;
+                                }
+                                
+                                document.getElementById('detected-location-text').textContent = 
+                                    `${data.city || data.district}, ${data.state}`;
+                                
+                                detectingDiv.classList.add('hidden');
+                                detectedDiv.classList.remove('hidden');
+                            }
+                        } catch (error) {
+                            detectingDiv.classList.add('hidden');
+                        }
+                    },
+                    (error) => {
+                        detectingDiv.classList.add('hidden');
+                        const key = 'location_failed';
+                        if (translations[selectedLanguage] && translations[selectedLanguage][key]) {
+                            alert(translations[selectedLanguage][key]);
+                        }
+                    },
+                    { timeout: 10000, enableHighAccuracy: true }
+                );
+            } else {
+                detectingDiv.classList.add('hidden');
+            }
+        }
+
+        function goToSoilStep() {
+            const state = document.getElementById('state-select').value;
+            const city = document.getElementById('city-input').value;
+            
+            if (!state) {
+                alert('Please select your state');
+                return;
+            }
+            
+            locationData.state = state;
+            locationData.district = document.getElementById('district-input').value;
+            locationData.city = city;
+            
+            document.getElementById('location-screen').classList.add('hidden');
+            document.getElementById('soil-screen').classList.remove('hidden');
+            document.getElementById('soil-screen').classList.add('fade-in');
+        }
+
+        function selectSoil(soil) {
+            selectedSoil = soil;
+            document.querySelectorAll('.soil-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-soil="${soil}"]`).classList.add('selected');
+            document.getElementById('complete-btn').disabled = false;
+        }
+
+        async function completeSetup() {
+            const btn = document.getElementById('complete-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-pulse">Saving...</span>';
+            
+            const setupData = {
+                language: selectedLanguage,
+                state: locationData.state,
+                district: locationData.district,
+                city: locationData.city,
+                latitude: document.getElementById('latitude').value || null,
+                longitude: document.getElementById('longitude').value || null,
+                soil_type: selectedSoil
+            };
+            
+            try {
+                const response = await fetch('/api/user/setup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(setupData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('soil-screen').classList.add('hidden');
+                    document.getElementById('loading-screen').classList.remove('hidden');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1000);
+                }
+            } catch (error) {
+                btn.disabled = false;
+                btn.innerHTML = '<span data-i18n="save_preferences">Save & Continue</span>';
+                alert('Setup failed. Please try again.');
+            }
+        }
+
+        loadTranslations();
+    </script>
+</body>
+</html>
