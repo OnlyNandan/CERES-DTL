@@ -1,0 +1,80 @@
+crop,state,district,year,season,area_ha,temperature_avg,rainfall_mm,humidity_avg,soil_type,nitrogen_kg,phosphorus_kg,potassium_kg,ph,organic_carbon,irrigation_type,pesticide_applied,yield_kg_per_ha
+rice,Karnataka,Davangere,2023,kharif,2.5,28,850,78,alluvial,120,60,40,6.5,0.8,canal,yes,5800
+rice,Karnataka,Shimoga,2023,kharif,1.8,27,920,82,black,100,50,35,6.8,0.7,flood,yes,5200
+rice,Tamil Nadu,Thanjavur,2023,kharif,3.2,29,780,75,alluvial,130,65,45,6.4,0.9,drip,yes,6200
+rice,Andhra Pradesh,Guntur,2023,kharif,4.0,30,680,72,black,110,55,40,6.6,0.6,canal,no,4800
+rice,West Bengal,Burdwan,2023,kharif,2.0,28,1100,85,alluvial,125,60,42,6.3,0.85,flood,yes,5500
+wheat,Punjab,Ludhiana,2023,rabi,5.0,18,45,55,alluvial,140,70,50,7.2,0.75,tube_well,yes,5200
+wheat,Haryana,Karnal,2023,rabi,4.5,17,50,52,alluvial,135,65,45,7.0,0.7,tube_well,yes,4900
+wheat,Uttar Pradesh,Meerut,2023,rabi,3.5,19,55,58,alluvial,120,60,40,6.8,0.65,canal,yes,4500
+wheat,Madhya Pradesh,Vidisha,2023,rabi,6.0,20,40,48,black,110,55,38,7.5,0.55,rainfed,no,3200
+wheat,Rajasthan,Alwar,2023,rabi,4.0,16,35,45,arid,100,50,35,7.8,0.4,tube_well,no,2800
+maize,Karnataka,Belgaum,2023,kharif,2.0,26,650,70,red,160,80,50,6.2,0.7,rainfed,yes,7500
+maize,Bihar,Bhagalpur,2023,kharif,1.5,29,750,78,alluvial,140,70,45,6.5,0.65,flood,yes,6800
+maize,Rajasthan,Bhilwara,2023,kharif,3.0,28,450,55,arid,120,60,40,7.2,0.45,tube_well,no,4500
+maize,Andhra Pradesh,Karimnagar,2023,kharif,2.5,30,580,65,black,150,75,48,6.8,0.6,canal,yes,7200
+cotton,Gujarat,Rajkot,2023,kharif,8.0,32,520,60,black,160,70,65,7.0,0.55,drip,yes,2200
+cotton,Maharashtra,Nagpur,2023,kharif,6.0,31,680,65,black,150,65,60,6.8,0.6,flood,yes,2000
+cotton,Telangana,Warangal,2023,kharif,5.0,30,750,70,red,140,60,55,6.5,0.5,canal,yes,1800
+cotton,Punjab,Bhatinda,2023,kharif,4.0,33,380,50,alluvial,170,75,70,7.2,0.65,tube_well,yes,2400
+sugarcane,Maharashtra,Kolhapur,2023,year_round,3.0,28,1200,75,black,280,120,110,7.0,0.8,drip,yes,95000
+sugarcane,Uttar Pradesh,Muzaffarnagar,2023,year_round,4.0,27,950,70,alluvial,260,100,100,6.8,0.75,canal,yes,85000
+sugarcane,Karnataka,Belgaum,2023,year_round,2.5,26,850,72,black,250,95,95,6.5,0.7,flood,yes,78000
+sugarcane,Tamil Nadu,Erode,2023,year_round,2.0,29,750,68,red,240,90,90,6.2,0.65,drip,yes,72000
+potato,Uttar Pradesh,Agra,2023,rabi,1.0,15,35,55,alluvial,200,110,160,6.5,0.8,tube_well,yes,28000
+potato,West Bengal,Hooghly,2023,rabi,0.8,17,45,60,alluvial,190,105,155,6.3,0.85,flood,yes,26000
+potato,Gujarat,Banaskantha,2023,rabi,1.5,18,30,48,arid,180,100,150,7.0,0.5,drip,yes,22000
+potato,Punjab,Jalandhar,2023,rabi,1.2,14,40,52,alluvial,210,115,165,6.8,0.75,tube_well,yes,30000
+tomato,Karnataka,Kolar,2023,rabi,0.5,25,450,65,red,160,110,130,6.2,0.7,drip,yes,45000
+tomato,Maharashtra,Nashik,2023,rabi,0.8,24,380,62,black,155,105,125,6.5,0.65,drip,yes,42000
+tomato,Andhra Pradesh,Chittoor,2023,kharif,0.6,28,520,70,red,165,115,135,6.0,0.6,flood,yes,38000
+tomato,Madhya Pradesh,Indore,2023,rabi,1.0,22,280,55,black,150,100,120,6.8,0.55,tube_well,no,32000
+onion,Maharashtra,Nashik,2023,rabi,1.5,22,320,55,black,110,55,55,6.5,0.6,drip,yes,22000
+onion,Karnataka,Chitradurga,2023,rabi,1.2,24,280,50,red,105,52,52,6.2,0.55,tube_well,yes,20000
+onion,Madhya Pradesh,Indore,2023,kharif,1.0,26,450,65,black,100,50,50,6.8,0.5,rainfed,no,16000
+groundnut,Gujarat,Junagadh,2023,kharif,3.0,29,550,68,black,30,55,50,6.5,0.6,rainfed,yes,2800
+groundnut,Andhra Pradesh,Anantapur,2023,kharif,4.0,30,420,55,red,25,50,45,6.2,0.45,rainfed,no,2200
+groundnut,Tamil Nadu,Tiruvannamalai,2023,kharif,2.0,28,580,72,red,28,52,48,6.4,0.55,tube_well,yes,2600
+soybean,Madhya Pradesh,Indore,2023,kharif,5.0,28,820,72,black,35,65,35,6.8,0.65,rainfed,yes,3200
+soybean,Maharashtra,Latur,2023,kharif,4.0,29,680,68,black,32,60,32,6.5,0.6,rainfed,yes,2800
+soybean,Rajasthan,Kota,2023,kharif,3.5,30,520,58,arid,28,55,28,7.2,0.45,tube_well,no,2200
+chickpea,Madhya Pradesh,Sagar,2023,rabi,4.0,18,45,48,black,25,55,35,7.0,0.55,rainfed,yes,2200
+chickpea,Rajasthan,Churu,2023,rabi,5.0,16,35,42,arid,20,50,30,7.5,0.4,rainfed,no,1600
+chickpea,Maharashtra,Akola,2023,rabi,3.0,20,50,52,black,28,58,38,6.8,0.5,tube_well,yes,2000
+mustard,Rajasthan,Bharatpur,2023,rabi,4.0,15,25,45,arid,65,40,30,7.2,0.4,tube_well,yes,1800
+mustard,Uttar Pradesh,Aligarh,2023,rabi,3.0,16,35,50,alluvial,70,45,35,6.8,0.55,tube_well,yes,2000
+mustard,Haryana,Hisar,2023,rabi,3.5,14,30,48,alluvial,68,42,32,7.0,0.5,tube_well,yes,1900
+rice,Karnataka,Mysore,2022,kharif,2.8,27,880,80,black,115,58,38,6.6,0.75,canal,yes,5400
+rice,Tamil Nadu,Trichy,2022,rabi,2.2,26,650,70,alluvial,105,52,36,6.4,0.7,flood,yes,4900
+wheat,Punjab,Amritsar,2022,rabi,5.5,17,48,54,alluvial,138,68,48,7.1,0.72,tube_well,yes,5100
+wheat,Haryana,Hisar,2022,rabi,4.8,18,42,50,alluvial,132,64,44,7.0,0.68,tube_well,yes,4700
+maize,Karnataka,Hassan,2022,kharif,1.8,25,720,75,red,145,72,44,6.3,0.68,rainfed,yes,7000
+cotton,Gujarat,Ahmedabad,2022,kharif,7.0,31,480,58,black,155,68,62,7.1,0.52,drip,yes,2100
+sugarcane,Maharashtra,Pune,2022,year_round,2.8,27,980,73,black,270,108,105,6.9,0.78,drip,yes,88000
+potato,Uttar Pradesh,Farrukhabad,2022,rabi,1.3,16,38,56,alluvial,195,108,158,6.6,0.78,tube_well,yes,27000
+tomato,Karnataka,Bangalore Rural,2022,rabi,0.7,24,420,63,red,158,108,128,6.3,0.68,drip,yes,43000
+groundnut,Gujarat,Rajkot,2022,kharif,3.5,28,580,70,black,32,54,49,6.4,0.58,rainfed,yes,2700
+rice,West Bengal,Midnapore,2023,kharif,2.2,28,1050,83,alluvial,122,58,41,6.4,0.82,flood,yes,5350
+rice,Odisha,Cuttack,2023,kharif,2.5,29,950,80,alluvial,118,56,39,6.5,0.78,canal,yes,5100
+wheat,Uttarakhand,Dehradun,2023,rabi,1.5,12,65,60,forest,108,54,36,6.2,0.85,rainfed,yes,3800
+wheat,Gujarat,Mehsana,2023,rabi,3.2,20,32,45,arid,115,58,40,7.4,0.48,tube_well,yes,3500
+maize,Jharkhand,Ranchi,2023,kharif,1.2,27,820,76,red,135,68,42,6.0,0.62,rainfed,yes,6500
+maize,Chhattisgarh,Raipur,2023,kharif,2.0,28,890,78,black,142,72,46,6.4,0.58,canal,yes,6900
+cotton,Rajasthan,Sri Ganganagar,2023,kharif,6.5,34,320,45,arid,165,72,68,7.5,0.42,tube_well,yes,2050
+cotton,Haryana,Sirsa,2023,kharif,5.5,32,420,52,alluvial,158,68,64,7.2,0.58,tube_well,yes,2250
+sugarcane,Bihar,Champaran,2023,year_round,2.2,28,1100,78,alluvial,255,98,98,6.6,0.72,flood,yes,75000
+sugarcane,Andhra Pradesh,Visakhapatnam,2023,year_round,1.8,30,920,74,red,245,92,92,6.4,0.68,canal,yes,70000
+potato,Bihar,Nalanda,2023,rabi,0.9,18,42,58,alluvial,185,102,152,6.4,0.8,flood,yes,24000
+potato,Madhya Pradesh,Gwalior,2023,rabi,1.4,16,28,50,black,175,98,148,7.0,0.52,tube_well,yes,21000
+tomato,Gujarat,Sabarkantha,2023,rabi,0.9,23,320,58,arid,152,102,122,6.6,0.52,drip,yes,36000
+tomato,Telangana,Medak,2023,kharif,0.7,29,580,72,black,162,112,132,6.4,0.58,flood,yes,35000
+onion,Gujarat,Bhavnagar,2023,rabi,1.8,23,250,48,black,108,54,54,6.8,0.52,drip,yes,19000
+onion,Rajasthan,Jodhpur,2023,rabi,2.0,21,180,42,arid,95,48,48,7.5,0.38,tube_well,no,14000
+groundnut,Karnataka,Dharwad,2023,kharif,2.5,27,620,70,black,29,53,47,6.6,0.58,rainfed,yes,2650
+groundnut,Maharashtra,Kolhapur,2023,kharif,2.2,26,780,75,black,31,54,49,6.5,0.62,flood,yes,2750
+soybean,Maharashtra,Nagpur,2023,kharif,4.5,28,720,70,black,34,62,34,6.6,0.58,rainfed,yes,2950
+soybean,Karnataka,Dharwad,2023,kharif,3.0,27,680,72,black,33,60,33,6.4,0.6,rainfed,yes,2850
+chickpea,Karnataka,Gulbarga,2023,rabi,3.5,19,55,50,black,26,56,36,6.9,0.52,rainfed,yes,2100
+chickpea,Uttar Pradesh,Hamirpur,2023,rabi,2.5,17,40,46,alluvial,24,54,34,6.8,0.58,tube_well,yes,1950
+mustard,Madhya Pradesh,Morena,2023,rabi,2.8,17,28,46,black,66,42,32,7.0,0.48,tube_well,yes,1750
+mustard,Gujarat,Mehsana,2023,rabi,2.2,18,22,42,arid,62,38,28,7.4,0.42,tube_well,no,1550
