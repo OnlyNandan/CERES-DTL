@@ -15,7 +15,7 @@ DATA_DIR = 'data'
 
 os.makedirs(MODELS_DIR, exist_ok=True)
 
-print('🌾 CERES ML Training (Fast Mode)')
+print(' CERES ML Training (Fast Mode)')
 print('='*50)
 
 # 1. Train Crop Recommendation Model
