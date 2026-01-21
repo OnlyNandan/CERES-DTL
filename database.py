@@ -162,6 +162,50 @@ class CropPlanning(db.Model):
         }
 
 
+class FarmPlot(db.Model):
+    """Store user's farm plots with coordinates and analysis data"""
+    __tablename__ = 'farm_plots'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    name = db.Column(db.String(100))  # User-friendly name like "North Field"
+    coordinates = db.Column(db.Text)  # JSON array of [lat, lng] pairs
+    area_hectares = db.Column(db.Float)
+    center_lat = db.Column(db.Float)  # Centroid latitude
+    center_lng = db.Column(db.Float)  # Centroid longitude
+    
+    # Detected/analyzed data
+    detected_soil_type = db.Column(db.String(50))
+    vegetation_index = db.Column(db.Float)  # NDVI-like index
+    current_crop = db.Column(db.String(100))  # Detected crop if any
+    has_irrigation = db.Column(db.Boolean)
+    
+    # Analysis metadata
+    last_analyzed = db.Column(db.DateTime)
+    analysis_source = db.Column(db.String(50))  # 'satellite', 'user', 'estimated'
+    
+    user = db.relationship('User', backref=db.backref('plots', lazy=True))
+    
+    def to_dict(self):
+        import json
+        return {
+            'id': self.id,
+            'name': self.name,
+            'coordinates': json.loads(self.coordinates) if self.coordinates else [],
+            'area_hectares': self.area_hectares,
+            'center': {'lat': self.center_lat, 'lng': self.center_lng},
+            'detected_soil_type': self.detected_soil_type,
+            'vegetation_index': self.vegetation_index,
+            'current_crop': self.current_crop,
+            'has_irrigation': self.has_irrigation,
+            'last_analyzed': self.last_analyzed.isoformat() if self.last_analyzed else None,
+            'analysis_source': self.analysis_source
+        }
+
+
 def init_db(app):
     db.init_app(app)
     with app.app_context():

@@ -6,6 +6,9 @@
     <title>CERES - Setup</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS for maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <style>
         * { font-family: 'Inter', sans-serif; }
         
@@ -103,11 +106,14 @@
             font-size: 16px;
         }
         
-        .high-contrast {
-            --text-primary: #111827;
-            --text-secondary: #374151;
-            --bg-primary: #ffffff;
-            --border-color: #1f2937;
+        #setup-map {
+            height: 300px;
+            border-radius: 12px;
+            z-index: 1;
+        }
+        
+        .leaflet-draw-toolbar a {
+            background-color: #fff !important;
         }
     </style>
 </head>
@@ -130,6 +136,7 @@
                     <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">2</span>
                     <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">3</span>
                     <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">4</span>
+                    <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">5</span>
                 </div>
                 
                 <button onclick="startSetup()" class="w-full md:w-auto px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
@@ -151,6 +158,7 @@
                     <span class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300">2</span>
                     <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">3</span>
                     <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">4</span>
+                    <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">5</span>
                 </div>
                 
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8" id="language-options">
@@ -195,6 +203,7 @@
                     <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
                     <span class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300">3</span>
                     <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">4</span>
+                    <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">5</span>
                 </div>
 
                 <div id="location-detecting" class="text-center py-8 hidden">
@@ -268,54 +277,125 @@
                     <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
                     <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
                     <span class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300">4</span>
+                    <span class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300 text-gray-400">5</span>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4 mb-8" id="soil-options">
                     <button onclick="selectSoil('alluvial')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="alluvial">
-                        <span class="text-2xl block mb-2">🌾</span>
+                        <div class="w-full h-16 rounded-lg mb-2 bg-gradient-to-br from-amber-200 via-amber-300 to-yellow-200 flex items-center justify-center">
+                            <span class="text-3xl">🌾</span>
+                        </div>
                         <span class="font-semibold text-gray-900 block" data-i18n="soil_alluvial">Alluvial Soil</span>
                         <span class="text-sm text-gray-500">Best for: Rice, Wheat, Sugarcane</span>
                     </button>
                     <button onclick="selectSoil('black')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="black">
-                        <span class="text-2xl block mb-2">🌻</span>
+                        <div class="w-full h-16 rounded-lg mb-2 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600 flex items-center justify-center">
+                            <span class="text-3xl">🪨</span>
+                        </div>
                         <span class="font-semibold text-gray-900 block" data-i18n="soil_black">Black Soil</span>
                         <span class="text-sm text-gray-500">Best for: Cotton, Soybean</span>
                     </button>
                     <button onclick="selectSoil('red')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="red">
-                        <span class="text-2xl block mb-2">🥜</span>
+                        <div class="w-full h-16 rounded-lg mb-2 bg-gradient-to-br from-red-400 via-red-500 to-orange-400 flex items-center justify-center">
+                            <span class="text-3xl">🥜</span>
+                        </div>
                         <span class="font-semibold text-gray-900 block" data-i18n="soil_red">Red Soil</span>
                         <span class="text-sm text-gray-500">Best for: Groundnut, Millets</span>
                     </button>
                     <button onclick="selectSoil('laterite')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="laterite">
-                        <span class="text-2xl block mb-2">☕</span>
+                        <div class="w-full h-16 rounded-lg mb-2 bg-gradient-to-br from-orange-600 via-red-600 to-amber-600 flex items-center justify-center">
+                            <span class="text-3xl">☕</span>
+                        </div>
                         <span class="font-semibold text-gray-900 block" data-i18n="soil_laterite">Laterite Soil</span>
                         <span class="text-sm text-gray-500">Best for: Tea, Coffee, Cashew</span>
                     </button>
                     <button onclick="selectSoil('arid')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="arid">
-                        <span class="text-2xl block mb-2">🌵</span>
+                        <div class="w-full h-16 rounded-lg mb-2 bg-gradient-to-br from-yellow-200 via-amber-100 to-orange-100 flex items-center justify-center">
+                            <span class="text-3xl">🏜️</span>
+                        </div>
                         <span class="font-semibold text-gray-900 block" data-i18n="soil_arid">Arid/Desert Soil</span>
                         <span class="text-sm text-gray-500">Best for: Barley, Millets</span>
                     </button>
                     <button onclick="selectSoil('forest')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="forest">
-                        <span class="text-2xl block mb-2">🌲</span>
+                        <div class="w-full h-16 rounded-lg mb-2 bg-gradient-to-br from-green-700 via-green-600 to-emerald-600 flex items-center justify-center">
+                            <span class="text-3xl">🌲</span>
+                        </div>
                         <span class="font-semibold text-gray-900 block" data-i18n="soil_forest">Forest Soil</span>
                         <span class="text-sm text-gray-500">Best for: Spices, Fruits</span>
                     </button>
                     <button onclick="selectSoil('saline')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="saline">
-                        <span class="text-2xl block mb-2">🧂</span>
+                        <div class="w-full h-16 rounded-lg mb-2 bg-gradient-to-br from-gray-300 via-white to-blue-100 flex items-center justify-center">
+                            <span class="text-3xl">🧂</span>
+                        </div>
                         <span class="font-semibold text-gray-900 block" data-i18n="soil_saline">Saline Soil</span>
                         <span class="text-sm text-gray-500">Best for: Salt-tolerant crops</span>
                     </button>
                     <button onclick="selectSoil('peaty')" class="soil-card p-4 border-2 border-gray-200 rounded-xl text-left hover:border-green-500" data-soil="peaty">
-                        <span class="text-2xl block mb-2">🍚</span>
+                        <div class="w-full h-16 rounded-lg mb-2 bg-gradient-to-br from-stone-800 via-stone-700 to-amber-900 flex items-center justify-center">
+                            <span class="text-3xl">🌿</span>
+                        </div>
                         <span class="font-semibold text-gray-900 block" data-i18n="soil_peaty">Peaty/Marshy Soil</span>
                         <span class="text-sm text-gray-500">Best for: Rice, Jute</span>
                     </button>
                 </div>
                 
-                <button onclick="completeSetup()" id="complete-btn" class="w-full py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    <span data-i18n="save_preferences">Save & Continue</span>
+                <button onclick="goToPlotStep()" id="soil-next-btn" class="w-full py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <span data-i18n="continue">Continue</span>
                 </button>
+            </div>
+
+            <!-- Plot Mapping Screen (Step 5) -->
+            <div id="plot-screen" class="glass-card rounded-3xl p-6 md:p-8 hidden">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">📍 Map Your Farm</h2>
+                    <p class="text-gray-600 text-sm">Draw your field boundaries on the map (optional)</p>
+                </div>
+                
+                <div class="flex justify-center gap-3 mb-6">
+                    <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="step-indicator completed w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold">✓</span>
+                    <span class="step-indicator active w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-gray-300">5</span>
+                </div>
+                
+                <!-- Plot Name Input -->
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Plot Name (optional)</label>
+                    <input type="text" id="plot-name-input" placeholder="e.g., North Field, Main Farm" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900">
+                </div>
+                
+                <!-- Map Container -->
+                <div id="setup-map" class="mb-4 border-2 border-gray-200 rounded-xl overflow-hidden"></div>
+                
+                <!-- Map Controls Info -->
+                <div class="mb-4 p-3 bg-blue-50 rounded-xl text-sm text-blue-700">
+                    <p class="font-medium mb-1">📌 How to draw:</p>
+                    <p>Click the polygon tool (▢) on the map, then click points to draw your field boundary. Double-click to finish.</p>
+                </div>
+                
+                <!-- Plot Info Display -->
+                <div id="plot-info" class="hidden mb-4 p-4 bg-green-50 border border-green-200 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-green-700">Plot Area</p>
+                            <p class="text-2xl font-bold text-green-800"><span id="plot-area-display">0</span> Hectares</p>
+                        </div>
+                        <button onclick="clearSetupPlot()" class="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-sm hover:bg-red-200">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <button onclick="skipPlotSetup()" class="flex-1 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all">
+                        Skip for Now
+                    </button>
+                    <button onclick="completeSetup()" id="complete-btn" class="flex-1 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg">
+                        Finish Setup 🎉
+                    </button>
+                </div>
             </div>
 
             <div id="loading-screen" class="glass-card rounded-3xl p-8 md:p-12 text-center hidden">
@@ -325,7 +405,6 @@
         </div>
     </div>
 
-    <script src="/static/js/main.js"></script>
     <script>
         let selectedLanguage = 'en';
         let selectedSoil = null;
@@ -479,7 +558,130 @@
                 card.classList.remove('selected');
             });
             document.querySelector(`[data-soil="${soil}"]`).classList.add('selected');
-            document.getElementById('complete-btn').disabled = false;
+            document.getElementById('soil-next-btn').disabled = false;
+        }
+
+        // Plot mapping variables
+        let setupMap = null;
+        let drawnItems = null;
+        let plotCoordinates = null;
+        let plotAreaHectares = 0;
+
+        function goToPlotStep() {
+            document.getElementById('soil-screen').classList.add('hidden');
+            document.getElementById('plot-screen').classList.remove('hidden');
+            document.getElementById('plot-screen').classList.add('fade-in');
+            
+            // Initialize map after a short delay
+            setTimeout(initSetupMap, 300);
+        }
+
+        function initSetupMap() {
+            if (setupMap) {
+                setupMap.remove();
+            }
+            
+            // Use detected location or default to India center
+            const lat = parseFloat(document.getElementById('latitude').value) || 20.5937;
+            const lng = parseFloat(document.getElementById('longitude').value) || 78.9629;
+            const zoom = document.getElementById('latitude').value ? 16 : 5;
+            
+            setupMap = L.map('setup-map').setView([lat, lng], zoom);
+            
+            // Add hybrid layer (satellite + labels)
+            const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Esri'
+            });
+            
+            const labels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap, &copy; CartoDB'
+            });
+            
+            satellite.addTo(setupMap);
+            labels.addTo(setupMap);
+            
+            // Add drawing controls
+            drawnItems = new L.FeatureGroup();
+            setupMap.addLayer(drawnItems);
+            
+            const drawControl = new L.Control.Draw({
+                edit: {
+                    featureGroup: drawnItems,
+                    remove: true
+                },
+                draw: {
+                    polygon: {
+                        allowIntersection: false,
+                        showArea: true,
+                        shapeOptions: {
+                            color: '#10b981',
+                            weight: 3,
+                            fillOpacity: 0.3
+                        }
+                    },
+                    rectangle: {
+                        shapeOptions: {
+                            color: '#10b981',
+                            weight: 3,
+                            fillOpacity: 0.3
+                        }
+                    },
+                    circle: false,
+                    circlemarker: false,
+                    marker: false,
+                    polyline: false
+                }
+            });
+            setupMap.addControl(drawControl);
+            
+            // Handle draw events
+            setupMap.on(L.Draw.Event.CREATED, function(e) {
+                drawnItems.clearLayers();
+                drawnItems.addLayer(e.layer);
+                
+                // Calculate area
+                const latlngs = e.layer.getLatLngs()[0];
+                plotCoordinates = latlngs.map(ll => [ll.lat, ll.lng]);
+                
+                // Calculate area using shoelace formula
+                const n = plotCoordinates.length;
+                let area_deg = 0;
+                for (let i = 0; i < n; i++) {
+                    const j = (i + 1) % n;
+                    area_deg += plotCoordinates[i][0] * plotCoordinates[j][1];
+                    area_deg -= plotCoordinates[j][0] * plotCoordinates[i][1];
+                }
+                area_deg = Math.abs(area_deg) / 2;
+                
+                const avg_lat = plotCoordinates.reduce((sum, c) => sum + c[0], 0) / n;
+                const km_per_deg_lat = 111;
+                const km_per_deg_lon = 111 * Math.cos(avg_lat * Math.PI / 180);
+                const area_km2 = area_deg * km_per_deg_lat * km_per_deg_lon;
+                plotAreaHectares = (area_km2 * 100).toFixed(2);
+                
+                // Show plot info
+                document.getElementById('plot-area-display').textContent = plotAreaHectares;
+                document.getElementById('plot-info').classList.remove('hidden');
+            });
+            
+            setupMap.on(L.Draw.Event.DELETED, function(e) {
+                plotCoordinates = null;
+                plotAreaHectares = 0;
+                document.getElementById('plot-info').classList.add('hidden');
+            });
+        }
+
+        function clearSetupPlot() {
+            if (drawnItems) {
+                drawnItems.clearLayers();
+            }
+            plotCoordinates = null;
+            plotAreaHectares = 0;
+            document.getElementById('plot-info').classList.add('hidden');
+        }
+
+        function skipPlotSetup() {
+            completeSetup();
         }
 
         async function completeSetup() {
@@ -498,6 +700,7 @@
             };
             
             try {
+                // First save user setup
                 const response = await fetch('/api/user/setup', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -507,7 +710,21 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    document.getElementById('soil-screen').classList.add('hidden');
+                    // If plot was drawn, save it
+                    if (plotCoordinates && plotCoordinates.length >= 3) {
+                        const plotName = document.getElementById('plot-name-input').value || 'My Farm';
+                        await fetch('/api/user/plots', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                name: plotName,
+                                coordinates: plotCoordinates,
+                                soil_type: selectedSoil
+                            })
+                        });
+                    }
+                    
+                    document.getElementById('plot-screen').classList.add('hidden');
                     document.getElementById('loading-screen').classList.remove('hidden');
                     
                     setTimeout(() => {
@@ -516,12 +733,16 @@
                 }
             } catch (error) {
                 btn.disabled = false;
-                btn.innerHTML = '<span data-i18n="save_preferences">Save & Continue</span>';
+                btn.innerHTML = 'Finish Setup 🎉';
                 alert('Setup failed. Please try again.');
             }
         }
 
         loadTranslations();
     </script>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 </body>
 </html>

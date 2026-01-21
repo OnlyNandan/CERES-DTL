@@ -76,24 +76,49 @@ class Config:
             'rain_trigger': 10, 'risk_formula': 'sporangia'
         },
         'powdery_mildew': {
-            'crops': ['wheat', 'mango', 'grapes'],
+            'crops': ['wheat', 'mango', 'grapes', 'cotton', 'rice', 'maize', 'groundnut', 'soybean'],
             'temp_range': (20, 30), 'humidity_range': (40, 70),
             'risk_formula': 'linear'
         },
         'rust': {
-            'crops': ['wheat', 'coffee'],
+            'crops': ['wheat', 'coffee', 'groundnut', 'soybean'],
             'temp_range': (15, 25), 'humidity_min': 70,
             'dew_hours': 6, 'risk_formula': 'infection_period'
         },
         'bacterial_leaf_blight': {
-            'crops': ['rice'],
+            'crops': ['rice', 'cotton'],
             'temp_range': (25, 35), 'humidity_min': 75,
             'risk_formula': 'quadratic'
         },
         'anthracnose': {
-            'crops': ['mango', 'banana', 'chili'],
+            'crops': ['mango', 'banana', 'chili', 'cotton', 'soybean'],
             'temp_range': (20, 30), 'humidity_min': 80,
             'rain_trigger': 5, 'risk_formula': 'exponential'
+        },
+        'downy_mildew': {
+            'crops': ['maize', 'grapes', 'rice', 'cotton', 'sugarcane'],
+            'temp_range': (15, 25), 'humidity_min': 85,
+            'rain_trigger': 8, 'risk_formula': 'linear'
+        },
+        'fusarium_wilt': {
+            'crops': ['cotton', 'banana', 'tomato', 'chickpea'],
+            'temp_range': (25, 30), 'humidity_min': 60,
+            'risk_formula': 'quadratic'
+        },
+        'sheath_blight': {
+            'crops': ['rice', 'maize'],
+            'temp_range': (28, 35), 'humidity_min': 80,
+            'risk_formula': 'exponential'
+        },
+        'stem_rot': {
+            'crops': ['groundnut', 'rice', 'sugarcane'],
+            'temp_range': (25, 32), 'humidity_min': 85,
+            'rain_trigger': 15, 'risk_formula': 'linear'
+        },
+        'leaf_spot': {
+            'crops': ['rice', 'wheat', 'maize', 'groundnut', 'soybean', 'cotton'],
+            'temp_range': (20, 28), 'humidity_min': 70,
+            'risk_formula': 'linear'
         }
     }
     
@@ -208,48 +233,78 @@ class Config:
             'id': 'pmksy',
             'name': 'PM Krishi Sinchai Yojana',
             'name_hi': 'पीएम कृषि सिंचाई योजना',
+            'name_kn': 'ಪ್ರಧಾನಮಂತ್ರಿ ಕೃಷಿ ನೀರಾವರಿ ಯೋಜನೆ',
             'description': 'Irrigation support and water conservation',
             'description_hi': 'सिंचाई सहायता और जल संरक्षण',
+            'description_kn': 'ನೀರಾವರಿ ಬೆಂಬಲ ಮತ್ತು ಜಲ ಸಂರಕ್ಷಣೆ',
+            'type': 'Irrigation',
+            'type_hi': 'सिंचाई',
+            'type_kn': 'ನೀರಾವರಿ',
             'url': 'https://pmksy.gov.in/'
         },
         {
             'id': 'pmfby',
             'name': 'PM Fasal Bima Yojana',
             'name_hi': 'पीएम फसल बीमा योजना',
+            'name_kn': 'ಪ್ರಧಾನಮಂತ್ರಿ ಫಸಲ್ ಬೀಮಾ ಯೋಜನೆ',
             'description': 'Crop insurance scheme',
             'description_hi': 'फसल बीमा योजना',
+            'description_kn': 'ಬೆಳೆ ವಿಮೆ ಯೋಜನೆ',
+            'type': 'Insurance',
+            'type_hi': 'बीमा',
+            'type_kn': 'ವಿಮೆ',
             'url': 'https://pmfby.gov.in/'
         },
         {
             'id': 'pmkisan',
             'name': 'PM-KISAN',
             'name_hi': 'पीएम-किसान',
+            'name_kn': 'ಪ್ರಧಾನಮಂತ್ರಿ-ಕಿಸಾನ್',
             'description': 'Direct income support of ₹6000/year',
             'description_hi': '₹6000/वर्ष की प्रत्यक्ष आय सहायता',
+            'description_kn': '₹6000/ವರ್ಷ ನೇರ ಆದಾಯ ಬೆಂಬಲ',
+            'type': 'Income Support',
+            'type_hi': 'आय सहायता',
+            'type_kn': 'ಆದಾಯ ಬೆಂಬಲ',
             'url': 'https://pmkisan.gov.in/'
         },
         {
             'id': 'kcc',
             'name': 'Kisan Credit Card',
             'name_hi': 'किसान क्रेडिट कार्ड',
+            'name_kn': 'ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್',
             'description': 'Easy credit access for farmers',
             'description_hi': 'किसानों के लिए आसान ऋण',
+            'description_kn': 'ರೈತರಿಗೆ ಸುಲಭ ಸಾಲ',
+            'type': 'Credit',
+            'type_hi': 'ऋण',
+            'type_kn': 'ಸಾಲ',
             'url': 'https://www.pmkisan.gov.in/KCC.aspx'
         },
         {
             'id': 'soil_health',
             'name': 'Soil Health Card',
             'name_hi': 'मृदा स्वास्थ्य कार्ड',
+            'name_kn': 'ಮಣ್ಣಿನ ಆರೋಗ್ಯ ಕಾರ್ಡ್',
             'description': 'Free soil testing and recommendations',
             'description_hi': 'मुफ्त मिट्टी परीक्षण और सिफारिशें',
+            'description_kn': 'ಉಚಿತ ಮಣ್ಣು ಪರೀಕ್ಷೆ ಮತ್ತು ಶಿಫಾರಸುಗಳು',
+            'type': 'Soil Testing',
+            'type_hi': 'मिट्टी परीक्षण',
+            'type_kn': 'ಮಣ್ಣು ಪರೀಕ್ಷೆ',
             'url': 'https://soilhealth.dac.gov.in/'
         },
         {
             'id': 'enam',
             'name': 'e-NAM',
             'name_hi': 'ई-नाम',
+            'name_kn': 'ಇ-ನಾಮ್',
             'description': 'Online trading platform for agricultural commodities',
             'description_hi': 'कृषि वस्तुओं के लिए ऑनलाइन व्यापार मंच',
+            'description_kn': 'ಕೃಷಿ ಸರಕುಗಳಿಗೆ ಆನ್‌ಲೈನ್ ವ್ಯಾಪಾರ ವೇದಿಕೆ',
+            'type': 'Market',
+            'type_hi': 'बाजार',
+            'type_kn': 'ಮಾರುಕಟ್ಟೆ',
             'url': 'https://enam.gov.in/'
         },
     ]

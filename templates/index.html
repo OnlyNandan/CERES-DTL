@@ -53,6 +53,18 @@
         
         .confidence-bar { transition: width 0.5s ease-out; }
         
+        /* Soil & Rainfall Selection Styles */
+        .soil-card input:checked + .soil-option,
+        .soil-option.selected {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        .rainfall-option.selected,
+        input[name="rainfall-preset"]:checked + .rainfall-option {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
@@ -91,8 +103,14 @@
             z-index: 100;
             align-items: center;
             justify-content: center;
+            overflow-y: auto;
+            padding: 20px 0;
         }
         .modal.active { display: flex; }
+        .modal > div {
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
         
         .bottom-nav {
             position: fixed;
@@ -252,6 +270,39 @@
                     <div id="forecast-container" class="grid grid-cols-7 gap-2 overflow-x-auto"></div>
                 </div>
 
+                <!-- Smart Daily Tips Section -->
+                <div id="daily-tips-section" class="card p-6 bg-gradient-to-br from-emerald-50 to-green-50 border-2 border-emerald-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
+                            <span class="text-xl">💡</span>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-900" data-i18n="daily_tips">Today's Smart Tips</h2>
+                    </div>
+                    <div id="tips-container" class="space-y-3">
+                        <div class="p-4 bg-white rounded-xl border border-emerald-100 flex items-start gap-3">
+                            <span class="text-2xl">🌤️</span>
+                            <div>
+                                <p class="font-semibold text-gray-900" data-i18n="weather_tip_title">Weather Advice</p>
+                                <p class="text-sm text-gray-600" id="weather-tip-text">Loading tips based on your weather...</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-white rounded-xl border border-emerald-100 flex items-start gap-3">
+                            <span class="text-2xl">🌱</span>
+                            <div>
+                                <p class="font-semibold text-gray-900" data-i18n="farming_tip_title">Farming Tip</p>
+                                <p class="text-sm text-gray-600" id="farming-tip-text">Check soil moisture before irrigation today.</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-white rounded-xl border border-emerald-100 flex items-start gap-3">
+                            <span class="text-2xl">🛡️</span>
+                            <div>
+                                <p class="font-semibold text-gray-900" data-i18n="pest_tip_title">Pest Alert</p>
+                                <p class="text-sm text-gray-600" id="pest-tip-text">Monitor for aphids in humid conditions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Market Prices Section -->
                 <div id="market-section" class="card p-6">
                     <div class="flex items-center justify-between mb-4">
@@ -312,76 +363,78 @@
             <div class="space-y-6">
                 <!-- Crop Recommendation Section -->
                 <div id="recommend-section" class="card p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="crop_recommendation">Crop Recommendation</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="crop_recommendation">🌾 What Should I Grow?</h2>
                     
                     <form id="crop-form" onsubmit="getCropRecommendation(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="nitrogen">Nitrogen (N)</label>
+                        <!-- Soil Type Display - Shows user's soil from setup with emoji -->
+                        <div class="p-4 bg-amber-50 border-2 border-amber-200 rounded-xl">
                             <div class="flex items-center gap-3">
-                                <input type="range" id="nitrogen" name="nitrogen" min="0" max="150" value="50" oninput="updateRangeValue('nitrogen')">
-                                <span id="nitrogen-value" class="text-lg font-bold text-green-600 w-12">50</span>
+                                <div id="user-soil-image" class="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-300 to-yellow-200 flex items-center justify-center">
+                                    <span class="text-2xl">🌾</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-amber-700" data-i18n="your_soil">Your Soil Type</p>
+                                    <p class="font-bold text-amber-900" id="user-soil-name">{{ user.soil_type|default('alluvial')|title }} Soil</p>
+                                </div>
+                                <a href="/setup" class="ml-auto text-xs text-amber-600 underline" data-i18n="change">Change</a>
                             </div>
                         </div>
                         
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="phosphorus">Phosphorus (P)</label>
+                        <!-- Hidden inputs for soil params - auto-set based on user's soil type -->
+                        <input type="hidden" id="nitrogen" value="80">
+                        <input type="hidden" id="phosphorus" value="40">
+                        <input type="hidden" id="potassium" value="40">
+                        <input type="hidden" id="ph" value="6.5">
+                        <input type="hidden" id="rainfall-input" value="100">
+                        <input type="hidden" id="user-soil-type" value="{{ user.soil_type|default('alluvial') }}">
+                        
+                        <!-- Auto Rainfall from Weather -->
+                        <div id="rainfall-auto-section" class="p-4 bg-blue-50 border-2 border-blue-200 rounded-xl">
                             <div class="flex items-center gap-3">
-                                <input type="range" id="phosphorus" name="phosphorus" min="0" max="150" value="50" oninput="updateRangeValue('phosphorus')">
-                                <span id="phosphorus-value" class="text-lg font-bold text-green-600 w-12">50</span>
+                                <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+                                    <span class="text-2xl">🌧️</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-blue-700" data-i18n="rainfall_from_weather">Rainfall (from weather forecast)</p>
+                                    <p class="font-bold text-blue-900 text-lg" id="auto-rainfall-display">Loading...</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">Auto</span>
+                                </div>
                             </div>
                         </div>
                         
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="potassium">Potassium (K)</label>
-                            <div class="flex items-center gap-3">
-                                <input type="range" id="potassium" name="potassium" min="0" max="150" value="50" oninput="updateRangeValue('potassium')">
-                                <span id="potassium-value" class="text-lg font-bold text-green-600 w-12">50</span>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="ph_level">pH Level</label>
-                            <div class="flex items-center gap-3">
-                                <input type="range" id="ph" name="ph" min="3" max="10" step="0.1" value="6.5" oninput="updateRangeValue('ph')">
-                                <span id="ph-value" class="text-lg font-bold text-green-600 w-12">6.5</span>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="rainfall">Rainfall (mm)</label>
-                            <div class="flex items-center gap-3">
-                                <input type="range" id="rainfall-input" name="rainfall" min="0" max="300" value="100" oninput="updateRangeValue('rainfall-input')">
-                                <span id="rainfall-input-value" class="text-lg font-bold text-green-600 w-12">100</span>
-                            </div>
-                        </div>
-                        
-                        <button type="submit" class="w-full py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg">
-                            <span data-i18n="get_recommendation">Get Recommendation</span>
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg text-lg">
+                            🌱 Find Best Crop
                         </button>
                     </form>
                     
                     <div id="recommendation-loading" class="hidden mt-6">
                         <div class="flex items-center justify-center gap-3">
-                            <div class="w-5 h-5 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
-                            <span class="text-gray-600" data-i18n="loading">Loading...</span>
+                            <div class="w-6 h-6 border-3 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                            <span class="text-gray-600 font-medium">Finding best crops...</span>
                         </div>
                     </div>
                     
                     <div id="recommendation-result" class="hidden mt-6">
                         <div class="recommendation-card rounded-xl p-6 text-center">
-                            <p class="text-sm text-green-700 mb-2" data-i18n="recommended_crop">Recommended Crop</p>
+                            <div id="crop-image" class="w-24 h-24 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center text-5xl">
+                                🌾
+                            </div>
+                            <p class="text-sm text-green-700 mb-1" data-i18n="recommended_crop">Best Crop For You</p>
                             <h3 id="recommended-crop" class="text-3xl font-bold text-green-800 mb-2"></h3>
                             <div class="flex items-center justify-center gap-2 mb-4">
-                                <span class="text-sm text-green-600">Confidence:</span>
-                                <span id="confidence-value" class="font-bold text-green-700"></span>
+                                <span class="px-3 py-1 bg-green-200 text-green-800 rounded-full text-sm font-medium">
+                                    <span id="confidence-value"></span> match
+                                </span>
                             </div>
-                            <div class="w-full bg-green-200 rounded-full h-2">
-                                <div id="confidence-bar" class="confidence-bar bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                            <div class="w-full bg-green-200 rounded-full h-3">
+                                <div id="confidence-bar" class="confidence-bar bg-green-600 h-3 rounded-full" style="width: 0%"></div>
                             </div>
                         </div>
                         
                         <div id="crop-info-panel" class="mt-4 p-4 bg-gray-50 rounded-xl hidden">
-                            <h4 class="font-semibold text-gray-700 mb-2">Crop Details</h4>
+                            <h4 class="font-semibold text-gray-700 mb-2">📋 Crop Details</h4>
                             <div id="crop-details" class="space-y-2 text-sm"></div>
                         </div>
                         
@@ -395,16 +448,26 @@
 
                 <!-- Farm Tools Section -->
                 <div id="tools-section" class="card p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Farm Tools</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="farm_tools">🛠️ Farm Tools</h2>
                     
                     <div class="space-y-3">
+                        <button onclick="openModal('plot-modal'); initPlotMap();" class="w-full p-4 bg-indigo-50 rounded-xl text-left hover:bg-indigo-100 transition-colors flex items-center gap-3">
+                            <div class="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">🗺️</span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900" data-i18n="plot_mapper">Plot Mapper</p>
+                                <p class="text-sm text-gray-600" data-i18n="plot_mapper_desc">Draw your field for smart recommendations</p>
+                            </div>
+                        </button>
+                        
                         <button onclick="openWaterCalculator()" class="w-full p-4 bg-blue-50 rounded-xl text-left hover:bg-blue-100 transition-colors flex items-center gap-3">
                             <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">💧</span>
                             </div>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="water_calculator">Water Calculator</p>
-                                <p class="text-sm text-gray-600">Calculate irrigation needs</p>
+                                <p class="text-sm text-gray-600" data-i18n="water_calculator_desc">Calculate irrigation needs</p>
                             </div>
                         </button>
                         
@@ -414,7 +477,7 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="fertilizer_calculator">Fertilizer Calculator</p>
-                                <p class="text-sm text-gray-600">NPK recommendations</p>
+                                <p class="text-sm text-gray-600" data-i18n="fertilizer_calculator_desc">NPK recommendations</p>
                             </div>
                         </button>
                         
@@ -424,17 +487,7 @@
                             </div>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="crop_calendar">Crop Calendar</p>
-                                <p class="text-sm text-gray-600">Sowing & harvest times</p>
-                            </div>
-                        </button>
-                        
-                        <button onclick="openFarmDiary()" class="w-full p-4 bg-purple-50 rounded-xl text-left hover:bg-purple-100 transition-colors flex items-center gap-3">
-                            <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
-                                <span class="text-xl">📓</span>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-gray-900" data-i18n="farm_diary">Farm Diary</p>
-                                <p class="text-sm text-gray-600">Track activities & expenses</p>
+                                <p class="text-sm text-gray-600" data-i18n="crop_calendar_desc">Sowing & harvest times</p>
                             </div>
                         </button>
                     </div>
@@ -442,16 +495,38 @@
 
                 <!-- AI-Powered Tools Section -->
                 <div class="card p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">🤖 AI-Powered Tools</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="ai_powered_tools">🤖 AI-Powered Tools</h2>
                     
                     <div class="space-y-3">
+                        <button onclick="openModal('ai-chat-modal')" class="w-full p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl text-left hover:from-purple-100 hover:to-indigo-100 transition-colors flex items-center gap-3 border-2 border-purple-200">
+                            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">🤖</span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900" data-i18n="ai_assistant">AI Farm Assistant</p>
+                                <p class="text-sm text-gray-600" data-i18n="ai_assistant_desc">Chat with Gemma AI for farming advice</p>
+                            </div>
+                            <span class="ml-auto px-2 py-1 bg-purple-200 text-purple-700 text-xs font-medium rounded-full">NEW</span>
+                        </button>
+                        
+                        <button onclick="openModal('plant-disease-modal')" class="w-full p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl text-left hover:from-green-100 hover:to-emerald-100 transition-colors flex items-center gap-3 border-2 border-green-200">
+                            <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">🔬</span>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900" data-i18n="disease_scanner">Plant Disease Scanner</p>
+                                <p class="text-sm text-gray-600" data-i18n="disease_scanner_desc">Upload leaf photo to detect diseases</p>
+                            </div>
+                            <span class="ml-auto px-2 py-1 bg-green-200 text-green-700 text-xs font-medium rounded-full">NEW</span>
+                        </button>
+                        
                         <button onclick="openYieldPredictor()" class="w-full p-4 bg-amber-50 rounded-xl text-left hover:bg-amber-100 transition-colors flex items-center gap-3">
                             <div class="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">📊</span>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-900">Yield Predictor</p>
-                                <p class="text-sm text-gray-600">ML-based yield forecast</p>
+                                <p class="font-semibold text-gray-900" data-i18n="yield_predictor">Yield Predictor</p>
+                                <p class="text-sm text-gray-600" data-i18n="yield_predictor_desc">ML-based yield forecast</p>
                             </div>
                         </button>
                         
@@ -460,8 +535,8 @@
                                 <span class="text-xl">🦠</span>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-900">Disease Risk Analyzer</p>
-                                <p class="text-sm text-gray-600">Weather-based disease alerts</p>
+                                <p class="font-semibold text-gray-900" data-i18n="disease_risk_analyzer">Disease Risk Analyzer</p>
+                                <p class="text-sm text-gray-600" data-i18n="disease_risk_desc">Weather-based disease alerts</p>
                             </div>
                         </button>
                         
@@ -470,8 +545,8 @@
                                 <span class="text-xl">🌍</span>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-900">Soil Health Index</p>
-                                <p class="text-sm text-gray-600">Composite soil analysis</p>
+                                <p class="font-semibold text-gray-900" data-i18n="soil_health_index">Soil Health Index</p>
+                                <p class="text-sm text-gray-600" data-i18n="soil_health_desc">Composite soil analysis</p>
                             </div>
                         </button>
                         
@@ -480,18 +555,8 @@
                                 <span class="text-xl">🚿</span>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-900">Smart Irrigation</p>
-                                <p class="text-sm text-gray-600">7-day irrigation schedule</p>
-                            </div>
-                        </button>
-                        
-                        <button onclick="openProfitCalculator()" class="w-full p-4 bg-emerald-50 rounded-xl text-left hover:bg-emerald-100 transition-colors flex items-center gap-3">
-                            <div class="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
-                                <span class="text-xl">💰</span>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-gray-900">Profit Calculator</p>
-                                <p class="text-sm text-gray-600">ROI & break-even analysis</p>
+                                <p class="font-semibold text-gray-900" data-i18n="smart_irrigation">Smart Irrigation</p>
+                                <p class="text-sm text-gray-600" data-i18n="smart_irrigation_desc">7-day irrigation schedule</p>
                             </div>
                         </button>
                     </div>
@@ -672,11 +737,11 @@
     </div>
 
     <!-- Disease Risk Analyzer Modal -->
-    <div id="disease-modal" class="modal">
+    <div id="disease-risk-modal" class="modal">
         <div class="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 max-h-[85vh] overflow-y-auto fade-in">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-bold text-gray-900">🦠 Disease Risk Analyzer</h3>
-                <button onclick="closeModal('disease-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <button onclick="closeModal('disease-risk-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             <form onsubmit="analyzeDiseaseRisk(event)" class="space-y-4">
                 <div>
@@ -893,68 +958,400 @@
         </div>
     </div>
 
-    <!-- Profit Calculator Modal -->
+    <!-- Profit Calculator Modal - Simplified -->
     <div id="profit-modal" class="modal">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 max-h-[85vh] overflow-y-auto fade-in">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4 max-h-[85vh] overflow-y-auto fade-in">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-bold text-gray-900">💰 Profit Calculator</h3>
                 <button onclick="closeModal('profit-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             <form onsubmit="calculateProfit(event)" class="space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Crop</label>
-                        <select id="profit-crop" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:outline-none">
-                            <option value="rice">Rice</option>
-                            <option value="wheat">Wheat</option>
-                            <option value="cotton">Cotton</option>
-                            <option value="maize">Maize</option>
-                            <option value="sugarcane">Sugarcane</option>
-                            <option value="soybean">Soybean</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Area (Ha)</label>
-                        <input type="number" id="profit-area" value="2" min="0.1" step="0.1" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:outline-none">
+                <!-- Simple Crop Selection with Visual Cards -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Select Crop</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="profit-crop-radio" value="rice" class="hidden peer" checked>
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                                <span class="text-2xl">🌾</span>
+                                <p class="text-xs font-medium mt-1">Rice</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="profit-crop-radio" value="wheat" class="hidden peer">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                                <span class="text-2xl">🌾</span>
+                                <p class="text-xs font-medium mt-1">Wheat</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="profit-crop-radio" value="cotton" class="hidden peer">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                                <span class="text-2xl">☁️</span>
+                                <p class="text-xs font-medium mt-1">Cotton</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="profit-crop-radio" value="maize" class="hidden peer">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                                <span class="text-2xl">🌽</span>
+                                <p class="text-xs font-medium mt-1">Maize</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="profit-crop-radio" value="sugarcane" class="hidden peer">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                                <span class="text-2xl">🎋</span>
+                                <p class="text-xs font-medium mt-1">Sugarcane</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="profit-crop-radio" value="soybean" class="hidden peer">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                                <span class="text-2xl">🫘</span>
+                                <p class="text-xs font-medium mt-1">Soybean</p>
+                            </div>
+                        </label>
                     </div>
                 </div>
-                <div class="p-4 bg-gray-50 rounded-xl">
-                    <h4 class="font-semibold text-gray-700 mb-3">Input Costs (₹)</h4>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs text-gray-500 mb-1">Seeds</label>
-                            <input type="number" id="profit-seed" value="5000" min="0" class="w-full p-2 border border-gray-200 rounded-lg text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-500 mb-1">Fertilizer</label>
-                            <input type="number" id="profit-fert" value="15000" min="0" class="w-full p-2 border border-gray-200 rounded-lg text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-500 mb-1">Pesticides</label>
-                            <input type="number" id="profit-pest" value="8000" min="0" class="w-full p-2 border border-gray-200 rounded-lg text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-500 mb-1">Irrigation</label>
-                            <input type="number" id="profit-irr" value="10000" min="0" class="w-full p-2 border border-gray-200 rounded-lg text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-500 mb-1">Labor</label>
-                            <input type="number" id="profit-labor" value="20000" min="0" class="w-full p-2 border border-gray-200 rounded-lg text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-gray-500 mb-1">Other</label>
-                            <input type="number" id="profit-other" value="5000" min="0" class="w-full p-2 border border-gray-200 rounded-lg text-sm">
-                        </div>
+                
+                <!-- Simple Area Selection -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3">Farm Size</label>
+                    <div class="grid grid-cols-4 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="profit-area-radio" value="1" class="hidden peer">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                                <p class="text-lg font-bold">1</p>
+                                <p class="text-xs text-gray-500">Hectare</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="profit-area-radio" value="2" class="hidden peer" checked>
+                            <div class="p-3 border-2 border-emerald-500 bg-emerald-50 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                                <p class="text-lg font-bold">2</p>
+                                <p class="text-xs text-gray-500">Hectares</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="profit-area-radio" value="5" class="hidden peer">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                                <p class="text-lg font-bold">5</p>
+                                <p class="text-xs text-gray-500">Hectares</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="profit-area-radio" value="10" class="hidden peer">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                                <p class="text-lg font-bold">10</p>
+                                <p class="text-xs text-gray-500">Hectares</p>
+                            </div>
+                        </label>
                     </div>
                 </div>
-                <button type="submit" class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors">Calculate Profit</button>
+                
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-xl hover:from-emerald-700 hover:to-green-700 transition-all text-lg shadow-lg">
+                    💵 Calculate My Profit
+                </button>
             </form>
             <div id="profit-result" class="hidden mt-4 space-y-4"></div>
         </div>
     </div>
 
+    <!-- AI Chat Modal -->
+    <div id="ai-chat-modal" class="modal">
+        <div class="bg-white rounded-2xl w-full max-w-2xl mx-4 max-h-[90vh] flex flex-col fade-in">
+            <div class="flex items-center justify-between p-4 border-b bg-gradient-to-r from-purple-600 to-indigo-600 rounded-t-2xl">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <span class="text-xl">🤖</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white" data-i18n="ai_assistant">AI Farm Assistant</h3>
+                        <p class="text-xs text-white/80" id="ai-status">Powered by Gemma 3</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="clearAIChat()" class="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg" title="Clear Chat">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    </button>
+                    <button onclick="closeModal('ai-chat-modal')" class="text-white/80 hover:text-white text-2xl px-2">&times;</button>
+                </div>
+            </div>
+            
+            <!-- Chat Messages -->
+            <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 min-h-[300px] max-h-[50vh]">
+                <!-- Welcome message -->
+                <div class="flex gap-3">
+                    <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-sm">🤖</span>
+                    </div>
+                    <div class="bg-gray-100 rounded-2xl rounded-tl-none p-4 max-w-[80%]">
+                        <p class="text-gray-800" data-i18n="ai_welcome">Hello! I'm your AI farming assistant. Ask me anything about crops, soil, weather, diseases, or farming practices!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Suggestions -->
+            <div id="ai-suggestions" class="px-4 pb-2">
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="sendAISuggestion('What crops should I plant this season?')" class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
+                        🌱 Seasonal crops
+                    </button>
+                    <button onclick="sendAISuggestion('How to improve soil health?')" class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
+                        🌍 Soil health
+                    </button>
+                    <button onclick="sendAISuggestion('What are common crop diseases?')" class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
+                        🦠 Crop diseases
+                    </button>
+                    <button onclick="sendAISuggestion('Tips for water management')" class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
+                        💧 Water tips
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Input Area -->
+            <div class="p-4 border-t bg-gray-50 rounded-b-2xl">
+                <form onsubmit="sendAIMessage(event)" class="flex gap-3">
+                    <button type="button" onclick="toggleVoiceInput()" id="voice-input-btn" class="p-3 bg-gray-200 text-gray-600 rounded-xl hover:bg-gray-300 transition-colors" title="Voice Input">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                        </svg>
+                    </button>
+                    <input type="text" id="ai-chat-input" placeholder="Ask me anything about farming..." class="flex-1 p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none">
+                    <button type="submit" id="ai-send-btn" class="px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors font-medium">
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plant Disease Scanner Modal -->
+    <div id="plant-disease-modal" class="modal">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🔬</span>
+                    <h3 class="text-xl font-bold text-gray-900" data-i18n="disease_scanner">Plant Disease Scanner</h3>
+                </div>
+                <button onclick="closeModal('plant-disease-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            
+            <!-- Upload Area -->
+            <div id="disease-upload-area" class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-green-500 transition-colors cursor-pointer" onclick="document.getElementById('disease-file-input').click()">
+                <input type="file" id="disease-file-input" accept="image/*" class="hidden" onchange="handleDiseaseImageSelect(event)">
+                <div class="space-y-4">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-gray-700 font-medium">Drop a leaf image here or click to upload</p>
+                        <p class="text-sm text-gray-500 mt-1">Take a clear photo of the affected plant leaf</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Camera Button -->
+            <div class="flex gap-3 mt-4">
+                <button onclick="openDiseaseCamera()" class="flex-1 flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span data-i18n="use_camera">Use Camera</span>
+                </button>
+            </div>
+            
+            <!-- Camera Preview -->
+            <div id="disease-camera-container" class="hidden mt-4">
+                <video id="disease-camera-video" class="w-full rounded-xl" autoplay playsinline></video>
+                <div class="flex gap-3 mt-3">
+                    <button onclick="captureDiseaseImage()" class="flex-1 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 font-medium">
+                        📸 Capture
+                    </button>
+                    <button onclick="closeDiseaseCamera()" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 font-medium">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Image Preview -->
+            <div id="disease-image-preview" class="hidden mt-4">
+                <img id="disease-preview-img" class="w-full rounded-xl" src="" alt="Plant image">
+                <button onclick="analyzeDiseaseImage()" id="analyze-btn" class="w-full mt-3 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 font-medium">
+                    🔍 Analyze Plant
+                </button>
+            </div>
+            
+            <!-- Results -->
+            <div id="disease-results" class="hidden mt-4 space-y-4">
+                <!-- Results will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Plot Mapper Modal -->
+    <div id="plot-modal" class="modal">
+        <div class="bg-white rounded-2xl w-full max-w-4xl mx-4 max-h-[90vh] flex flex-col fade-in">
+            <div class="flex items-center justify-between p-4 border-b">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🗺️</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900" data-i18n="plot_mapper">Plot Mapper</h3>
+                        <p class="text-sm text-gray-500">Draw your field boundaries to get personalized recommendations</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('plot-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            
+            <!-- Map Container -->
+            <div id="plot-map" class="flex-1 min-h-[400px]"></div>
+            
+            <!-- Instructions & Actions -->
+            <div class="p-4 border-t bg-gray-50 rounded-b-2xl">
+                <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                    <div class="text-sm text-gray-600">
+                        <p class="font-medium text-gray-800">📍 Instructions:</p>
+                        <p>Use the drawing tools on the map to mark your field boundaries. Click to add points, close the shape to finish.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="clearPlotDrawing()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium">
+                            Clear
+                        </button>
+                        <button onclick="analyzePlot()" id="analyze-plot-btn" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium disabled:opacity-50" disabled>
+                            🌱 Get Recommendations
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Plot Analysis Results -->
+                <div id="plot-analysis-results" class="hidden mt-4 p-4 bg-white rounded-xl border">
+                    <!-- Results will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Buttons -->
+    <div class="fixed bottom-24 md:bottom-6 right-4 flex flex-col gap-3 z-40">
+        <!-- Voice Assistant Button -->
+        <button onclick="toggleVoiceAssistant()" id="voice-fab" class="w-14 h-14 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group" title="Voice Assistant">
+            <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+            </svg>
+            <span class="voice-pulse hidden absolute w-full h-full rounded-full bg-blue-400 animate-ping"></span>
+        </button>
+        
+        <!-- AI Chat Button -->
+        <button onclick="openModal('ai-chat-modal')" id="ai-fab" class="w-14 h-14 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group" title="AI Assistant">
+            <span class="text-2xl group-hover:scale-110 transition-transform">🤖</span>
+        </button>
+        
+        <!-- Disease Scanner Button -->
+        <button onclick="openModal('plant-disease-modal')" id="disease-fab" class="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group" title="Plant Disease Scanner">
+            <span class="text-2xl group-hover:scale-110 transition-transform">🔬</span>
+        </button>
+    </div>
+
+    <!-- Voice Assistant Overlay -->
+    <div id="voice-overlay" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center">
+        <div class="text-center text-white max-w-lg mx-auto px-4">
+            <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center voice-listening-animation">
+                <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                </svg>
+            </div>
+            <p class="text-2xl font-medium mb-2" id="voice-status-text" data-i18n="listening">Listening...</p>
+            <p class="text-gray-400 mb-4" id="voice-transcript">Speak your question</p>
+            
+            <!-- Voice Command Hints -->
+            <div class="mb-6 text-left bg-white/10 rounded-xl p-4">
+                <p class="text-sm font-medium text-blue-300 mb-2">💡 Try saying:</p>
+                <div class="grid grid-cols-2 gap-2 text-sm text-gray-300">
+                    <div class="p-2 bg-white/5 rounded-lg">"Show weather"</div>
+                    <div class="p-2 bg-white/5 rounded-lg">"Market prices"</div>
+                    <div class="p-2 bg-white/5 rounded-lg">"What should I grow?"</div>
+                    <div class="p-2 bg-white/5 rounded-lg">"Check disease"</div>
+                    <div class="p-2 bg-white/5 rounded-lg">"Water calculator"</div>
+                    <div class="p-2 bg-white/5 rounded-lg">"Government schemes"</div>
+                </div>
+            </div>
+            
+            <div class="flex gap-4 justify-center">
+                <select id="voice-language-select" onchange="changeVoiceLanguage(this.value)" class="bg-white/20 border border-white/30 rounded-lg px-4 py-2 text-white">
+                    <option value="en-IN" class="text-gray-900">English</option>
+                    <option value="hi-IN" class="text-gray-900">हिंदी</option>
+                    <option value="kn-IN" class="text-gray-900">ಕನ್ನಡ</option>
+                    <option value="te-IN" class="text-gray-900">తెలుగు</option>
+                    <option value="ta-IN" class="text-gray-900">தமிழ்</option>
+                    <option value="mr-IN" class="text-gray-900">मराठी</option>
+                </select>
+                <button onclick="stopVoiceAssistant()" class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium">
+                    Stop
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet CSS & JS for Plot Mapping -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+
+    <style>
+        /* Voice Listening Animation */
+        .voice-listening-animation {
+            animation: voice-pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes voice-pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); }
+        }
+        
+        /* Chat Message Styles */
+        .ai-message-user {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: white;
+            border-radius: 1rem 1rem 0 1rem;
+        }
+        .ai-message-assistant {
+            background: #f3f4f6;
+            border-radius: 1rem 1rem 1rem 0;
+        }
+        
+        /* Typing indicator */
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #9ca3af;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: typing-bounce 1.4s infinite ease-in-out;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing-bounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
+        }
+        
+        /* FAB hover effects */
+        #voice-fab:hover, #ai-fab:hover, #disease-fab:hover {
+            transform: scale(1.1);
+        }
+    </style>
+
     <script>
-        const userData = {{ user | tojson | safe }};
+        window.userData = {{ user | tojson | safe }};
+        console.log('User soil type:', window.userData.soil_type);
     </script>
     <script src="/static/js/main.js"></script>
 </body>
