@@ -16,7 +16,7 @@ class CeresApp {
         this.updateUITranslations();
         this.setDefaultDiaryDate();
         this.initSoilFromProfile(); // Initialize soil params from user profile
-        
+
         if (document.getElementById('weather-content')) {
             this.loadWeather();
             this.loadMarketPrices();
@@ -32,50 +32,50 @@ class CeresApp {
     // Features: N, P, K, temperature, humidity, ph, rainfall
     initSoilFromProfile() {
         const soilType = this.userData.soil_type || 'alluvial';
-        
+
         // Soil presets with ALL ML model features tuned based on crop_data.csv patterns
         // Each soil type targets a different crop based on training data
         const soilPresets = {
             // Black soil (cotton belt) - Cotton: N=78-94, P=15-28, K=17-25, temp=23-29, hum=66-75, rainfall=45-78
             'black': { N: 88, P: 20, K: 20, ph: 7.1, temp: 26, humidity: 71, rainfall: 60, emoji: '🪨', color: 'from-gray-800 to-gray-600', bestCrop: 'cotton' },
-            
+
             // Red soil (groundnut) - Groundnut: N=32-41, P=54-65, K=15-24, temp=26-32, hum=58-68, rainfall=68-92
             'red': { N: 35, P: 58, K: 20, ph: 6.2, temp: 28, humidity: 62, rainfall: 75, emoji: '🥜', color: 'from-red-500 to-orange-400', bestCrop: 'groundnut' },
-            
+
             // Alluvial soil (rice paddy) - Rice: N=60-105, P=26-58, K=39-45, temp=20-26, hum=80-86, rainfall=200-270
             'alluvial': { N: 80, P: 42, K: 42, ph: 6.5, temp: 22, humidity: 82, rainfall: 230, emoji: '🌾', color: 'from-amber-300 to-yellow-200', bestCrop: 'rice' },
-            
+
             // Loamy soil (maize) - Maize: N=68-82, P=56-82, K=39-48, temp=18-24, hum=17-70, rainfall=47-108
             'loamy': { N: 72, P: 68, K: 42, ph: 6.0, temp: 21, humidity: 55, rainfall: 75, emoji: '🌽', color: 'from-amber-600 to-yellow-500', bestCrop: 'maize' },
-            
+
             // Laterite soil (coffee) - Coffee: N=90-105, P=28-42, K=25-35, temp=22-28, hum=55-70, rainfall=140-180
             'laterite': { N: 98, P: 35, K: 30, ph: 5.8, temp: 25, humidity: 62, rainfall: 155, emoji: '☕', color: 'from-orange-600 to-red-600', bestCrop: 'coffee' },
-            
+
             // Arid/Sandy soil (millets) - Millets: N=28-48, P=32-52, K=18-35, temp=28-34, hum=45-65, rainfall=35-75
             'arid': { N: 38, P: 42, K: 26, ph: 6.5, temp: 30, humidity: 55, rainfall: 55, emoji: '🏜️', color: 'from-yellow-200 to-orange-100', bestCrop: 'millets' },
-            
+
             // Forest soil (tea) - Tea: N=75-95, P=42-58, K=38-52, temp=18-24, hum=70-85, rainfall=180-240
             'forest': { N: 82, P: 48, K: 45, ph: 5.5, temp: 20, humidity: 78, rainfall: 200, emoji: '🍵', color: 'from-green-700 to-emerald-600', bestCrop: 'tea' },
-            
+
             // Saline soil (soybean tolerant) - Soybean: N=18-28, P=65-74, K=22-31, temp=22-28, hum=60-75, rainfall=45-85
             'saline': { N: 22, P: 70, K: 26, ph: 7.0, temp: 24, humidity: 68, rainfall: 65, emoji: '🧂', color: 'from-gray-300 to-blue-100', bestCrop: 'soybean' },
-            
+
             // Peaty/Organic soil (banana) - Banana: N=95-115, P=68-85, K=48-62, temp=26-32, hum=75-88, rainfall=95-150
             'peaty': { N: 102, P: 75, K: 55, ph: 5.8, temp: 28, humidity: 82, rainfall: 120, emoji: '🍌', color: 'from-stone-800 to-amber-900', bestCrop: 'banana' }
         };
-        
+
         const preset = soilPresets[soilType] || soilPresets['alluvial'];
-        
+
         // Store current preset for use in crop recommendation
         this.currentSoilPreset = preset;
-        
+
         // Update hidden inputs
         const nInput = document.getElementById('nitrogen');
         const pInput = document.getElementById('phosphorus');
         const kInput = document.getElementById('potassium');
         const phInput = document.getElementById('ph');
         const soilImage = document.getElementById('user-soil-image');
-        
+
         if (nInput) nInput.value = preset.N;
         if (pInput) pInput.value = preset.P;
         if (kInput) kInput.value = preset.K;
@@ -156,9 +156,9 @@ class CeresApp {
     getCropTranslation(crop) {
         const cropLower = crop.toLowerCase();
         if (this.cropTranslations && this.cropTranslations[cropLower]) {
-            return this.cropTranslations[cropLower][this.currentLang] || 
-                   this.cropTranslations[cropLower]['en'] || 
-                   crop;
+            return this.cropTranslations[cropLower][this.currentLang] ||
+                this.cropTranslations[cropLower]['en'] ||
+                crop;
         }
         return crop;
     }
@@ -173,7 +173,7 @@ class CeresApp {
     async changeLanguage(lang) {
         this.currentLang = lang;
         this.updateUITranslations();
-        
+
         try {
             await fetch('/api/user/update', {
                 method: 'POST',
@@ -183,11 +183,11 @@ class CeresApp {
         } catch (error) {
             console.error('Failed to update language preference');
         }
-        
+
         if (this.marketData.length > 0) {
             this.renderMarketPrices(this.marketData);
         }
-        
+
         this.loadGovernmentSchemes();
     }
 
@@ -234,7 +234,7 @@ class CeresApp {
 
         try {
             let url = '/api/weather?lang=' + this.currentLang;
-            
+
             // Use user's saved location - no more Delhi fallback
             if (this.userData.latitude && this.userData.longitude) {
                 url += `&lat=${this.userData.latitude}&lon=${this.userData.longitude}`;
@@ -252,14 +252,14 @@ class CeresApp {
             // Check if data is valid (not 0 or empty, has valid forecast)
             const hasValidTemp = data.current && data.current.temperature && data.current.temperature !== 0;
             const hasValidForecast = data.forecast && data.forecast.length > 0 && data.forecast[0].date;
-            
+
             if (data.error || !hasValidTemp || !hasValidForecast) {
                 console.log('Weather API returned invalid data, using Bangalore fallback');
                 this.renderWeather(bangaloreWeatherFallback);
                 loadingEl.classList.add('hidden');
                 contentEl.classList.remove('hidden');
                 contentEl.classList.add('fade-in');
-                
+
                 this.renderForecast(bangaloreWeatherFallback.forecast);
                 forecastSection.classList.remove('hidden');
                 forecastSection.classList.add('fade-in');
@@ -282,7 +282,7 @@ class CeresApp {
             loadingEl.classList.add('hidden');
             contentEl.classList.remove('hidden');
             contentEl.classList.add('fade-in');
-            
+
             if (bangaloreWeatherFallback.forecast) {
                 this.renderForecast(bangaloreWeatherFallback.forecast);
                 forecastSection.classList.remove('hidden');
@@ -301,13 +301,13 @@ class CeresApp {
                         <span class="text-2xl">📍</span>
                         <div class="flex-1">
                             <p class="font-semibold text-yellow-800">${this.getTranslation('location_permission')}</p>
-                            <p class="text-sm text-yellow-700">Set your location to get accurate weather data for your area.</p>
+                            <p class="text-sm text-yellow-700">${this.getTranslation('set_location_prompt')}</p>
                         </div>
                         <button onclick="detectLocation()" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 text-sm font-medium">
-                            Detect Location
+                            ${this.getTranslation('detect_location')}
                         </button>
                         <a href="/setup" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm font-medium">
-                            Set Manually
+                            ${this.getTranslation('set_manually')}
                         </a>
                     </div>
                 </div>
@@ -317,7 +317,7 @@ class CeresApp {
 
     renderWeather(data) {
         const current = data.current;
-        
+
         document.getElementById('temperature').textContent = current.temperature;
         document.getElementById('weather-description').textContent = current.description || '';
         document.getElementById('weather-city').textContent = current.city || '';
@@ -325,13 +325,13 @@ class CeresApp {
         document.getElementById('wind-speed').textContent = current.wind_speed + ' km/h';
         document.getElementById('feels-like').textContent = current.feels_like + '°C';
         document.getElementById('rainfall').textContent = (current.rainfall || 0) + ' mm';
-        
+
         // UV Index
         const uvEl = document.getElementById('uv-index');
         if (uvEl && current.uv_index !== undefined) {
             uvEl.textContent = current.uv_index.toFixed(1);
         }
-        
+
         // Sunrise/Sunset - handle both data structures
         if (data.daily) {
             if (data.daily.sunrise) document.getElementById('sunrise').textContent = data.daily.sunrise;
@@ -340,7 +340,7 @@ class CeresApp {
             if (current.sunrise) document.getElementById('sunrise').textContent = current.sunrise;
             if (current.sunset) document.getElementById('sunset').textContent = current.sunset;
         }
-        
+
         // Weather icon - handle WeatherAPI.com icon URL or fallback to emoji
         const iconEl = document.getElementById('weather-icon');
         if (current.icon && current.icon.includes('http')) {
@@ -350,22 +350,22 @@ class CeresApp {
             iconEl.src = this.getWeatherIcon(weatherCode);
         }
         iconEl.alt = current.description || 'Weather';
-        
+
         // Store weather data for other tools
         this.weatherData = data;
-        
+
         // Auto-fill rainfall in crop recommendation based on weather forecast
         this.autoFillRainfallFromWeather(data);
     }
-    
+
     autoFillRainfallFromWeather(weatherData) {
         const rainfallInput = document.getElementById('rainfall-input');
         const autoRainfallDisplay = document.getElementById('auto-rainfall-display');
         if (!rainfallInput) return;
-        
+
         let totalRainfall = 0;
         let weeklyRainfall = 0;
-        
+
         // Sum rainfall from forecast (next 5-7 days and estimate for season)
         if (weatherData.forecast && weatherData.forecast.length > 0) {
             // Get weekly rainfall and extrapolate to seasonal estimate
@@ -376,31 +376,31 @@ class CeresApp {
             // Fallback: use current day rainfall and estimate
             totalRainfall = Math.round(weatherData.current.rainfall * 30);
         }
-        
+
         // Default minimum if no rainfall data
         if (totalRainfall < 50) {
             totalRainfall = Math.max(totalRainfall, 100); // Default 100mm
         }
-        
+
         // Cap at reasonable seasonal max
         totalRainfall = Math.min(totalRainfall, 3000);
-        
+
         // Set the hidden input
         rainfallInput.value = totalRainfall;
-        
+
         // Update the display
         if (autoRainfallDisplay) {
-            let rainfallCategory = 'Medium';
+            let rainfallCategory = this.getTranslation('rainfall_medium');
             let categoryEmoji = '🌧️';
-            
+
             if (totalRainfall < 200) {
-                rainfallCategory = 'Low';
+                rainfallCategory = this.getTranslation('rainfall_low');
                 categoryEmoji = '🌤️';
             } else if (totalRainfall > 500) {
-                rainfallCategory = 'High';
+                rainfallCategory = this.getTranslation('rainfall_high');
                 categoryEmoji = '⛈️';
             }
-            
+
             autoRainfallDisplay.innerHTML = `${totalRainfall} mm/season <span class="text-sm font-normal">(${categoryEmoji} ${rainfallCategory})</span>`;
         }
     }
@@ -416,7 +416,7 @@ class CeresApp {
             80: '🌧️', 81: '🌧️', 82: '🌧️',
             95: '⛈️', 96: '⛈️', 99: '⛈️'
         };
-        
+
         // Create a data URL for the emoji
         const emoji = iconMap[code] || '🌤️';
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80">
@@ -438,10 +438,10 @@ class CeresApp {
         forecast.slice(0, 7).forEach((day, index) => {
             const date = new Date(day.date);
             const dayName = index < 2 ? days[index] : date.toLocaleDateString(this.currentLang === 'en' ? 'en-US' : 'hi-IN', { weekday: 'short' });
-            
+
             const dayEl = document.createElement('div');
             dayEl.className = 'text-center p-2 bg-gray-50 rounded-xl min-w-[60px]';
-            
+
             // Handle both WeatherAPI.com format and Open-Meteo format
             let iconHtml;
             if (day.icon && day.icon.includes('weatherapi')) {
@@ -451,11 +451,11 @@ class CeresApp {
                 const emoji = this.getWeatherEmoji(weatherCode);
                 iconHtml = `<span class="text-2xl">${emoji}</span>`;
             }
-            
+
             // Handle both temp formats
             const maxTemp = day.temp_max ?? day.max_temp ?? day.avg_temp ?? '--';
             const minTemp = day.temp_min ?? day.min_temp ?? '--';
-            
+
             dayEl.innerHTML = `
                 <p class="text-xs text-gray-500 mb-1">${dayName}</p>
                 ${iconHtml}
@@ -464,27 +464,27 @@ class CeresApp {
             `;
             container.appendChild(dayEl);
         });
-        
+
         // Generate smart tips based on forecast
         this.generateSmartTips(forecast);
     }
-    
+
     generateSmartTips(forecast) {
         const tips = {
             weather: [],
             farming: [],
             pest: []
         };
-        
+
         // Get today's forecast data
         const today = forecast[0] || {};
         const current = this.weatherData?.current || {};
-        
+
         const temp = current.temperature || today.temp_max || today.avg_temp || 30;
         const humidity = current.humidity || 60;
         const rainfall = today.rainfall || 0;
         const willRain = rainfall > 0 || (forecast.slice(0, 3).some(d => (d.rainfall || 0) > 5));
-        
+
         // Language-based tips
         const tipMessages = {
             en: {
@@ -536,9 +536,9 @@ class CeresApp {
                 noSpray: '4 घंटे के भीतर बारिश की उम्मीद हो तो कीटनाशक स्प्रे से बचें।'
             }
         };
-        
+
         const messages = tipMessages[this.currentLang] || tipMessages.en;
-        
+
         // Weather tips
         if (temp > 35) {
             tips.weather.push(messages.hotWeather);
@@ -553,11 +553,11 @@ class CeresApp {
         } else {
             tips.weather.push(messages.idealWeather);
         }
-        
+
         // Farming tips
         const farmingTips = [messages.checkSoil, messages.mulching, messages.fertilizer, messages.pruning];
         tips.farming.push(farmingTips[Math.floor(Math.random() * farmingTips.length)]);
-        
+
         // Pest tips
         if (humidity > 70 && temp > 25) {
             tips.pest.push(messages.aphids);
@@ -568,7 +568,7 @@ class CeresApp {
         } else {
             tips.pest.push(messages.pestCheck);
         }
-        
+
         // Update UI
         document.getElementById('weather-tip-text').textContent = tips.weather[0] || messages.idealWeather;
         document.getElementById('farming-tip-text').textContent = tips.farming[0] || messages.checkSoil;
@@ -615,9 +615,9 @@ class CeresApp {
 
         alerts.slice(0, 3).forEach(alert => {
             const alertEl = document.createElement('div');
-            const alertClass = alert.severity === 'high' ? 'alert-high' : 
-                             alert.severity === 'medium' ? 'alert-medium' : 'alert-low';
-            
+            const alertClass = alert.severity === 'high' ? 'alert-high' :
+                alert.severity === 'medium' ? 'alert-medium' : 'alert-low';
+
             const icons = {
                 rain: '🌧️',
                 heat: '🌡️',
@@ -625,7 +625,7 @@ class CeresApp {
                 pest: '🐛',
                 wind: '💨'
             };
-            
+
             alertEl.className = `${alertClass} p-4 rounded-lg flex items-center gap-3 fade-in`;
             alertEl.innerHTML = `
                 <span class="text-2xl">${icons[alert.type] || '⚠️'}</span>
@@ -655,9 +655,9 @@ class CeresApp {
         const container = document.getElementById('schemes-container');
         container.innerHTML = '';
 
-        const colors = ['bg-green-50 border-green-200', 'bg-blue-50 border-blue-200', 
-                       'bg-orange-50 border-orange-200', 'bg-purple-50 border-purple-200',
-                       'bg-pink-50 border-pink-200', 'bg-yellow-50 border-yellow-200'];
+        const colors = ['bg-green-50 border-green-200', 'bg-blue-50 border-blue-200',
+            'bg-orange-50 border-orange-200', 'bg-purple-50 border-purple-200',
+            'bg-pink-50 border-pink-200', 'bg-yellow-50 border-yellow-200'];
 
         schemes.forEach((scheme, index) => {
             const schemeEl = document.createElement('div');
@@ -681,7 +681,7 @@ class CeresApp {
                 this.renderAirQuality(this.weatherData.air_quality);
                 return;
             }
-            
+
             // Fallback to dedicated endpoint
             let url = '/api/air-quality';
             if (this.userData.latitude && this.userData.longitude) {
@@ -711,7 +711,7 @@ class CeresApp {
         // Handle both WeatherAPI format and Open-Meteo format
         const aqi = data.us_epa_index || data.aqi || (data.pm25 ? Math.round(data.pm25) : 0);
         aqiValue.textContent = Math.round(aqi);
-        
+
         // AQI label based on US EPA index
         let label = 'Good';
         let color = 'text-green-600';
@@ -720,14 +720,14 @@ class CeresApp {
         else if (aqi >= 4) { label = 'Unhealthy'; color = 'text-red-600'; }
         else if (aqi >= 3) { label = 'Unhealthy (Sensitive)'; color = 'text-orange-600'; }
         else if (aqi >= 2) { label = 'Moderate'; color = 'text-yellow-600'; }
-        
+
         aqiLabel.textContent = label;
         aqiValue.className = `text-4xl font-bold mb-2 ${color}`;
-        
+
         // PM values
         const pm25Val = data.pm25 || data.pm2_5 || 0;
         const pm10Val = data.pm10 || 0;
-        
+
         if (pm25Val) pm25.textContent = pm25Val.toFixed(1) + ' µg/m³';
         if (pm10Val) pm10.textContent = pm10Val.toFixed(1) + ' µg/m³';
     }
@@ -743,7 +743,7 @@ class CeresApp {
 
         try {
             let url = `/api/market-prices?state=${encodeURIComponent(this.userData.state || 'Karnataka')}&lang=${this.currentLang}`;
-            
+
             if (this.userData.district) {
                 url += `&district=${encodeURIComponent(this.userData.district)}`;
             }
@@ -777,9 +777,9 @@ class CeresApp {
         filteredPrices.slice(0, 10).forEach(price => {
             const row = document.createElement('tr');
             row.className = 'table-row border-b border-gray-100 hover:bg-gray-50';
-            
+
             const commodityName = this.getCropTranslation(price.commodity);
-            
+
             row.innerHTML = `
                 <td class="py-3 px-2">
                     <span class="font-semibold text-gray-900">${commodityName}</span>
@@ -869,7 +869,7 @@ class CeresApp {
         };
 
         const recommendation = hardcodedRecommendations[soilType] || hardcodedRecommendations['alluvial'];
-        
+
         // Small delay to show loading state
         await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -895,13 +895,13 @@ class CeresApp {
         const cropName = data.recommended_crop_translated || this.getCropTranslation(data.recommended_crop);
         document.getElementById('recommended-crop').textContent = cropName;
         document.getElementById('confidence-value').textContent = data.confidence.toFixed(1) + '%';
-        
+
         // Update crop image/emoji
         const cropImageEl = document.getElementById('crop-image');
         if (cropImageEl) {
             cropImageEl.textContent = getCropEmoji(data.recommended_crop);
         }
-        
+
         const confidenceBar = document.getElementById('confidence-bar');
         confidenceBar.style.width = '0%';
         setTimeout(() => {
@@ -936,7 +936,7 @@ class CeresApp {
             if (data.success) {
                 const panel = document.getElementById('crop-info-panel');
                 const details = document.getElementById('crop-details');
-                
+
                 details.innerHTML = `
                     <div class="flex justify-between"><span class="text-gray-500">Season:</span><span class="font-medium">${data.season || 'N/A'}</span></div>
                     <div class="flex justify-between"><span class="text-gray-500">Water Needs:</span><span class="font-medium">${data.water_needs || 'N/A'}</span></div>
@@ -952,7 +952,7 @@ class CeresApp {
     // Water Calculator
     async calculateWater(event) {
         event.preventDefault();
-        
+
         const crop = document.getElementById('water-crop').value;
         const area = parseFloat(document.getElementById('water-area').value);
 
@@ -979,7 +979,7 @@ class CeresApp {
     // Fertilizer Calculator
     async calculateFertilizer(event) {
         event.preventDefault();
-        
+
         const crop = document.getElementById('fert-crop').value;
         const area = parseFloat(document.getElementById('fert-area').value);
 
@@ -995,7 +995,7 @@ class CeresApp {
             if (data.success) {
                 const resultEl = document.getElementById('fert-result');
                 const detailsEl = document.getElementById('fert-details');
-                
+
                 detailsEl.innerHTML = `
                     <div class="flex justify-between p-2 bg-white rounded"><span>Urea</span><span class="font-bold">${data.urea_kg} kg</span></div>
                     <div class="flex justify-between p-2 bg-white rounded"><span>DAP</span><span class="font-bold">${data.dap_kg} kg</span></div>
@@ -1029,7 +1029,7 @@ class CeresApp {
 
         const currentMonth = new Date().toLocaleString('en-US', { month: 'long' });
         const currentSeason = data.current_season || this.getCurrentSeason();
-        
+
         // Current month info
         const monthEl = document.createElement('div');
         monthEl.className = 'p-4 bg-green-50 rounded-xl mb-4';
@@ -1056,7 +1056,7 @@ class CeresApp {
         // Season-wise calendar
         const seasons = ['kharif', 'rabi', 'zaid'];
         const seasonNames = { kharif: 'Kharif (Jun-Oct)', rabi: 'Rabi (Nov-Mar)', zaid: 'Zaid (Mar-Jun)' };
-        
+
         seasons.forEach(season => {
             if (data.calendar && data.calendar[season]) {
                 const seasonEl = document.createElement('div');
@@ -1064,9 +1064,9 @@ class CeresApp {
                 seasonEl.innerHTML = `
                     <h5 class="font-semibold text-gray-700 mb-2">${seasonNames[season]}</h5>
                     <div class="flex flex-wrap gap-2">
-                        ${data.calendar[season].map(crop => 
-                            `<span class="px-3 py-1 bg-gray-100 rounded-full text-sm">${this.getCropTranslation(crop)}</span>`
-                        ).join('')}
+                        ${data.calendar[season].map(crop =>
+                    `<span class="px-3 py-1 bg-gray-100 rounded-full text-sm">${this.getCropTranslation(crop)}</span>`
+                ).join('')}
                     </div>
                 `;
                 container.appendChild(seasonEl);
@@ -1133,10 +1133,10 @@ class CeresApp {
 
     updateDiarySummary(summary) {
         if (!summary) return;
-        
+
         document.getElementById('total-expense').textContent = `₹${(summary.total_expense || 0).toLocaleString()}`;
         document.getElementById('total-income').textContent = `₹${(summary.total_income || 0).toLocaleString()}`;
-        
+
         const profit = (summary.total_income || 0) - (summary.total_expense || 0);
         const profitEl = document.getElementById('profit-loss');
         profitEl.textContent = `₹${Math.abs(profit).toLocaleString()}`;
@@ -1170,7 +1170,7 @@ class CeresApp {
                 document.getElementById('diary-notes').value = '';
                 document.getElementById('diary-expense').value = '';
                 document.getElementById('diary-income').value = '';
-                
+
                 // Reload entries
                 this.loadFarmDiary();
             }
@@ -1188,11 +1188,11 @@ class CeresApp {
     }
 
     // === ADVANCED ML TOOLS ===
-    
+
     // Disease Risk Analyzer
     async analyzeDiseaseRisk(event) {
         event.preventDefault();
-        
+
         const data = {
             crop: document.getElementById('disease-crop').value,
             temperature: parseFloat(document.getElementById('disease-temp').value),
@@ -1223,27 +1223,27 @@ class CeresApp {
 
     renderDiseaseRiskResult(data) {
         const container = document.getElementById('disease-result');
-        
+
         const riskColors = {
             low: { bg: 'bg-green-100', text: 'text-green-700', bar: 'bg-green-500' },
             moderate: { bg: 'bg-yellow-100', text: 'text-yellow-700', bar: 'bg-yellow-500' },
             high: { bg: 'bg-red-100', text: 'text-red-700', bar: 'bg-red-500' }
         };
-        
+
         const colors = riskColors[data.risk_level] || riskColors.moderate;
-        
+
         let html = `
             <div class="p-4 ${colors.bg} rounded-xl text-center">
-                <p class="text-sm text-gray-600 mb-1">Overall Risk Level</p>
-                <p class="text-3xl font-bold ${colors.text} mb-2">${data.risk_level.toUpperCase()}</p>
+                <p class="text-sm text-gray-600 mb-1">${this.getTranslation('overall_risk_level')}</p>
+                <p class="text-3xl font-bold ${colors.text} mb-2">${this.getTranslation('risk_' + data.risk_level.toLowerCase())}</p>
                 <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
                     <div class="${colors.bar} h-3 rounded-full transition-all duration-500" style="width: ${Math.min(data.overall_risk, 100)}%"></div>
                 </div>
-                <p class="text-sm ${colors.text}">Risk Score: ${data.overall_risk.toFixed(1)}%</p>
+                <p class="text-sm ${colors.text}">${this.getTranslation('risk_score')}: ${data.overall_risk.toFixed(1)}%</p>
             </div>
             
             <div class="p-4 bg-gray-50 rounded-xl">
-                <p class="font-semibold text-gray-700 mb-2">Primary Threat: <span class="text-red-600">${data.primary_threat?.replace(/_/g, ' ').toUpperCase() || 'None'}</span></p>
+                <p class="font-semibold text-gray-700 mb-2">${this.getTranslation('primary_threat')}: <span class="text-red-600">${data.primary_threat ? this.getTranslation(data.primary_threat.toLowerCase()) || data.primary_threat.replace(/_/g, ' ').toUpperCase() : 'None'}</span></p>
             </div>
         `;
 
@@ -1252,10 +1252,11 @@ class CeresApp {
             html += `<div class="space-y-2">`;
             for (const [disease, info] of Object.entries(data.disease_risks)) {
                 const diseaseRiskPct = Math.min(info.risk_score, 100);
+                const diseaseName = this.getTranslation(info.disease.toLowerCase()) || info.disease.replace(/_/g, ' ');
                 html += `
                     <div class="p-3 bg-white border rounded-lg">
                         <div class="flex justify-between items-center mb-1">
-                            <span class="font-medium text-gray-700">${info.disease.replace(/_/g, ' ')}</span>
+                            <span class="font-medium text-gray-700">${diseaseName}</span>
                             <span class="text-sm font-bold ${diseaseRiskPct > 60 ? 'text-red-600' : diseaseRiskPct > 30 ? 'text-yellow-600' : 'text-green-600'}">${diseaseRiskPct.toFixed(0)}%</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2">
@@ -1272,7 +1273,7 @@ class CeresApp {
         if (data.recommendations && data.recommendations.length > 0) {
             html += `
                 <div class="p-4 bg-blue-50 rounded-xl">
-                    <p class="font-semibold text-blue-800 mb-2">💡 Recommendations</p>
+                    <p class="font-semibold text-blue-800 mb-2">💡 ${this.getTranslation('recommendations')}</p>
                     <ul class="text-sm text-blue-700 space-y-1">
                         ${data.recommendations.map(r => `<li>• ${r}</li>`).join('')}
                     </ul>
@@ -1298,10 +1299,10 @@ class CeresApp {
     // Yield Predictor
     async predictYield(event) {
         event.preventDefault();
-        
+
         const irrigationMap = { 'good': 0.9, 'moderate': 0.7, 'poor': 0.4 };
         const pestMap = { 'low': 0.1, 'moderate': 0.3, 'high': 0.5 };
-        
+
         const data = {
             crop: document.getElementById('yield-crop').value,
             state: this.userData.state || 'Karnataka',
@@ -1339,10 +1340,10 @@ class CeresApp {
 
     renderYieldResult(data) {
         const container = document.getElementById('yield-result');
-        
+
         const factors = data.factors || {};
         const limitingFactor = data.limiting_factor || 'unknown';
-        
+
         let html = `
             <div class="p-4 bg-gradient-to-r from-amber-100 to-yellow-100 rounded-xl text-center">
                 <p class="text-sm text-gray-600 mb-1">Predicted Yield</p>
@@ -1365,7 +1366,7 @@ class CeresApp {
                 <p class="font-semibold text-gray-700 mb-3">🎯 Factor Analysis</p>
                 <div class="space-y-2">
         `;
-        
+
         const factorLabels = {
             water: '💧 Water',
             nutrients: '🌿 Nutrients',
@@ -1373,7 +1374,7 @@ class CeresApp {
             soil_ph: '⚗️ Soil pH',
             pest_pressure: '🐛 Pest Impact'
         };
-        
+
         for (const [factor, value] of Object.entries(factors)) {
             const pct = (value * 100).toFixed(0);
             const isLimiting = factor === limitingFactor;
@@ -1387,7 +1388,7 @@ class CeresApp {
                 </div>
             `;
         }
-        
+
         html += `</div></div>`;
 
         // Economic Projection
@@ -1425,7 +1426,7 @@ class CeresApp {
     // Soil Health Analyzer
     async analyzeSoilHealth(event) {
         event.preventDefault();
-        
+
         const data = {
             nitrogen: parseFloat(document.getElementById('soil-n').value),
             phosphorus: parseFloat(document.getElementById('soil-p').value),
@@ -1457,19 +1458,19 @@ class CeresApp {
 
     renderSoilHealthResult(data) {
         const container = document.getElementById('soil-result');
-        
+
         const healthColors = {
             poor: { bg: 'bg-red-100', text: 'text-red-700', bar: 'bg-red-500' },
             fair: { bg: 'bg-yellow-100', text: 'text-yellow-700', bar: 'bg-yellow-500' },
             good: { bg: 'bg-green-100', text: 'text-green-700', bar: 'bg-green-500' },
             excellent: { bg: 'bg-emerald-100', text: 'text-emerald-700', bar: 'bg-emerald-500' }
         };
-        
+
         const colors = healthColors[data.category] || healthColors.fair;
-        
+
         let html = `
             <div class="p-4 ${colors.bg} rounded-xl text-center">
-                <p class="text-sm text-gray-600 mb-1">Soil Health Index</p>
+                <p class="text-sm text-gray-600 mb-1">${this.getTranslation('soil_health_index')}</p>
                 <p class="text-5xl font-bold ${colors.text}">${(data.soil_health_index || 0).toFixed(1)}</p>
                 <p class="text-lg font-semibold ${colors.text} mt-1">${(data.category || 'Unknown').toUpperCase()}</p>
                 <div class="w-full bg-gray-200 rounded-full h-4 mt-3">
@@ -1482,25 +1483,26 @@ class CeresApp {
         if (data.component_scores) {
             html += `
                 <div class="p-4 bg-gray-50 rounded-xl">
-                    <p class="font-semibold text-gray-700 mb-3">📊 Component Scores</p>
+                    <p class="font-semibold text-gray-700 mb-3">📊 ${this.getTranslation('component_scores')}</p>
                     <div class="space-y-2">
             `;
-            
+
             const componentLabels = {
-                nitrogen: 'Nitrogen (N)',
-                phosphorus: 'Phosphorus (P)',
-                potassium: 'Potassium (K)',
-                ph_balance: 'pH Balance',
-                organic_carbon: 'Organic Carbon',
-                ec: 'EC (Salinity)',
-                texture: 'Soil Texture'
+                nitrogen: 'nitrogen_n',
+                phosphorus: 'phosphorus_p',
+                potassium: 'potassium_k',
+                ph_balance: 'ph_balance',
+                organic_carbon: 'organic_carbon_label',
+                ec: 'ec_salinity',
+                texture: 'soil_texture'
             };
-            
+
             for (const [component, score] of Object.entries(data.component_scores)) {
                 const pct = Math.min(100, Math.round(score)); // Score is already 0-100, just round it
+                const label = this.getTranslation(componentLabels[component]) || component;
                 html += `
                     <div class="flex items-center gap-2">
-                        <span class="text-sm w-32 text-gray-600">${componentLabels[component] || component}</span>
+                        <span class="text-sm w-32 text-gray-600">${label}</span>
                         <div class="flex-1 bg-gray-200 rounded-full h-2">
                             <div class="${pct >= 80 ? 'bg-green-500' : pct >= 50 ? 'bg-yellow-500' : 'bg-red-500'} h-2 rounded-full" style="width: ${pct}%"></div>
                         </div>
@@ -1508,7 +1510,7 @@ class CeresApp {
                     </div>
                 `;
             }
-            
+
             html += `</div></div>`;
         }
 
@@ -1516,7 +1518,7 @@ class CeresApp {
         if (data.recommendations && data.recommendations.length > 0) {
             html += `
                 <div class="p-4 bg-blue-50 rounded-xl">
-                    <p class="font-semibold text-blue-800 mb-2">💡 Improvement Recommendations</p>
+                    <p class="font-semibold text-blue-800 mb-2">💡 ${this.getTranslation('improvement_recommendations')}</p>
                     <ul class="text-sm text-blue-700 space-y-1">
                         ${data.recommendations.map(r => `<li>• ${r}</li>`).join('')}
                     </ul>
@@ -1543,7 +1545,7 @@ class CeresApp {
     // Smart Irrigation Scheduler
     async getIrrigationSchedule(event) {
         event.preventDefault();
-        
+
         const data = {
             crop: document.getElementById('irr-crop').value,
             growth_stage: document.getElementById('irr-stage').value,
@@ -1597,7 +1599,7 @@ class CeresApp {
 
     renderIrrigationResult(data) {
         const container = document.getElementById('irrigation-result');
-        
+
         let html = `
             <div class="grid grid-cols-3 gap-3">
                 <div class="p-3 bg-cyan-100 rounded-xl text-center">
@@ -1632,12 +1634,12 @@ class CeresApp {
                             </thead>
                             <tbody>
             `;
-            
+
             data.schedule.forEach(day => {
                 const date = new Date(day.date).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric' });
                 const irrigationLiters = day.irrigation_liters || 0;
                 const needsIrrigation = irrigationLiters > 0;
-                
+
                 html += `
                     <tr class="border-b ${needsIrrigation ? 'bg-cyan-50' : ''}">
                         <td class="py-2 px-1">
@@ -1652,7 +1654,7 @@ class CeresApp {
                     </tr>
                 `;
             });
-            
+
             html += `</tbody></table></div></div>`;
         }
 
@@ -1684,20 +1686,20 @@ class CeresApp {
 
     async calculateProfit(event) {
         event.preventDefault();
-        
+
         // Read from radio buttons
         const cropRadio = document.querySelector('input[name="profit-crop-radio"]:checked');
         const areaRadio = document.querySelector('input[name="profit-area-radio"]:checked');
-        
+
         if (!cropRadio || !areaRadio) {
             alert('Please select a crop and farm area');
             return;
         }
-        
+
         const crop = cropRadio.value;
         const area = parseFloat(areaRadio.value);
         const costs = this.CROP_COSTS[crop] || this.CROP_COSTS['rice']; // Fallback to rice costs
-        
+
         const data = {
             crop: crop,
             state: this.userData.state || 'Karnataka',
@@ -1737,19 +1739,19 @@ class CeresApp {
     calculateProfitLocally(crop, area, costs) {
         const marketPrices = { rice: 2200, wheat: 2300, cotton: 6500, maize: 2000, sugarcane: 350, soybean: 4500 };
         const yields = { rice: 4500, wheat: 3800, cotton: 1800, maize: 6000, sugarcane: 70000, soybean: 2200 };
-        
+
         const totalCost = Object.values(costs).reduce((a, b) => a + b, 0) * area;
         const yieldKg = (yields[crop] || 4000) * area;
         const price = marketPrices[crop] || 2000;
         const revenue = (yieldKg / 100) * price; // Convert to quintals
         const profit = revenue - totalCost;
-        
+
         this.renderProfitResult({
             crop, area_hectares: area,
             yield: { predicted_kg_per_ha: yields[crop] || 4000, total_kg: yieldKg },
             revenue: { gross_revenue: revenue, market_price_per_quintal: price },
             total_cost: totalCost,
-            financials: { net_profit: profit, profit_margin_percent: (profit/revenue*100), return_on_investment_percent: (profit/totalCost*100) }
+            financials: { net_profit: profit, profit_margin_percent: (profit / revenue * 100), return_on_investment_percent: (profit / totalCost * 100) }
         }, crop, area);
     }
 
@@ -1757,10 +1759,10 @@ class CeresApp {
         const container = document.getElementById('profit-result');
         const cropEmoji = this.getCropEmoji(crop);
         const cropName = crop.charAt(0).toUpperCase() + crop.slice(1);
-        
+
         const isProfit = data.financials?.net_profit >= 0;
         const verdictColor = isProfit ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
-        
+
         let html = `
             <div class="p-4 bg-blue-50 rounded-xl text-center mb-3">
                 <p class="text-3xl mb-1">${cropEmoji}</p>
@@ -1834,35 +1836,35 @@ class VoiceAssistant {
         this.synthesis = window.speechSynthesis;
         this.isListening = false;
         this.isSupported = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
-        
+
         if (this.isSupported) {
             this.initRecognition();
         } else {
             console.warn('Speech recognition not supported in this browser');
         }
     }
-    
+
     initRecognition() {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         this.recognition = new SpeechRecognition();
         this.recognition.continuous = false;
         this.recognition.interimResults = true;
         this.recognition.maxAlternatives = 1;
-        
+
         // Set language based on app language
         this.updateLanguage();
-        
+
         this.recognition.onstart = () => {
             this.isListening = true;
             this.updateMicButton(true);
             this.showListeningFeedback();
             this.updateVoiceStatus('Listening...');
         };
-        
+
         this.recognition.onresult = (event) => {
             let finalTranscript = '';
             let interimTranscript = '';
-            
+
             for (let i = event.resultIndex; i < event.results.length; i++) {
                 const transcript = event.results[i][0].transcript;
                 if (event.results[i].isFinal) {
@@ -1871,35 +1873,35 @@ class VoiceAssistant {
                     interimTranscript += transcript;
                 }
             }
-            
+
             this.updateTranscript(interimTranscript || finalTranscript, !event.results[event.results.length - 1].isFinal);
-            
+
             if (finalTranscript) {
                 this.processCommand(finalTranscript);
             }
         };
-        
+
         this.recognition.onerror = (event) => {
             console.error('Speech recognition error:', event.error);
             this.isListening = false;
             this.updateMicButton(false);
             this.hideListeningFeedback();
-            
+
             if (event.error === 'no-speech') {
                 this.speak(this.app.getTranslation('no_speech_detected') || 'No speech detected. Please try again.');
             }
         };
-        
+
         this.recognition.onend = () => {
             this.isListening = false;
             this.updateMicButton(false);
             this.hideListeningFeedback();
         };
     }
-    
+
     updateLanguage() {
         if (!this.recognition) return;
-        
+
         const langMap = {
             'en': 'en-IN',
             'hi': 'hi-IN',
@@ -1908,10 +1910,10 @@ class VoiceAssistant {
             'ta': 'ta-IN',
             'mr': 'mr-IN'
         };
-        
+
         this.recognition.lang = langMap[this.app.currentLang] || 'en-IN';
     }
-    
+
     toggle() {
         if (this.isListening) {
             this.stop();
@@ -1919,13 +1921,13 @@ class VoiceAssistant {
             this.start();
         }
     }
-    
+
     async start() {
         if (!this.isSupported) {
             this.showNotSupported();
             return;
         }
-        
+
         // Request microphone permission
         try {
             await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -1933,10 +1935,10 @@ class VoiceAssistant {
             this.showPermissionError();
             return;
         }
-        
+
         this.updateLanguage();
         this.updateVoiceStatus('Starting...');
-        
+
         try {
             this.recognition.start();
         } catch (e) {
@@ -1954,7 +1956,7 @@ class VoiceAssistant {
             }
         }
     }
-    
+
     showNotSupported() {
         const langMessages = {
             'en': 'Voice recognition is not supported in your browser. Please use Chrome or Edge.',
@@ -1963,7 +1965,7 @@ class VoiceAssistant {
         };
         alert(langMessages[this.app.currentLang] || langMessages['en']);
     }
-    
+
     showPermissionError() {
         const langMessages = {
             'en': 'Please allow microphone access to use voice assistant.',
@@ -1972,7 +1974,7 @@ class VoiceAssistant {
         };
         alert(langMessages[this.app.currentLang] || langMessages['en']);
     }
-    
+
     updateVoiceStatus(text) {
         const statusEl = document.getElementById('voice-status-text');
         if (statusEl) {
@@ -1983,13 +1985,13 @@ class VoiceAssistant {
             transcriptEl.textContent = text;
         }
     }
-    
+
     stop() {
         if (this.recognition) {
             this.recognition.stop();
         }
     }
-    
+
     async processCommand(text) {
         try {
             const response = await fetch('/api/voice/process', {
@@ -2000,15 +2002,15 @@ class VoiceAssistant {
                     language: this.app.currentLang
                 })
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 // Speak response
                 if (data.speak) {
                     this.speak(data.speak);
                 }
-                
+
                 // Execute action
                 switch (data.action) {
                     case 'show_weather':
@@ -2048,15 +2050,15 @@ class VoiceAssistant {
             console.error('Error processing voice command:', error);
         }
     }
-    
+
     speak(text) {
         if (!this.synthesis) return;
-        
+
         // Cancel any ongoing speech
         this.synthesis.cancel();
-        
+
         const utterance = new SpeechSynthesisUtterance(text);
-        
+
         // Set language
         const langMap = {
             'en': 'en-IN',
@@ -2066,14 +2068,14 @@ class VoiceAssistant {
             'ta': 'ta-IN',
             'mr': 'mr-IN'
         };
-        
+
         utterance.lang = langMap[this.app.currentLang] || 'en-IN';
         utterance.rate = 0.9;
         utterance.pitch = 1;
-        
+
         this.synthesis.speak(utterance);
     }
-    
+
     updateMicButton(isActive) {
         const btn = document.getElementById('voice-btn');
         if (btn) {
@@ -2096,7 +2098,7 @@ class VoiceAssistant {
             }
         }
     }
-    
+
     showListeningFeedback() {
         let feedback = document.getElementById('voice-feedback');
         if (!feedback) {
@@ -2118,14 +2120,14 @@ class VoiceAssistant {
         }
         feedback.classList.remove('hidden');
     }
-    
+
     hideListeningFeedback() {
         const feedback = document.getElementById('voice-feedback');
         if (feedback) {
             feedback.classList.add('hidden');
         }
     }
-    
+
     updateTranscript(text, isInterim) {
         const el = document.getElementById('voice-transcript');
         if (el) {
@@ -2149,7 +2151,7 @@ class AIChat {
         this.conversationHistory = [];
         this.isLoading = false;
     }
-    
+
     async checkStatus() {
         try {
             const response = await fetch('/api/ai/status');
@@ -2158,17 +2160,17 @@ class AIChat {
             return { connected: false, error: 'Cannot connect to AI service' };
         }
     }
-    
+
     async sendMessage(message) {
         if (this.isLoading || !message.trim()) return;
-        
+
         this.isLoading = true;
         this.addMessage(message, 'user');
         this.showTypingIndicator();
-        
+
         // Add to history
         this.conversationHistory.push({ role: 'user', content: message });
-        
+
         try {
             const response = await fetch('/api/ai/chat', {
                 method: 'POST',
@@ -2179,15 +2181,15 @@ class AIChat {
                     language: this.app.currentLang
                 })
             });
-            
+
             const data = await response.json();
-            
+
             this.hideTypingIndicator();
-            
+
             if (data.success) {
                 this.addMessage(data.response, 'assistant');
                 this.conversationHistory.push({ role: 'assistant', content: data.response });
-                
+
                 // Speak response if voice is enabled
                 if (document.getElementById('ai-voice-toggle')?.checked) {
                     voiceAssistant.speak(data.response);
@@ -2199,33 +2201,33 @@ class AIChat {
             this.hideTypingIndicator();
             this.addMessage('Connection error. Please check if Ollama is running.', 'error');
         }
-        
+
         this.isLoading = false;
     }
-    
+
     addMessage(text, type) {
         const container = document.getElementById('ai-chat-messages');
         if (!container) return;
-        
+
         const messageEl = document.createElement('div');
         messageEl.className = `flex ${type === 'user' ? 'justify-end' : 'justify-start'} mb-3`;
-        
-        const bubbleClass = type === 'user' 
-            ? 'bg-green-600 text-white rounded-2xl rounded-br-md' 
+
+        const bubbleClass = type === 'user'
+            ? 'bg-green-600 text-white rounded-2xl rounded-br-md'
             : type === 'error'
-            ? 'bg-red-100 text-red-700 rounded-2xl rounded-bl-md'
-            : 'bg-gray-100 text-gray-800 rounded-2xl rounded-bl-md';
-        
+                ? 'bg-red-100 text-red-700 rounded-2xl rounded-bl-md'
+                : 'bg-gray-100 text-gray-800 rounded-2xl rounded-bl-md';
+
         messageEl.innerHTML = `
             <div class="max-w-[80%] p-3 ${bubbleClass}">
                 <p class="text-sm whitespace-pre-wrap">${this.formatMessage(text)}</p>
             </div>
         `;
-        
+
         container.appendChild(messageEl);
         container.scrollTop = container.scrollHeight;
     }
-    
+
     formatMessage(text) {
         // Basic markdown-like formatting
         return text
@@ -2233,11 +2235,11 @@ class AIChat {
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/\n/g, '<br>');
     }
-    
+
     showTypingIndicator() {
         const container = document.getElementById('ai-chat-messages');
         if (!container) return;
-        
+
         const indicator = document.createElement('div');
         indicator.id = 'typing-indicator';
         indicator.className = 'flex justify-start mb-3';
@@ -2253,19 +2255,19 @@ class AIChat {
         container.appendChild(indicator);
         container.scrollTop = container.scrollHeight;
     }
-    
+
     hideTypingIndicator() {
         const indicator = document.getElementById('typing-indicator');
         if (indicator) {
             indicator.remove();
         }
     }
-    
+
     async loadSuggestions() {
         try {
             const response = await fetch(`/api/ai/suggestions?lang=${this.app.currentLang}`);
             const data = await response.json();
-            
+
             if (data.success && data.suggestions) {
                 this.renderSuggestions(data.suggestions);
             }
@@ -2273,11 +2275,11 @@ class AIChat {
             console.error('Failed to load AI suggestions:', error);
         }
     }
-    
+
     renderSuggestions(suggestions) {
         const container = document.getElementById('ai-suggestions');
         if (!container) return;
-        
+
         container.innerHTML = suggestions.map(s => `
             <button onclick="aiChat.sendMessage('${s.replace(/'/g, "\\'")}')" 
                     class="px-3 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:bg-green-50 hover:border-green-300 transition-colors whitespace-nowrap">
@@ -2285,7 +2287,7 @@ class AIChat {
             </button>
         `).join('');
     }
-    
+
     clear() {
         this.conversationHistory = [];
         const container = document.getElementById('ai-chat-messages');
@@ -2318,22 +2320,22 @@ class DiseaseScanner {
         this.app = app;
         this.stream = null;
     }
-    
+
     async openCamera() {
         const video = document.getElementById('disease-camera');
         const preview = document.getElementById('disease-preview');
-        
+
         if (!video) return;
-        
+
         try {
             this.stream = await navigator.mediaDevices.getUserMedia({
                 video: { facingMode: 'environment' }
             });
-            
+
             video.srcObject = this.stream;
             video.classList.remove('hidden');
             preview.classList.add('hidden');
-            
+
             document.getElementById('capture-btn').classList.remove('hidden');
             document.getElementById('camera-btn').classList.add('hidden');
         } catch (error) {
@@ -2341,45 +2343,45 @@ class DiseaseScanner {
             alert('Could not access camera. Please use file upload instead.');
         }
     }
-    
+
     captureImage() {
         const video = document.getElementById('disease-camera');
         const canvas = document.getElementById('disease-canvas');
         const preview = document.getElementById('disease-preview');
-        
+
         if (!video || !canvas) return;
-        
+
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        
+
         const ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0);
-        
+
         // Stop camera
         this.stopCamera();
-        
+
         // Show preview
         const imageData = canvas.toDataURL('image/jpeg', 0.8);
         preview.src = imageData;
         preview.classList.remove('hidden');
         video.classList.add('hidden');
-        
+
         document.getElementById('capture-btn').classList.add('hidden');
         document.getElementById('camera-btn').classList.remove('hidden');
         document.getElementById('analyze-disease-btn').classList.remove('hidden');
     }
-    
+
     stopCamera() {
         if (this.stream) {
             this.stream.getTracks().forEach(track => track.stop());
             this.stream = null;
         }
     }
-    
+
     handleFileUpload(event) {
         const file = event.target.files[0];
         if (!file) return;
-        
+
         const reader = new FileReader();
         reader.onload = (e) => {
             const preview = document.getElementById('disease-preview');
@@ -2390,12 +2392,12 @@ class DiseaseScanner {
         };
         reader.readAsDataURL(file);
     }
-    
+
     async analyzeImage() {
         const preview = document.getElementById('disease-preview');
         const canvas = document.getElementById('disease-canvas');
         const resultContainer = document.getElementById('disease-scan-result');
-        
+
         // Get image data
         let imageBase64;
         if (preview.src.startsWith('data:')) {
@@ -2404,7 +2406,7 @@ class DiseaseScanner {
             // Convert from canvas
             imageBase64 = canvas.toDataURL('image/jpeg', 0.8);
         }
-        
+
         // Show loading
         resultContainer.innerHTML = `
             <div class="flex items-center justify-center py-8">
@@ -2413,7 +2415,7 @@ class DiseaseScanner {
             </div>
         `;
         resultContainer.classList.remove('hidden');
-        
+
         try {
             const response = await fetch('/api/disease/detect', {
                 method: 'POST',
@@ -2423,9 +2425,9 @@ class DiseaseScanner {
                     language: this.app.currentLang
                 })
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
                 this.renderResult(data);
             } else {
@@ -2443,19 +2445,19 @@ class DiseaseScanner {
             `;
         }
     }
-    
+
     renderResult(data) {
         const container = document.getElementById('disease-scan-result');
-        
+
         const severityColors = {
             none: 'bg-green-100 text-green-700',
             moderate: 'bg-yellow-100 text-yellow-700',
             severe: 'bg-red-100 text-red-700',
             high: 'bg-red-100 text-red-700'
         };
-        
+
         const severityColor = severityColors[data.severity] || severityColors.moderate;
-        
+
         let html = `
             <div class="p-4 ${severityColor} rounded-xl text-center mb-4">
                 <p class="text-sm opacity-75 mb-1">Detected</p>
@@ -2463,7 +2465,7 @@ class DiseaseScanner {
                 <p class="text-sm mt-1">Confidence: ${data.confidence?.toFixed(1)}%</p>
             </div>
         `;
-        
+
         if (data.severity !== 'none') {
             // Symptoms
             if (data.symptoms) {
@@ -2474,7 +2476,7 @@ class DiseaseScanner {
                     </div>
                 `;
             }
-            
+
             // Treatment
             if (data.treatment && data.treatment.length > 0) {
                 html += `
@@ -2486,7 +2488,7 @@ class DiseaseScanner {
                     </div>
                 `;
             }
-            
+
             // Prevention
             if (data.prevention) {
                 html += `
@@ -2505,7 +2507,7 @@ class DiseaseScanner {
                 </div>
             `;
         }
-        
+
         container.innerHTML = html;
     }
 }
@@ -2694,7 +2696,7 @@ function openIrrigationScheduler() {
     // Pre-fill from user's profile and plots
     const soilType = app.userData.soil_type || 'loamy';
     const userArea = app.getUserPlotArea();
-    
+
     // Set soil type
     const soilSelect = document.getElementById('irr-soil');
     if (soilSelect) {
@@ -2706,13 +2708,13 @@ function openIrrigationScheduler() {
         };
         soilSelect.value = soilMap[soilType] || 'loamy';
     }
-    
+
     // Set area from user's plots
     const areaInput = document.getElementById('irr-area');
     if (areaInput && userArea > 0) {
         areaInput.value = userArea.toFixed(1);
     }
-    
+
     openModal('irrigation-modal');
 }
 
@@ -2722,7 +2724,7 @@ function openProfitCalculator() {
     if (userArea > 0) {
         // Find closest radio option to user's area
         const areaOptions = [1, 2, 5, 10];
-        const closest = areaOptions.reduce((prev, curr) => 
+        const closest = areaOptions.reduce((prev, curr) =>
             Math.abs(curr - userArea) < Math.abs(prev - userArea) ? curr : prev
         );
         const radio = document.querySelector(`input[name="profit-area-radio"][value="${closest}"]`);
@@ -2829,7 +2831,7 @@ function handleDiseaseImageSelect(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             diseaseImageData = e.target.result;
             const previewImg = document.getElementById('disease-preview-img');
             const previewContainer = document.getElementById('disease-image-preview');
@@ -2845,8 +2847,8 @@ function handleDiseaseImageSelect(event) {
 
 async function openDiseaseCamera() {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'environment' } 
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment' }
         });
         diseaseCameraStream = stream;
         const video = document.getElementById('disease-camera-video');
@@ -2869,10 +2871,10 @@ function captureDiseaseImage() {
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0);
     diseaseImageData = canvas.toDataURL('image/jpeg');
-    
+
     // Stop camera
     closeDiseaseCamera();
-    
+
     // Show preview
     const previewImg = document.getElementById('disease-preview-img');
     const previewContainer = document.getElementById('disease-image-preview');
@@ -2896,13 +2898,13 @@ async function analyzeDiseaseImage() {
         alert('Please upload or capture an image first.');
         return;
     }
-    
+
     const analyzeBtn = document.getElementById('analyze-btn');
     if (analyzeBtn) {
         analyzeBtn.disabled = true;
         analyzeBtn.textContent = '🔍 Analyzing...';
     }
-    
+
     try {
         const response = await fetch('/api/disease/detect', {
             method: 'POST',
@@ -2912,7 +2914,7 @@ async function analyzeDiseaseImage() {
                 lang: app.currentLang
             })
         });
-        
+
         const data = await response.json();
         renderDiseaseResults(data);
     } catch (error) {
@@ -2934,7 +2936,7 @@ async function analyzeDiseaseImage() {
 function renderDiseaseResults(data) {
     const container = document.getElementById('disease-results');
     if (!container) return;
-    
+
     if (!data.success) {
         container.innerHTML = `
             <div class="p-4 bg-red-50 rounded-xl text-red-600">
@@ -2944,7 +2946,7 @@ function renderDiseaseResults(data) {
         container.classList.remove('hidden');
         return;
     }
-    
+
     if (data.disease_key === 'healthy' || data.disease_name === 'Healthy Plant') {
         container.innerHTML = `
             <div class="p-6 bg-green-50 rounded-xl text-center">
@@ -2962,7 +2964,7 @@ function renderDiseaseResults(data) {
             'low': 'bg-blue-100 text-blue-700 border-blue-300'
         };
         const severityColor = severityColors[data.severity] || severityColors['moderate'];
-        
+
         // Format treatment as list if it's an array
         let treatmentHtml = '';
         if (data.treatment) {
@@ -2974,7 +2976,7 @@ function renderDiseaseResults(data) {
                 treatmentHtml = `<p class="text-sm text-blue-600">${data.treatment}</p>`;
             }
         }
-        
+
         container.innerHTML = `
             <div class="p-4 bg-red-50 border-2 border-red-200 rounded-xl">
                 <div class="flex items-center gap-3 mb-3">
@@ -3041,25 +3043,25 @@ function initPlotMap() {
     if (plotMap) {
         plotMap.remove();
     }
-    
+
     // Default to user's location or Bangalore
     const lat = app.userData.latitude || 12.9716;
     const lon = app.userData.longitude || 77.5946;
-    
+
     plotMap = L.map('plot-map').setView([lat, lon], 16);
-    
+
     // Add hybrid layer (satellite + labels)
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Esri'
     });
-    
+
     const labels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; OpenStreetMap, &copy; CartoDB'
     });
-    
+
     satellite.addTo(plotMap);
     labels.addTo(plotMap);
-    
+
     // Load user's saved plots if any
     if (app.userPlots && app.userPlots.length > 0) {
         app.userPlots.forEach(plot => {
@@ -3073,11 +3075,11 @@ function initPlotMap() {
             }
         });
     }
-    
+
     // Add drawing controls
     drawnItems = new L.FeatureGroup();
     plotMap.addLayer(drawnItems);
-    
+
     const drawControl = new L.Control.Draw({
         edit: {
             featureGroup: drawnItems
@@ -3106,9 +3108,9 @@ function initPlotMap() {
         }
     });
     plotMap.addControl(drawControl);
-    
+
     // Handle draw events
-    plotMap.on(L.Draw.Event.CREATED, function(e) {
+    plotMap.on(L.Draw.Event.CREATED, function (e) {
         drawnItems.clearLayers();
         drawnItems.addLayer(e.layer);
         const btn = document.getElementById('analyze-plot-btn');
@@ -3124,20 +3126,20 @@ async function analyzePlot() {
         alert('Please draw your plot boundary on the map first.');
         return;
     }
-    
+
     const layer = drawnItems.getLayers()[0];
     let coordinates = [];
-    
+
     if (layer.getLatLngs) {
         const latlngs = layer.getLatLngs()[0];
         coordinates = latlngs.map(ll => [ll.lat, ll.lng]);
     }
-    
+
     if (coordinates.length < 3) {
         alert('Please draw a valid plot boundary.');
         return;
     }
-    
+
     const resultContainer = document.getElementById('plot-analysis-results');
     resultContainer.innerHTML = `
         <div class="flex items-center justify-center py-8">
@@ -3146,7 +3148,7 @@ async function analyzePlot() {
         </div>
     `;
     resultContainer.classList.remove('hidden');
-    
+
     // Get soil params from user profile
     const soilType = app.userData.soil_type || 'loam';
     const soilPresets = {
@@ -3161,7 +3163,7 @@ async function analyzePlot() {
         'peaty': { N: 95, P: 55, K: 50, ph: 5.0 }
     };
     const soilParams = soilPresets[soilType] || soilPresets['alluvial'];
-    
+
     try {
         const response = await fetch('/api/plot/analyze', {
             method: 'POST',
@@ -3176,9 +3178,9 @@ async function analyzePlot() {
                 lang: app.currentLang
             })
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             renderPlotAnalysis(data);
         } else {
@@ -3191,7 +3193,7 @@ async function analyzePlot() {
 
 function renderPlotAnalysis(data) {
     const container = document.getElementById('plot-analysis-results');
-    
+
     let html = `
         <div class="p-4 bg-green-50 rounded-xl mb-4">
             <div class="flex justify-between items-center mb-2">
@@ -3203,7 +3205,7 @@ function renderPlotAnalysis(data) {
         
         <p class="font-semibold text-gray-700 mb-3">🗺️ Recommended Zones</p>
     `;
-    
+
     // Zone recommendations
     data.zones.forEach((zone, idx) => {
         const colors = ['bg-green-100 border-green-300', 'bg-blue-100 border-blue-300', 'bg-orange-100 border-orange-300'];
@@ -3223,7 +3225,7 @@ function renderPlotAnalysis(data) {
             </div>
         `;
     });
-    
+
     container.innerHTML = html;
 }
 

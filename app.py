@@ -438,7 +438,7 @@ def get_weather_alerts():
             alerts.append({
                 'type': 'pest',
                 'severity': 'medium',
-                'message': 'High pest risk due to humid conditions',
+                'message': get_translation('pest_risk_humid', lang),
                 'pests': ['aphids', 'fungal diseases']
             })
         

@@ -237,18 +237,18 @@
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="select_state">Select Your State</label>
                         <select id="state-select" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900 bg-white">
-                            <option value="">-- Select State --</option>
+                            <option value="" data-i18n="select_state_placeholder">-- Select State --</option>
                         </select>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="select_district">Select Your District</label>
-                        <input type="text" id="district-input" placeholder="Enter district name" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900">
+                        <input type="text" id="district-input" placeholder="ಜಿಲ್ಲೆಯ ಹೆಸರು ನಮೂದಿಸಿ / Enter district name" data-i18n-placeholder="district_placeholder" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900">
                     </div>
                     
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="city_name">City/Village Name</label>
-                        <input type="text" id="city-input" placeholder="Enter city or village name" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900">
+                        <input type="text" id="city-input" placeholder="ನಗರ/ಹಳ್ಳಿ ಹೆಸರು ನಮೂದಿಸಿ / Enter city or village name" data-i18n-placeholder="city_placeholder" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900">
                     </div>
                 </div>
                 
@@ -259,7 +259,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                     </svg>
-                    <span>Auto-detect Location</span>
+                    <span data-i18n="auto_detect_location">Auto-detect Location</span>
                 </button>
                 
                 <button onclick="goToSoilStep()" class="w-full mt-4 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg">
@@ -361,8 +361,8 @@
                 
                 <!-- Plot Name Input -->
                 <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Plot Name (optional)</label>
-                    <input type="text" id="plot-name-input" placeholder="e.g., North Field, Main Farm" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="plot_name_label">Plot Name (optional)</label>
+                    <input type="text" id="plot-name-input" placeholder="ಉದಾ: ಉತ್ತರ ಹೊಲ, ಮುಖ್ಯ ತೋಟ / e.g., North Field, Main Farm" data-i18n-placeholder="plot_name_placeholder" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900">
                 </div>
                 
                 <!-- Map Container -->
@@ -370,8 +370,8 @@
                 
                 <!-- Map Controls Info -->
                 <div class="mb-4 p-3 bg-blue-50 rounded-xl text-sm text-blue-700">
-                    <p class="font-medium mb-1">📌 How to draw:</p>
-                    <p>Click the polygon tool (▢) on the map, then click points to draw your field boundary. Double-click to finish.</p>
+                    <p class="font-medium mb-1" data-i18n="how_to_draw">📌 How to draw:</p>
+                    <p data-i18n="draw_instructions">Click the polygon tool (▢) on the map, then click points to draw your field boundary. Double-click to finish.</p>
                 </div>
                 
                 <!-- Plot Info Display -->
@@ -390,10 +390,10 @@
                 <!-- Action Buttons -->
                 <div class="flex gap-3">
                     <button onclick="skipPlotSetup()" class="flex-1 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all">
-                        Skip for Now
+                        <span data-i18n="skip_for_now">Skip for Now</span>
                     </button>
                     <button onclick="completeSetup()" id="complete-btn" class="flex-1 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg">
-                        Finish Setup 🎉
+                        <span data-i18n="finish_setup">Finish Setup 🎉</span>
                     </button>
                 </div>
             </div>
@@ -687,7 +687,7 @@
         async function completeSetup() {
             const btn = document.getElementById('complete-btn');
             btn.disabled = true;
-            btn.innerHTML = '<span class="animate-pulse">Saving...</span>';
+            btn.innerHTML = '<span class="animate-pulse" data-i18n="saving">Saving...</span>';
             
             const setupData = {
                 language: selectedLanguage,
@@ -733,8 +733,8 @@
                 }
             } catch (error) {
                 btn.disabled = false;
-                btn.innerHTML = 'Finish Setup 🎉';
-                alert('Setup failed. Please try again.');
+                btn.innerHTML = '<span data-i18n="finish_setup">Finish Setup 🎉</span>';
+                alert(translations[selectedLanguage]?.setup_failed || 'Setup failed. Please try again.');
             }
         }
 
