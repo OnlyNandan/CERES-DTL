@@ -1346,14 +1346,14 @@ class CeresApp {
 
         let html = `
             <div class="p-4 bg-gradient-to-r from-amber-100 to-yellow-100 rounded-xl text-center">
-                <p class="text-sm text-gray-600 mb-1">Predicted Yield</p>
+                <p class="text-sm text-gray-600 mb-1">${this.getTranslation('predicted_yield') || 'Predicted Yield'}</p>
                 <p class="text-4xl font-bold text-amber-700">${data.predicted_yield?.toLocaleString() || 'N/A'}</p>
                 <p class="text-sm text-gray-600">${data.unit || 'kg/ha'}</p>
-                <p class="text-xs text-gray-500 mt-2">Range: ${data.yield_min?.toLocaleString()} - ${data.yield_max?.toLocaleString()} ${data.unit}</p>
+                <p class="text-xs text-gray-500 mt-2">${this.getTranslation('range') || 'Range'}: ${data.yield_min?.toLocaleString()} - ${data.yield_max?.toLocaleString()} ${data.unit}</p>
             </div>
             
             <div class="p-4 bg-blue-50 rounded-xl">
-                <p class="font-semibold text-blue-800 mb-2">📊 Confidence: ${(data.confidence || 0).toFixed(1)}%</p>
+                <p class="font-semibold text-blue-800 mb-2">📊 ${this.getTranslation('confidence_level')}: ${(data.confidence || 0).toFixed(1)}%</p>
                 <div class="w-full bg-blue-200 rounded-full h-3">
                     <div class="bg-blue-600 h-3 rounded-full" style="width: ${data.confidence || 0}%"></div>
                 </div>
@@ -1363,24 +1363,27 @@ class CeresApp {
         // Factor Analysis
         html += `
             <div class="p-4 bg-gray-50 rounded-xl">
-                <p class="font-semibold text-gray-700 mb-3">🎯 Factor Analysis</p>
+                <p class="font-semibold text-gray-700 mb-3">🎯 ${this.getTranslation('factor_analysis') || 'Factor Analysis'}</p>
                 <div class="space-y-2">
         `;
 
         const factorLabels = {
-            water: '💧 Water',
-            nutrients: '🌿 Nutrients',
-            temperature: '🌡️ Temperature',
-            soil_ph: '⚗️ Soil pH',
-            pest_pressure: '🐛 Pest Impact'
+            water: 'water',
+            nutrients: 'nutrients',
+            temperature: 'temperature',
+            soil_ph: 'soil_ph',
+            pest_pressure: 'pest_pressure'
         };
 
         for (const [factor, value] of Object.entries(factors)) {
             const pct = (value * 100).toFixed(0);
             const isLimiting = factor === limitingFactor;
+            const labelKey = factorLabels[factor] || factor;
+            const label = this.getTranslation(labelKey) || factor;
+
             html += `
                 <div class="flex items-center gap-2">
-                    <span class="text-sm w-28 ${isLimiting ? 'text-red-600 font-bold' : 'text-gray-600'}">${factorLabels[factor] || factor} ${isLimiting ? '⚠️' : ''}</span>
+                    <span class="text-sm w-28 ${isLimiting ? 'text-red-600 font-bold' : 'text-gray-600'}">${label} ${isLimiting ? '⚠️' : ''}</span>
                     <div class="flex-1 bg-gray-200 rounded-full h-2">
                         <div class="${pct >= 90 ? 'bg-green-500' : pct >= 70 ? 'bg-yellow-500' : 'bg-red-500'} h-2 rounded-full" style="width: ${pct}%"></div>
                     </div>
@@ -1396,18 +1399,18 @@ class CeresApp {
             const econ = data.economic_projection;
             html += `
                 <div class="p-4 bg-emerald-50 rounded-xl">
-                    <p class="font-semibold text-emerald-800 mb-3">💰 Economic Projection</p>
+                    <p class="font-semibold text-emerald-800 mb-3">💰 ${this.getTranslation('economic_projection') || 'Economic Projection'}</p>
                     <div class="grid grid-cols-2 gap-2 text-sm">
                         <div class="bg-white p-2 rounded-lg">
-                            <p class="text-xs text-gray-500">Total Yield</p>
+                            <p class="text-xs text-gray-500">${this.getTranslation('total_yield') || 'Total Yield'}</p>
                             <p class="font-bold text-gray-800">${econ.total_yield_kg?.toLocaleString()} kg</p>
                         </div>
                         <div class="bg-white p-2 rounded-lg">
-                            <p class="text-xs text-gray-500">Yield/Ha</p>
+                            <p class="text-xs text-gray-500">${this.getTranslation('yield_per_ha') || 'Yield/Ha'}</p>
                             <p class="font-bold text-gray-800">${econ.yield_per_hectare_quintals?.toFixed(1)} qtl</p>
                         </div>
                         <div class="bg-white p-2 rounded-lg">
-                            <p class="text-xs text-gray-500">Market Price</p>
+                            <p class="text-xs text-gray-500">${this.getTranslation('market_price') || 'Market Price'}</p>
                             <p class="font-bold text-gray-800">₹${econ.market_price_per_quintal?.toLocaleString()}/qtl</p>
                         </div>
                         <div class="bg-white p-2 rounded-lg">
@@ -2951,8 +2954,8 @@ function renderDiseaseResults(data) {
         container.innerHTML = `
             <div class="p-6 bg-green-50 rounded-xl text-center">
                 <span class="text-6xl mb-4 block">✅</span>
-                <h3 class="text-2xl font-bold text-green-700 mb-2">Healthy Plant!</h3>
-                <p class="text-green-600">No disease detected. Your plant looks healthy.</p>
+                <h3 class="text-2xl font-bold text-green-700 mb-2">${app.getTranslation('healthy_plant') || 'Healthy Plant!'}</h3>
+                <p class="text-green-600">${app.getTranslation('no_disease_detected') || 'No disease detected. Your plant looks healthy.'}</p>
             </div>
         `;
     } else {
@@ -2977,15 +2980,19 @@ function renderDiseaseResults(data) {
             }
         }
 
+        // Try to get translated disease name
+        const diseaseKey = data.disease_name.toLowerCase().replace(/ /g, '_');
+        const translatedDiseaseName = app.getTranslation(diseaseKey) || data.disease_name;
+
         container.innerHTML = `
             <div class="p-4 bg-red-50 border-2 border-red-200 rounded-xl">
                 <div class="flex items-center gap-3 mb-3">
                     <span class="text-4xl">🦠</span>
                     <div class="flex-1">
-                        <h3 class="text-xl font-bold text-red-700">${data.disease_name || 'Unknown Disease'}</h3>
+                        <h3 class="text-xl font-bold text-red-700">${translatedDiseaseName || 'Unknown Disease'}</h3>
                         <div class="flex items-center gap-2 mt-1">
-                            <span class="text-sm text-red-600">Confidence: ${confidence.toFixed(0)}%</span>
-                            <span class="px-2 py-0.5 text-xs font-medium rounded-full ${severityColor}">${(data.severity || 'unknown').toUpperCase()}</span>
+                            <span class="text-sm text-red-600">${app.getTranslation('confidence_level') || 'Confidence'}: ${confidence.toFixed(0)}%</span>
+                            <span class="px-2 py-0.5 text-xs font-medium rounded-full ${severityColor}">${(data.severity ? (app.getTranslation(data.severity) || data.severity) : 'unknown').toUpperCase()}</span>
                         </div>
                     </div>
                 </div>
@@ -2993,21 +3000,21 @@ function renderDiseaseResults(data) {
             
             ${data.symptoms ? `
             <div class="p-4 bg-orange-50 rounded-xl">
-                <h4 class="font-semibold text-orange-700 mb-2">⚠️ Symptoms</h4>
+                <h4 class="font-semibold text-orange-700 mb-2">⚠️ ${app.getTranslation('symptoms') || 'Symptoms'}</h4>
                 <p class="text-sm text-orange-600">${data.symptoms}</p>
             </div>
             ` : ''}
             
             ${data.treatment ? `
             <div class="p-4 bg-blue-50 rounded-xl">
-                <h4 class="font-semibold text-blue-700 mb-2">💊 Treatment</h4>
+                <h4 class="font-semibold text-blue-700 mb-2">💊 ${app.getTranslation('treatment') || 'Treatment'}</h4>
                 ${treatmentHtml}
             </div>
             ` : ''}
             
             ${data.prevention ? `
             <div class="p-4 bg-green-50 rounded-xl">
-                <h4 class="font-semibold text-green-700 mb-2">🛡️ Prevention</h4>
+                <h4 class="font-semibold text-green-700 mb-2">🛡️ ${app.getTranslation('prevention') || 'Prevention'}</h4>
                 <p class="text-sm text-green-600">${data.prevention}</p>
             </div>
             ` : ''}

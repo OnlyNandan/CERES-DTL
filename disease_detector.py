@@ -19,13 +19,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಸೇಬು ಸ್ಕ್ಯಾಬ್',
         'severity': 'moderate',
         'symptoms': 'Dark olive-green spots on leaves, velvety texture, leaves may curl',
+        'symptoms_hi': 'पत्तियों पर गहरे जैतून-हरे धब्बे, मखमली बनावट, पत्तियां मुड़ सकती हैं',
+        'symptoms_kn': 'ಎಲೆಗಳ ಮೇಲೆ ಗಾಢ ಆಲಿವ್-ಹಸಿರು ಕಲೆಗಳು, ವೆಲ್ವೆಟ್ ವಿನ್ಯಾಸ, ಎಲೆಗಳು ಸುರುಳಿಯಾಗಬಹುದು',
         'treatment': [
             'Apply fungicide (Mancozeb/Captan) at 2g/L',
             'Remove and destroy infected leaves',
             'Improve air circulation by pruning',
             'Apply sulfur-based sprays preventively'
         ],
-        'prevention': 'Plant resistant varieties, maintain good sanitation'
+        'treatment_hi': [
+            'कवकनाशी (मैनकोजेब/कैप्टन) 2g/L का प्रयोग करें',
+            'संक्रमित पत्तियों को हटा दें और नष्ट कर दें',
+            'कटाई-छंटाई करके हवा का संचार सुधारें',
+            'निवारक रूप से सल्फर-आधारित स्प्रे लागू करें'
+        ],
+        'treatment_kn': [
+            'ಶಿಲೀಂಧ್ರನಾಶಕವನ್ನು (ಮ್ಯಾನ್ಕೋಜೆಬ್/ಕ್ಯಾಪ್ಟನ್) 2g/L ನಲ್ಲಿ ಅನ್ವಯಿಸಿ',
+            'ಸೋಂಕಿತ ಎಲೆಗಳನ್ನು ತೆಗೆದುಹಾಕಿ ಮತ್ತು ನಾಶಮಾಡಿ',
+            'ಕತ್ತರಿಸುವ ಮೂಲಕ ಗಾಳಿಯ ಹರಿವನ್ನು ಸುಧಾರಿಸಿ',
+            'ಗಂಧಕ ಆಧಾರಿತ ಸ್ಪ್ರೇಗಳನ್ನು ಮುನ್ನೆಚ್ಚರಿಕೆಯಾಗಿ ಅನ್ವಯಿಸಿ'
+        ],
+        'prevention': 'Plant resistant varieties, maintain good sanitation',
+        'prevention_hi': 'प्रतिरोधी किस्में लगाएं, अच्छी स्वच्छता बनाए रखें',
+        'prevention_kn': 'ನಿರೋಧಕ ತಳಿಗಳನ್ನು ನೆಡಿ, ಉತ್ತಮ ನೈರ್ಮಲ್ಯವನ್ನು ಕಾಪಾಡಿಕೊಳ್ಳಿ'
     },
     'bacterial_spot': {
         'name': 'Bacterial Spot',
@@ -33,13 +49,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಬ್ಯಾಕ್ಟೀರಿಯಾ ಚುಕ್ಕೆ',
         'severity': 'high',
         'symptoms': 'Water-soaked spots, turning brown with yellow halos',
+        'symptoms_hi': 'पानी से लथपथ धब्बे, जो पीले घेरे के साथ भूरे हो जाते हैं',
+        'symptoms_kn': 'ನೀರಿನಲ್ಲಿ ನೆನೆದ ಕಲೆಗಳು, ಹಳದಿ ಹಾಲೋಗಳೊಂದಿಗೆ ಕಂದು ಬಣ್ಣಕ್ಕೆ ತಿರುಗುತ್ತವೆ',
         'treatment': [
             'Apply copper-based bactericide',
             'Remove infected plant parts',
             'Avoid overhead irrigation',
             'Use disease-free seeds'
         ],
-        'prevention': 'Crop rotation, resistant varieties'
+        'treatment_hi': [
+            'कॉपर-आधारित जीवाणुनाशक का प्रयोग करें',
+            'संक्रमित पौधों के हिस्सों को हटा दें',
+            'ऊपरी सिंचाई से बचें',
+            'रोग-मुक्त बीजों का उपयोग करें'
+        ],
+        'treatment_kn': [
+            'ತಾಮ್ರ-ಆಧಾರಿತ ಬ್ಯಾಕ್ಟೀರಿಯಾನಾಶಕವನ್ನು ಅನ್ವಯಿಸಿ',
+            'ಸೋಂಕಿತ ಸಸ್ಯ ಭಾಗಗಳನ್ನು ತೆಗೆದುಹಾಕಿ',
+            'ಓವರ್ಹೆಡ್ ನೀರಾವರಿ ತಪ್ಪಿಸಿ',
+            'ರೋಗ-ಮುಕ್ತ ಬೀಜಗಳನ್ನು ಬಳಸಿ'
+        ],
+        'prevention': 'Crop rotation, resistant varieties',
+        'prevention_hi': 'फसल चक्र, प्रतिरोधी किस्में',
+        'prevention_kn': 'ಬೆಳೆ ಸರದಿ, ನಿರೋಧಕ ತಳಿಗಳು'
     },
     'late_blight': {
         'name': 'Late Blight',
@@ -47,13 +79,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ತಡವಾದ ಬ್ಲೈಟ್',
         'severity': 'severe',
         'symptoms': 'Water-soaked lesions, white mold growth, rapid plant collapse',
+        'symptoms_hi': 'पानी से लथपथ घाव, सफेद फफूंद की वृद्धि, पौधे का तेजी से गिरना',
+        'symptoms_kn': 'ನೀರಿನಲ್ಲಿ ನೆನೆದ ಗಾಯಗಳು, ಬಿಳಿ ಶಿಲೀಂಧ್ರ ಬೆಳವಣಿಗೆ, ಸಸ್ಯದ ತ್ವರಿತ ಕುಸಿತ',
         'treatment': [
             'Apply Metalaxyl + Mancozeb immediately',
             'Remove and burn infected plants',
             'Improve drainage',
             'Spray every 7-10 days during outbreak'
         ],
-        'prevention': 'Plant certified disease-free tubers, proper spacing'
+        'treatment_hi': [
+            'मेटालेक्सिल + मैंकोजेब का तुरंत प्रयोग करें',
+            'संक्रमित पौधों को हटा दें और जला दें',
+            'जल निकासी में सुधार करें',
+            'प्रकोप के दौरान हर 7-10 दिनों में स्प्रे करें'
+        ],
+        'treatment_kn': [
+            'ಮೆಟಾಲಾಕ್ಸಿಲ್ + ಮ್ಯಾನ್ಕೋಜೆಬ್ ಅನ್ನು ತಕ್ಷಣ ಅನ್ವಯಿಸಿ',
+            'ಸೋಂಕಿತ ಸಸ್ಯಗಳನ್ನು ತೆಗೆದುಹಾಕಿ ಮತ್ತು ಸುಟ್ಟುಹಾಕಿ',
+            'ಒಳಚರಂಡಿಯನ್ನು ಸುಧಾರಿಸಿ',
+            'ಏಕಾಏಕಿ ಹರಡುವಾಗ ಪ್ರತಿ 7-10 ದಿನಗಳಿಗೊಮ್ಮೆ ಸಿಂಪಡಿಸಿ'
+        ],
+        'prevention': 'Plant certified disease-free tubers, proper spacing',
+        'prevention_hi': 'प्रमाणित रोग-मुक्त कंद रोपें, उचित दूरी',
+        'prevention_kn': 'ಪ್ರಮಾಣೀಕೃತ ರೋಗ-ಮುಕ್ತ ಗೆಡ್ಡೆಗಳನ್ನು ನೆಡಿ, ಸರಿಯಾದ ಅಂತರ'
     },
     'early_blight': {
         'name': 'Early Blight',
@@ -61,13 +109,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಆರಂಭಿಕ ಬ್ಲೈಟ್',
         'severity': 'moderate',
         'symptoms': 'Target-shaped concentric rings on leaves, yellowing',
+        'symptoms_hi': 'पत्तियों पर लक्ष्य-आकार के संकेंद्रित छल्ले, पीलापन',
+        'symptoms_kn': 'ಎಲೆಗಳ ಮೇಲೆ ಗುರಿ-ಆಕಾರದ ಉಂಗುರಗಳು, ಹಳದಿಯಾಗುವುದು',
         'treatment': [
             'Apply Chlorothalonil or Mancozeb',
             'Remove lower infected leaves',
             'Mulch to prevent soil splash',
             'Maintain adequate nitrogen levels'
         ],
-        'prevention': 'Crop rotation, stake plants for airflow'
+        'treatment_hi': [
+            'क्लोरोथालोनिल या मैंकोजेब का प्रयोग करें',
+            'निचली संक्रमित पत्तियों को हटा दें',
+            'मिट्टी के छींटों को रोकने के लिए मल्चिंग करें',
+            'पर्याप्त नाइट्रोजन का स्तर बनाए रखें'
+        ],
+        'treatment_kn': [
+            'ಕ್ಲೋರೊಥಲೋನಿಲ್ ಅಥವಾ ಮ್ಯಾನ್ಕೋಜೆಬ್ ಅನ್ವಯಿಸಿ',
+            'ಕೆಳಗಿನ ಸೋಂಕಿತ ಎಲೆಗಳನ್ನು ತೆಗೆದುಹಾಕಿ',
+            'ಮಣ್ಣು ಚಿಮ್ಮುವುದನ್ನು ತಡೆಯಲು ಹೊದಿಕೆ ಹಾಕಿ',
+            'ಸಾಕಷ್ಟು ಸಾರಜನಕ ಮಟ್ಟವನ್ನು ನಿರ್ವಹಿಸಿ'
+        ],
+        'prevention': 'Crop rotation, stake plants for airflow',
+        'prevention_hi': 'फसल चक्र, पौधों को हवा के लिए सहारा दें',
+        'prevention_kn': 'ಬೆಳೆ ಸರದಿ, ಗಾಳಿ ಹರಿವಿಗಾಗಿ ಸಸ್ಯಗಳನ್ನು ಬೆಂಬಲಿಸಿ'
     },
     'leaf_mold': {
         'name': 'Leaf Mold',
@@ -75,13 +139,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಎಲೆ ಶಿಲೀಂಧ್ರ',
         'severity': 'moderate',
         'symptoms': 'Yellow spots on upper leaf, olive-green mold below',
+        'symptoms_hi': 'ऊपरी पत्ती पर पीले धब्बे, नीचे जैतून-हरे रंग की फफूंद',
+        'symptoms_kn': 'ಎಲೆಗಳ ಮೇಲೆ ಹಳದಿ ಕಲೆಗಳು, ಕೆಳಗೆ ಆಲಿವ್-ಹಸಿರು ಶಿಲೀಂಧ್ರ',
         'treatment': [
             'Improve ventilation',
             'Reduce humidity below 85%',
             'Apply fungicide if severe',
             'Remove infected leaves'
         ],
-        'prevention': 'Proper spacing, avoid overhead watering'
+        'treatment_hi': [
+            'हवा का संचार सुधारें',
+            'नमी को 85% से कम करें',
+            'गंभीर होने पर कवकनाशी का प्रयोग करें',
+            'संक्रमित पत्तियों को हटा दें'
+        ],
+        'treatment_kn': [
+            'ಗಾಳಿ ಸಂಪರ್ಕ ಸುಧಾರಿಸಿ',
+            'ಆರ್ದ್ರತೆಯನ್ನು 85% ಕ್ಕಿಂತ ಕಡಿಮೆ ಮಾಡಿ',
+            'ತೀವ್ರವಾಗಿದ್ದರೆ ಶಿಲೀಂಧ್ರನಾಶಕವನ್ನು ಅನ್ವಯಿಸಿ',
+            'ಸೋಂಕಿತ ಎಲೆಗಳನ್ನು ತೆಗೆದುಹಾಕಿ'
+        ],
+        'prevention': 'Proper spacing, avoid overhead watering',
+        'prevention_hi': 'उचित दूरी, ऊपरी पानी देने से बचें',
+        'prevention_kn': 'ಸರಿಯಾದ ಅಂತರ, ಓವರ್ಹೆಡ್ ನೀರುಹಾಕುವುದನ್ನು ತಪ್ಪಿಸಿ'
     },
     'powdery_mildew': {
         'name': 'Powdery Mildew',
@@ -89,13 +169,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಪುಡಿ ಶಿಲೀಂಧ್ರ',
         'severity': 'moderate',
         'symptoms': 'White powdery coating on leaves, stems, buds',
+        'symptoms_hi': 'पत्तियों, तनों, कलियों पर सफेद पाउडर की परत',
+        'symptoms_kn': 'ಎಲೆಗಳು, ಕಾಂಡಗಳು, ಮೊಗ್ಗುಗಳ ಮೇಲೆ ಬಿಳಿ ಪುಡಿ ಲೇಪನ',
         'treatment': [
             'Apply sulfur-based fungicide',
             'Spray potassium bicarbonate solution',
             'Neem oil spray (2ml/L)',
             'Remove severely infected parts'
         ],
-        'prevention': 'Adequate spacing, avoid excessive nitrogen'
+        'treatment_hi': [
+            'सल्फर-आधारित कवकनाशी का प्रयोग करें',
+            'पोटेशियम बाइकार्बोनेट घोल का स्प्रे करें',
+            'नीम के तेल का स्प्रे (2ml/L)',
+            'गंभीर रूप से संक्रमित भागों को हटा दें'
+        ],
+        'treatment_kn': [
+            'ಗಂಧಕ ಆಧಾರಿತ ಶಿಲೀಂಧ್ರನಾಶಕವನ್ನು ಅನ್ವಯಿಸಿ',
+            'ಪೊಟ್ಯಾಸಿಯಮ್ ಬೈಕಾರ್ಬನೇಟ್ ದ್ರಾವಣವನ್ನು ಸಿಂಪಡಿಸಿ',
+            'ಬೇವು ಎಣ್ಣೆ ಸಿಂಪಡಿಸಿ (2ml/L)',
+            'ತೀವ್ರವಾಗಿ ಸೋಂಕಿತ ಭಾಗಗಳನ್ನು ತೆಗೆದುಹಾಕಿ'
+        ],
+        'prevention': 'Adequate spacing, avoid excessive nitrogen',
+        'prevention_hi': 'पर्याप्त दूरी, अत्यधिक नाइट्रोजन से बचें',
+        'prevention_kn': 'ಸಾಕಷ್ಟು ಅಂತರ, ಅತಿಯಾದ ಸಾರಜನಕವನ್ನು ತಪ್ಪಿಸಿ'
     },
     'rust': {
         'name': 'Rust Disease',
@@ -103,13 +199,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ತುಕ್ಕು ರೋಗ',
         'severity': 'moderate',
         'symptoms': 'Orange-brown pustules on undersides of leaves',
+        'symptoms_hi': 'पत्तियों के नीचे नारंगी-भूरे रंग के दाने',
+        'symptoms_kn': 'ಎಲೆಗಳ ಕೆಳಭಾಗದಲ್ಲಿ ಕಿತ್ತಳೆ-ಕಂದು ಬೊಕ್ಕೆಗಳು',
         'treatment': [
             'Apply Propiconazole or Tebuconazole',
             'Remove alternate hosts',
             'Destroy crop residues',
             'Apply at first sign of disease'
         ],
-        'prevention': 'Resistant varieties, crop rotation'
+        'treatment_hi': [
+            'प्रोपिकोनाज़ोल या टेबुकोनाज़ोल का प्रयोग करें',
+            'वैकल्पिक मेजबानों को हटा दें',
+            'फसल अवशेषों को नष्ट करें',
+            'रोग के पहले संकेत पर प्रयोग करें'
+        ],
+        'treatment_kn': [
+            'ಪ್ರೊಪಿಕೊನಜೋಲ್ ಅಥವಾ ಟೆಬುಕೊನಜೋಲ್ ಅನ್ವಯಿಸಿ',
+            'ಪರ್ಯಾಯ ಆತಿಥೇಯರನ್ನು ತೆಗೆದುಹಾಕಿ',
+            'ಬೆಳೆ ತ್ಯಾಜ್ಯಗಳನ್ನು ನಾಶಮಾಡಿ',
+            'ರೋಗದ ಮೊದಲ ಚಿಹ್ನೆಯಲ್ಲಿ ಅನ್ವಯಿಸಿ'
+        ],
+        'prevention': 'Resistant varieties, crop rotation',
+        'prevention_hi': 'प्रतिरोधी किस्में, फसल चक्र',
+        'prevention_kn': 'ನಿರೋಧಕ ತಳಿಗಳು, ಬೆಳೆ ಸರದಿ'
     },
     'septoria_leaf_spot': {
         'name': 'Septoria Leaf Spot',
@@ -117,13 +229,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಸೆಪ್ಟೋರಿಯಾ ಎಲೆ ಚುಕ್ಕೆ',
         'severity': 'moderate',
         'symptoms': 'Small circular spots with dark borders and tan centers',
+        'symptoms_hi': 'काले किनारों और भूरे केंद्रों के साथ छोटे गोलाकार धब्बे',
+        'symptoms_kn': 'ಗಾಢ ಗಡಿಗಳು ಮತ್ತು ಕಂದು ಕೇಂದ್ರಗಳನ್ನು ಹೊಂದಿರುವ ಸಣ್ಣ ವೃತ್ತಾಕಾರದ ಕಲೆಗಳು',
         'treatment': [
             'Apply Chlorothalonil fungicide',
             'Remove infected lower leaves',
             'Avoid wetting foliage',
             'Mulch around plants'
         ],
-        'prevention': 'Crop rotation, proper plant spacing'
+        'treatment_hi': [
+            'क्लोरोथालोनिल कवकनाशी का प्रयोग करें',
+            'संक्रमित निचली पत्तियों को हटा दें',
+            'पत्तियों को गीला करने से बचें',
+            'पौधों के चारों ओर मल्चिंग करें'
+        ],
+        'treatment_kn': [
+            'ಕ್ಲೋರೊಥಲೋನಿಲ್ ಶಿಲೀಂಧ್ರನಾಶಕವನ್ನು ಅನ್ವಯಿಸಿ',
+            'ಸೋಂಕಿತ ಕೆಳಗಿನ ಎಲೆಗಳನ್ನು ತೆಗೆದುಹಾಕಿ',
+            'ಎಲೆಗಳನ್ನು ಒದ್ದೆ ಮಾಡುವುದನ್ನು ತಪ್ಪಿಸಿ',
+            'ಸಸ್ಯಗಳ ಸುತ್ತಲೂ ಹೊದಿಕೆ ಹಾಕಿ'
+        ],
+        'prevention': 'Crop rotation, proper plant spacing',
+        'prevention_hi': 'फसल चक्र, उचित पौधों की दूरी',
+        'prevention_kn': 'ಬೆಳೆ ಸರದಿ, ಸರಿಯಾದ ಸಸ್ಯ ಅಂತರ'
     },
     'yellow_leaf_curl_virus': {
         'name': 'Yellow Leaf Curl Virus',
@@ -131,13 +259,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಹಳದಿ ಎಲೆ ಸುರುಳಿ ವೈರಸ್',
         'severity': 'severe',
         'symptoms': 'Upward curling, yellowing leaves, stunted growth',
+        'symptoms_hi': 'ऊपर की ओर मुड़ना, पीली पत्तियां, रुका हुआ विकास',
+        'symptoms_kn': 'ಎಲೆಗಳು ಮೇಲಕ್ಕೆ ಸುರುಳಿಯಾಗುವುದು, ಹಳದಿಯಾಗುವುದು, ಬೆಳವಣಿಗೆ ಕುಂಠಿತವಾಗುವುದು',
         'treatment': [
             'No cure - remove infected plants',
             'Control whitefly vectors with Imidacloprid',
             'Use yellow sticky traps',
             'Apply neem oil to control vectors'
         ],
-        'prevention': 'Resistant varieties, reflective mulches, screen nurseries'
+        'treatment_hi': [
+            'कोई इलाज नहीं - संक्रमित पौधों को हटा दें',
+            'इमिडाक्लोप्रिड के साथ सफेद मक्खी वैक्टर को नियंत्रित करें',
+            'पीले चिपचिपे जाल का उपयोग करें',
+            'वैक्टर को नियंत्रित करने के लिए नीम का तेल लगाएं'
+        ],
+        'treatment_kn': [
+            'ರೋಗ ಪರಿಹಾರವಿಲ್ಲ - ಸೋಂಕಿತ ಸಸ್ಯಗಳನ್ನು ತೆಗೆದುಹಾಕಿ',
+            'ಇಮಿಡಾಕ್ಲೋಪ್ರಿಡ್ ಮೂಲಕ ಬಿಳಿ ನೊಣ ವಾಹಕಗಳನ್ನು ನಿಯಂತ್ರಿಸಿ',
+            'ಹಳದಿ ಅಂಟು ಬಲೆಗಳನ್ನು ಬಳಸಿ',
+            'ವಾಹಕಗಳನ್ನು ನಿಯಂತ್ರಿಸಲು ಬೇವಿನ ಎಣ್ಣೆ ಅನ್ವಯಿಸಿ'
+        ],
+        'prevention': 'Resistant varieties, reflective mulches, screen nurseries',
+        'prevention_hi': 'प्रतिरोधी किस्में,  नर्सरी को स्क्रीन करें',
+        'prevention_kn': 'ನಿರೋಧಕ ತಳಿಗಳು, ಪ್ರತಿಫಲಿತ ಹೊದಿಕೆಗಳು, ನರ್ಸರಿಗಳನ್ನು ರಕ್ಷಿಸಿ'
     },
     'healthy': {
         'name': 'Healthy Plant',
@@ -145,8 +289,14 @@ DISEASE_DATABASE = {
         'name_kn': 'ಆರೋಗ್ಯಕರ ಸಸ್ಯ',
         'severity': 'none',
         'symptoms': 'No visible disease symptoms',
+        'symptoms_hi': 'कोई दिखाई देने वाले रोग के लक्षण नहीं',
+        'symptoms_kn': 'ಯಾವುದೇ ಗೋಚರ ರೋಗ ಲಕ್ಷಣಗಳಿಲ್ಲ',
         'treatment': ['Continue regular care and monitoring'],
-        'prevention': 'Maintain current practices'
+        'treatment_hi': ['नियमित देखभाल और निगरानी जारी रखें'],
+        'treatment_kn': ['ನಿಯಮಿತ ಆರೈಕೆ ಮತ್ತು ಮೇಲ್ವಿಚಾರಣೆಯನ್ನು ಮುಂದುವರಿಸಿ'],
+        'prevention': 'Maintain current practices',
+        'prevention_hi': 'वर्तमान प्रथाओं को बनाए रखें',
+        'prevention_kn': 'ಪ್ರಸ್ತುತ ಅಭ್ಯಾಸಗಳನ್ನು ನಿರ್ವಹಿಸಿ'
     },
     'rice_blast': {
         'name': 'Rice Blast',
@@ -154,13 +304,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಭತ್ತದ ಬ್ಲಾಸ್ಟ್',
         'severity': 'severe',
         'symptoms': 'Diamond-shaped lesions on leaves, neck rot',
+        'symptoms_hi': 'पत्तियों पर हीरे के आकार के घाव, गर्दन का सड़ना',
+        'symptoms_kn': 'ಎಲೆಗಳ ಮೇಲೆ ವಜ್ರದ ಆಕಾರದ ಗಾಯಗಳು, ಕುತ್ತಿಗೆ ಕೊಳೆತ',
         'treatment': [
             'Apply Tricyclazole (0.6g/L) or Isoprothiolane',
             'Drain excess water from fields',
             'Reduce nitrogen application',
             'Apply silicon-based fertilizers'
         ],
-        'prevention': 'Resistant varieties, balanced fertilization'
+        'treatment_hi': [
+            'ट्राइसाइक्लाज़ोल (0.6g/L) या आइसोप्रोथियोलेन का प्रयोग करें',
+            'खेतों से अतिरिक्त पानी निकाल दें',
+            'नाइट्रोजन का प्रयोग कम करें',
+            'सिलिकॉन आधारित उर्वरकों का प्रयोग करें'
+        ],
+        'treatment_kn': [
+            '್ರೈಸೈಕ್ಲಾಜೋಲ್ (0.6g/L) ಅಥವಾ ಐಸೊಪ್ರೊಥಿಯೊಲೇನ್ ಅನ್ವಯಿಸಿ',
+            'ಹೊಲಗಳಿಂದ ಹೆಚ್ಚುವರಿ ನೀರನ್ನು ಹರಿಸಿ',
+            'ಸಾರಜನಕ ಅನ್ವಯಿಕೆ ಕಡಿಮೆ ಮಾಡಿ',
+            'ಸಿಲಿಕಾನ್ ಆಧಾರಿತ ರಸಗೊಬ್ಬರಗಳನ್ನು ಅನ್ವಯಿಸಿ'
+        ],
+        'prevention': 'Resistant varieties, balanced fertilization',
+        'prevention_hi': 'प्रतिरोधी किस्में, संतुलित उर्वरक',
+        'prevention_kn': 'ನಿರೋಧಕ ತಳಿಗಳು, ಸಮತೋಲಿತ ಫಲೀಕರಣ'
     },
     'brown_spot': {
         'name': 'Brown Spot',
@@ -168,13 +334,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಕಂದು ಚುಕ್ಕೆ',
         'severity': 'moderate',
         'symptoms': 'Brown oval spots with gray center on leaves',
+        'symptoms_hi': 'पत्तियों पर ग्रे केंद्र के साथ भूरे अंडाकार धब्बे',
+        'symptoms_kn': 'ಎಲೆಗಳ ಮೇಲೆ ಬೂದು ಕೇಂದ್ರವಿರುವ ಕಂದು ಅಂಡಾಕಾರದ ಕಲೆಗಳು',
         'treatment': [
             'Apply Mancozeb or Carbendazim',
             'Improve soil fertility',
             'Proper water management',
             'Seed treatment with fungicide'
         ],
-        'prevention': 'Balanced nutrition, proper drainage'
+        'treatment_hi': [
+            'मैनकोजेब या कार्बेन्डाजिम का प्रयोग करें',
+            'मिट्टी की उर्वरता में सुधार करें',
+            'उचित जल प्रबंधन',
+            'कवकनाशी के साथ बीज उपचार'
+        ],
+        'treatment_kn': [
+            'ಮ್ಯಾನ್ಕೋಜೆಬ್ ಅಥವಾ ಕಾರ್ಬೆಂಡಾಜಿಮ್ ಅನ್ವಯಿಸಿ',
+            'ಮಣ್ಣಿನ ಫಲವತ್ತತೆಯನ್ನು ಸುಧಾರಿಸಿ',
+            'ಸರಿಯಾದ ನೀರು ನಿರ್ವಹಣೆ',
+            'ಶಿಲೀಂಧ್ರನಾಶಕದೊಂದಿಗೆ ಬೀಜ ಸಂಸ್ಕರಣೆ'
+        ],
+        'prevention': 'Balanced nutrition, proper drainage',
+        'prevention_hi': 'संतुलित पोषण, उचित जल निकासी',
+        'prevention_kn': 'ಸಮತೋಲಿತ ಪೋಷಣೆ, ಸರಿಯಾದ ಒಳಚರಂಡಿ'
     },
     'bacterial_leaf_blight': {
         'name': 'Bacterial Leaf Blight',
@@ -182,13 +364,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಬ್ಯಾಕ್ಟೀರಿಯಲ್ ಎಲೆ ಬ್ಲೈಟ್',
         'severity': 'severe',
         'symptoms': 'Water-soaked lesions turning yellow-white, wilting',
+        'symptoms_hi': 'पानी से लथपथ घाव पीले-सफेद हो जाते हैं, मुरझाना',
+        'symptoms_kn': 'ಹಳದಿ-ಬಿಳಿ, ಬಾಡುವ ನೀರಿನಲ್ಲಿ ನೆನೆದ ಗಾಯಗಳು',
         'treatment': [
             'Apply Streptomycin sulfate',
             'Copper hydroxide spray',
             'Drain fields during infection',
             'Remove infected plant debris'
         ],
-        'prevention': 'Resistant varieties, balanced fertilizer'
+        'treatment_hi': [
+            'स्ट्रेप्टोमाइसिन सल्फेट का प्रयोग करें',
+            'कॉपर हाइड्रोक्साइड स्प्रे',
+            'संक्रमण के दौरान खेत खाली करें',
+            'संक्रमित पौधों के मलबे को हटा दें'
+        ],
+        'treatment_kn': [
+            'ಸ್ಟ್ರೆಪ್ಟೊಮೈಸಿನ್ ಸಲ್ಫೇಟ್ ಅನ್ವಯಿಸಿ',
+            'ಕಾಪರ್ ಹೈಡ್ರಾಕ್ಸೈಡ್ ಸ್ಪ್ರೇ',
+            'ಸೋಂಕಿನ ಸಮಯದಲ್ಲಿ ಹೊಲಗಳನ್ನು ಬರಿದು ಮಾಡಿ',
+            'ಸೋಂಕಿತ ಸಸ್ಯ ಭಗ್ನಾವಶೇಷಗಳನ್ನು ತೆಗೆದುಹಾಕಿ'
+        ],
+        'prevention': 'Resistant varieties, balanced fertilizer',
+        'prevention_hi': 'प्रतिरोधी किस्में, संतुलित उर्वरक',
+        'prevention_kn': 'ನಿರೋಧಕ ತಳಿಗಳು, ಸಮತೋಲಿತ ರಸಗೊಬ್ಬರ'
     },
     'cotton_leaf_curl': {
         'name': 'Cotton Leaf Curl Virus',
@@ -196,13 +394,29 @@ DISEASE_DATABASE = {
         'name_kn': 'ಹತ್ತಿ ಎಲೆ ಸುರುಳಿ',
         'severity': 'severe',
         'symptoms': 'Upward/downward leaf curling, vein thickening, stunting',
+        'symptoms_hi': 'ऊपर/नीचे पत्ती का मुड़ना, शिरा मोटा होना, बोनापन',
+        'symptoms_kn': 'ಎಲೆಗಳು ಮೇಲಕ್ಕೆ/ಕೆಳಕ್ಕೆ ಸುರುಳಿಯಾಗುವುದು, ರಕ್ತನಾಳಗಳ ದಪ್ಪವಾಗುವುದು, ಕುಂಠಿತ',
         'treatment': [
             'Remove and destroy infected plants',
             'Control whitefly with Thiamethoxam',
             'Use neem-based insecticides',
             'Install yellow sticky traps'
         ],
-        'prevention': 'Bt cotton varieties, early sowing, vector control'
+        'treatment_hi': [
+            'संक्रमित पौधों को हटा दें और नष्ट कर दें',
+            'थियामेथोक्साम के साथ सफेद मक्खी को नियंत्रित करें',
+            'नीम आधारित कीटनाशकों का प्रयोग करें',
+            'पीले चिपचिपे जाल स्थापित करें'
+        ],
+        'treatment_kn': [
+            'ಸೋಂಕಿತ ಸಸ್ಯಗಳನ್ನು ತೆಗೆದುಹಾಕಿ ಮತ್ತು ನಾಶಮಾಡಿ',
+            'ಥಿಯಾಮೆಥಾಕ್ಸಮ್ ಮೂಲಕ ಬಿಳಿ ನೊಣವನ್ನು ನಿಯಂತ್ರಿಸಿ',
+            'ಬೇವಿನ ಆಧಾರಿತ ಕೀಟನಾಶಕಗಳನ್ನು ಬಳಸಿ',
+            'ಹಳದಿ ಅಂಟು ಬಲೆಗಳನ್ನು ಸ್ಥಾಪಿಸಿ'
+        ],
+        'prevention': 'Bt cotton varieties, early sowing, vector control',
+        'prevention_hi': 'बीटी कपास किस्में, जल्दी बुवाई, वेक्टर नियंत्रण',
+        'prevention_kn': 'ಬಿಟಿ ಹತ್ತಿ ತಳಿಗಳು, ಆರಂಭಿಕ ಬಿತ್ತನೆ, ವಾಹಕ ನಿಯಂತ್ರಣ'
     }
 }
 
@@ -450,9 +664,13 @@ class DiseaseDetector:
                 disease_key = CLASS_MAPPING.get(top_idx, 'healthy')
                 disease_info = DISEASE_DATABASE.get(disease_key, DISEASE_DATABASE['healthy'])
                 
-                # Get localized name
+                # Get localized fields
                 name_key = f'name_{language}' if language != 'en' else 'name'
                 disease_name = disease_info.get(name_key, disease_info['name'])
+                
+                symptoms_key = f'symptoms_{language}' if language != 'en' else 'symptoms'
+                treatment_key = f'treatment_{language}' if language != 'en' else 'treatment'
+                prevention_key = f'prevention_{language}' if language != 'en' else 'prevention'
                 
                 # Get top 3 predictions
                 top_3_idx = np.argsort(predictions[0])[-3:][::-1]
@@ -460,8 +678,9 @@ class DiseaseDetector:
                 for idx in top_3_idx[1:]:
                     alt_key = CLASS_MAPPING.get(idx, 'healthy')
                     alt_info = DISEASE_DATABASE.get(alt_key, DISEASE_DATABASE['healthy'])
+                    alt_name = alt_info.get(name_key, alt_info['name'])
                     alternatives.append({
-                        'disease': alt_info['name'],
+                        'disease': alt_name,
                         'confidence': float(predictions[0][idx]) * 100
                     })
                 
@@ -471,9 +690,9 @@ class DiseaseDetector:
                     'disease_name': disease_name,
                     'confidence': confidence,
                     'severity': disease_info['severity'],
-                    'symptoms': disease_info['symptoms'],
-                    'treatment': disease_info['treatment'],
-                    'prevention': disease_info['prevention'],
+                    'symptoms': disease_info.get(symptoms_key, disease_info['symptoms']),
+                    'treatment': disease_info.get(treatment_key, disease_info['treatment']),
+                    'prevention': disease_info.get(prevention_key, disease_info['prevention']),
                     'alternatives': alternatives,
                     'method': 'ml_model'
                 }
@@ -495,15 +714,18 @@ class DiseaseDetector:
         
         info = DISEASE_DATABASE[disease_key]
         name_key = f'name_{language}' if language != 'en' else 'name'
+        symptoms_key = f'symptoms_{language}' if language != 'en' else 'symptoms'
+        treatment_key = f'treatment_{language}' if language != 'en' else 'treatment'
+        prevention_key = f'prevention_{language}' if language != 'en' else 'prevention'
         
         return {
             'success': True,
             'disease_key': disease_key,
             'name': info.get(name_key, info['name']),
             'severity': info['severity'],
-            'symptoms': info['symptoms'],
-            'treatment': info['treatment'],
-            'prevention': info['prevention']
+            'symptoms': info.get(symptoms_key, info['symptoms']),
+            'treatment': info.get(treatment_key, info['treatment']),
+            'prevention': info.get(prevention_key, info['prevention'])
         }
     
     def get_all_diseases(self, language: str = 'en') -> list:

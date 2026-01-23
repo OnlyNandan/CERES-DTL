@@ -311,6 +311,18 @@ TRANSLATIONS = {
         'powdery_mildew': 'Powdery Mildew',
         'sheath_blight': 'Sheath Blight',
         'stem_rot': 'Stem Rot',
+        # Healthy Plant & Errors
+        'healthy_plant': 'Healthy Plant!',
+        'no_disease_detected': 'No disease detected. Your plant looks healthy.',
+        'analysis_failed': 'Analysis failed. Please try again.',
+        'unknown_disease': 'Unknown Disease',
+        # Tool Descriptions
+        'yield_predictor_desc': 'ML-based yield forecast',
+        'disease_risk_desc': 'Weather-based disease alerts',
+        'soil_health_desc': 'Composite soil analysis',
+        'smart_irrigation_desc': '7-day irrigation schedule',
+        'ai_assistant_desc': 'Chat with Gemma AI for farming advice',
+        'disease_scanner_desc': 'Upload leaf photo to detect diseases',
     },
     'hi': {
         'app_name': 'सेरेस - स्मार्ट खेती',
@@ -457,6 +469,14 @@ TRANSLATIONS = {
         'your_soil': 'आपकी मिट्टी का प्रकार',
         'change': 'बदलें',
         'rainfall_from_weather': 'वर्षा (मौसम पूर्वानुमान से)',
+        'unknown_disease': 'अज्ञात रोग',
+        # Tool Descriptions
+        'yield_predictor_desc': 'एमएल-आधारित उपज पूर्वानुमान',
+        'disease_risk_desc': 'मौसम आधारित रोग चेतावनी',
+        'soil_health_desc': 'समग्र मिट्टी विश्लेषण',
+        'smart_irrigation_desc': '7-दिवसीय सिंचाई सूची',
+        'ai_assistant_desc': 'खेती की सलाह के लिए जेम्मा एआई से चैट करें',
+        'disease_scanner_desc': 'रोगों का पता लगाने के लिए पत्ते की फोटो अपलोड करें',
     },
     'kn': {
         'app_name': 'ಸೆರೆಸ್ - ಸ್ಮಾರ್ಟ್ ಕೃಷಿ',
@@ -720,6 +740,18 @@ TRANSLATIONS = {
         'powdery_mildew': 'ಪುಡಿ ಶಿಲೀಂಧ್ರ',
         'sheath_blight': 'ಕವಚ ಬ್ಲೈಟ್',
         'stem_rot': 'ಕಾಂಡ ಕೊಳೆತ',
+        # Healthy Plant & Errors
+        'healthy_plant': 'ಆರೋಗ್ಯಕರ ಸಸ್ಯ!',
+        'no_disease_detected': 'ಯಾವುದೇ ರೋಗ ಪತ್ತೆಯಾಗಿಲ್ಲ. ನಿಮ್ಮ ಸಸ್ಯ ಆರೋಗ್ಯಕರವಾಗಿದೆ.',
+        'analysis_failed': 'ವಿಶ್ಲೇಷಣೆ ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.',
+        'unknown_disease': 'ಅಜ್ಞಾತ ರೋಗ',
+        # Tool Descriptions
+        'yield_predictor_desc': 'ML-ಆಧಾರಿತ ಇಳುವರಿ ಮುನ್ಸೂಚನೆ',
+        'disease_risk_desc': 'ಹವಾಮಾನ ಆಧಾರಿತ ರೋಗ ಎಚ್ಚರಿಕೆಗಳು',
+        'soil_health_desc': 'ಸಮಗ್ರ ಮಣ್ಣಿನ ವಿಶ್ಲೇಷಣೆ',
+        'smart_irrigation_desc': '7-ದಿನಗಳ ನೀರಾವರಿ ವೇಳಾಪಟ್ಟಿ',
+        'ai_assistant_desc': 'ಕೃಷಿ ಸಲಹೆಗಾಗಿ ಜೆಮ್ಮಾ AI ನೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ',
+        'disease_scanner_desc': 'ರೋಗಗಳನ್ನು ಪತ್ತೆಹಚ್ಚಲು ಎಲೆ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',
     },
     'te': {
         'app_name': 'సెరెస్ - స్మార్ట్ వ్యవసాయం',
