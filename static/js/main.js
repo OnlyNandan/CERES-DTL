@@ -36,32 +36,32 @@ class CeresApp {
         // Soil presets with ALL ML model features tuned based on crop_data.csv patterns
         // Each soil type targets a different crop based on training data
         const soilPresets = {
-            // Black soil (cotton belt) - Cotton: N=78-94, P=15-28, K=17-25, temp=23-29, hum=66-75, rainfall=45-78
-            'black': { N: 88, P: 20, K: 20, ph: 7.1, temp: 26, humidity: 71, rainfall: 60, emoji: '🪨', color: 'from-gray-800 to-gray-600', bestCrop: 'cotton' },
+            // Black soil (cotton) - Cotton: N=107-121, P=28-55, K=36-61, temp=23-29, hum=60-85, rainfall=51-101
+            'black': { N: 88, P: 20, K: 20, ph: 7.1, temp: 26, humidity: 71, rainfall: 60, emoji: '/static/images/soils/black_soil.png', color: 'from-gray-800 to-gray-600', bestCrop: 'cotton' },
 
             // Red soil (groundnut) - Groundnut: N=32-41, P=54-65, K=15-24, temp=26-32, hum=58-68, rainfall=68-92
-            'red': { N: 35, P: 58, K: 20, ph: 6.2, temp: 28, humidity: 62, rainfall: 75, emoji: '🥜', color: 'from-red-500 to-orange-400', bestCrop: 'groundnut' },
+            'red': { N: 35, P: 58, K: 20, ph: 6.2, temp: 28, humidity: 62, rainfall: 75, emoji: '/static/images/soils/red_soil.png', color: 'from-red-500 to-orange-400', bestCrop: 'groundnut' },
 
             // Alluvial soil (rice paddy) - Rice: N=60-105, P=26-58, K=39-45, temp=20-26, hum=80-86, rainfall=200-270
-            'alluvial': { N: 80, P: 42, K: 42, ph: 6.5, temp: 22, humidity: 82, rainfall: 230, emoji: '🌾', color: 'from-amber-300 to-yellow-200', bestCrop: 'rice' },
+            'alluvial': { N: 80, P: 42, K: 42, ph: 6.5, temp: 22, humidity: 82, rainfall: 230, emoji: '/static/images/soils/alluvial_soil.png', color: 'from-amber-300 to-yellow-200', bestCrop: 'rice' },
 
             // Loamy soil (maize) - Maize: N=68-82, P=56-82, K=39-48, temp=18-24, hum=17-70, rainfall=47-108
-            'loamy': { N: 72, P: 68, K: 42, ph: 6.0, temp: 21, humidity: 55, rainfall: 75, emoji: '🌽', color: 'from-amber-600 to-yellow-500', bestCrop: 'maize' },
+            'loamy': { N: 72, P: 68, K: 42, ph: 6.0, temp: 21, humidity: 55, rainfall: 75, emoji: '/static/images/soils/loamy_soil.png', color: 'from-amber-600 to-yellow-500', bestCrop: 'maize' },
 
             // Laterite soil (coffee) - Coffee: N=90-105, P=28-42, K=25-35, temp=22-28, hum=55-70, rainfall=140-180
-            'laterite': { N: 98, P: 35, K: 30, ph: 5.8, temp: 25, humidity: 62, rainfall: 155, emoji: '☕', color: 'from-orange-600 to-red-600', bestCrop: 'coffee' },
+            'laterite': { N: 98, P: 35, K: 30, ph: 5.8, temp: 25, humidity: 62, rainfall: 155, emoji: '/static/images/soils/laterite_soil.png', color: 'from-orange-600 to-red-600', bestCrop: 'coffee' },
 
             // Arid/Sandy soil (millets) - Millets: N=28-48, P=32-52, K=18-35, temp=28-34, hum=45-65, rainfall=35-75
-            'arid': { N: 38, P: 42, K: 26, ph: 6.5, temp: 30, humidity: 55, rainfall: 55, emoji: '🏜️', color: 'from-yellow-200 to-orange-100', bestCrop: 'millets' },
+            'arid': { N: 45, P: 25, K: 30, ph: 8.0, temp: 30, humidity: 35, rainfall: 25, emoji: '/static/images/soils/arid_soil.png', color: 'from-yellow-400 to-orange-300', bestCrop: 'millet' },
 
             // Forest soil (tea) - Tea: N=75-95, P=42-58, K=38-52, temp=18-24, hum=70-85, rainfall=180-240
-            'forest': { N: 82, P: 48, K: 45, ph: 5.5, temp: 20, humidity: 78, rainfall: 200, emoji: '🍵', color: 'from-green-700 to-emerald-600', bestCrop: 'tea' },
+            'forest': { N: 85, P: 40, K: 35, ph: 6.2, temp: 22, humidity: 80, rainfall: 180, emoji: '/static/images/soils/forest_soil.png', color: 'from-green-800 to-brown-600', bestCrop: 'spices' },
 
             // Saline soil (soybean tolerant) - Soybean: N=18-28, P=65-74, K=22-31, temp=22-28, hum=60-75, rainfall=45-85
-            'saline': { N: 22, P: 70, K: 26, ph: 7.0, temp: 24, humidity: 68, rainfall: 65, emoji: '🧂', color: 'from-gray-300 to-blue-100', bestCrop: 'soybean' },
+            'saline': { N: 30, P: 18, K: 40, ph: 8.5, temp: 28, humidity: 50, rainfall: 40, emoji: '/static/images/soils/saline_soil.png', color: 'from-gray-300 to-blue-200', bestCrop: 'barley' },
 
             // Peaty/Organic soil (banana) - Banana: N=95-115, P=68-85, K=48-62, temp=26-32, hum=75-88, rainfall=95-150
-            'peaty': { N: 102, P: 75, K: 55, ph: 5.8, temp: 28, humidity: 82, rainfall: 120, emoji: '🍌', color: 'from-stone-800 to-amber-900', bestCrop: 'banana' }
+            'peaty': { N: 102, P: 75, K: 55, ph: 5.8, temp: 28, humidity: 82, rainfall: 120, emoji: '', color: 'from-stone-800 to-amber-900', bestCrop: 'banana' }
         };
 
         const preset = soilPresets[soilType] || soilPresets['alluvial'];
@@ -74,16 +74,25 @@ class CeresApp {
         const pInput = document.getElementById('phosphorus');
         const kInput = document.getElementById('potassium');
         const phInput = document.getElementById('ph');
-        const soilImage = document.getElementById('user-soil-image');
 
         if (nInput) nInput.value = preset.N;
         if (pInput) pInput.value = preset.P;
         if (kInput) kInput.value = preset.K;
         if (phInput) phInput.value = preset.ph;
-        if (soilImage) {
-            // Use gradient background with emoji instead of external images
-            soilImage.innerHTML = `<span class="text-2xl">${preset.emoji}</span>`;
-            soilImage.className = `w-12 h-12 rounded-full bg-gradient-to-br ${preset.color} flex items-center justify-center`;
+        if (preset) {
+            // Use gradient background with image instead of external images
+            const soilImage = document.getElementById('soil-type-image');
+            if (soilImage) { // Ensure the element exists before manipulating
+                if (preset.emoji && preset.emoji.startsWith('/static/')) {
+                    // Render actual image
+                    soilImage.innerHTML = `<img src="${preset.emoji}" alt="${soilType} soil" class="w-full h-full object-cover rounded-full">`;
+                    soilImage.className = `w-12 h-12 rounded-full overflow-hidden`;
+                } else {
+                    // Fallback to gradient
+                    soilImage.innerHTML = `<span class="text-2xl">${preset.emoji}</span>`;
+                    soilImage.className = `w-12 h-12 rounded-full bg-gradient-to-br ${preset.color} flex items-center justify-center`;
+                }
+            }
         }
     }
 
@@ -391,7 +400,7 @@ class CeresApp {
         // Update the display
         if (autoRainfallDisplay) {
             let rainfallCategory = this.getTranslation('rainfall_medium');
-            let categoryEmoji = '🌧️';
+            let categoryEmoji = '';
 
             if (totalRainfall < 200) {
                 rainfallCategory = this.getTranslation('rainfall_low');
@@ -408,12 +417,12 @@ class CeresApp {
     getWeatherIcon(code) {
         // WMO Weather Codes to icon mapping
         const iconMap = {
-            0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+            0: '☀️', 1: '🌤️', 2: '⛅', 3: '',
             45: '🌫️', 48: '🌫️',
-            51: '🌧️', 53: '🌧️', 55: '🌧️',
-            61: '🌧️', 63: '🌧️', 65: '🌧️',
+            51: '', 53: '', 55: '',
+            61: '', 63: '', 65: '',
             71: '🌨️', 73: '🌨️', 75: '🌨️',
-            80: '🌧️', 81: '🌧️', 82: '🌧️',
+            80: '', 81: '', 82: '',
             95: '⛈️', 96: '⛈️', 99: '⛈️'
         };
 
@@ -577,12 +586,12 @@ class CeresApp {
 
     getWeatherEmoji(code) {
         const emojiMap = {
-            0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+            0: '☀️', 1: '🌤️', 2: '⛅', 3: '',
             45: '🌫️', 48: '🌫️',
-            51: '🌧️', 53: '🌧️', 55: '🌧️',
-            61: '🌧️', 63: '🌧️', 65: '🌧️',
+            51: '', 53: '', 55: '',
+            61: '', 63: '', 65: '',
             71: '🌨️', 73: '🌨️', 75: '🌨️',
-            80: '🌧️', 81: '🌧️', 82: '🌧️',
+            80: '', 81: '', 82: '',
             95: '⛈️', 96: '⛈️', 99: '⛈️'
         };
         return emojiMap[code] || '🌤️';
@@ -619,7 +628,7 @@ class CeresApp {
                 alert.severity === 'medium' ? 'alert-medium' : 'alert-low';
 
             const icons = {
-                rain: '🌧️',
+                rain: '',
                 heat: '🌡️',
                 frost: '❄️',
                 pest: '🐛',
@@ -628,7 +637,7 @@ class CeresApp {
 
             alertEl.className = `${alertClass} p-4 rounded-lg flex items-center gap-3 fade-in`;
             alertEl.innerHTML = `
-                <span class="text-2xl">${icons[alert.type] || '⚠️'}</span>
+                <span class="text-2xl">${icons[alert.type] || ''}</span>
                 <div>
                     <p class="font-semibold text-gray-900">${alert.title}</p>
                     <p class="text-sm text-gray-600">${alert.message}</p>
@@ -937,10 +946,13 @@ class CeresApp {
                 const panel = document.getElementById('crop-info-panel');
                 const details = document.getElementById('crop-details');
 
+                // Handle both old and new API response formats
+                const cropInfo = data.crop_details || data;
+
                 details.innerHTML = `
-                    <div class="flex justify-between"><span class="text-gray-500">Season:</span><span class="font-medium">${data.season || 'N/A'}</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Water Needs:</span><span class="font-medium">${data.water_needs || 'N/A'}</span></div>
-                    <div class="flex justify-between"><span class="text-gray-500">Duration:</span><span class="font-medium">${data.duration || 'N/A'}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Season:</span><span class="font-medium">${cropInfo.season || 'N/A'}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Water Needs:</span><span class="font-medium">${cropInfo.water_needs || 'N/A'}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-500">Duration:</span><span class="font-medium">${cropInfo.duration || 'N/A'} days</span></div>
                 `;
                 panel.classList.remove('hidden');
             }
@@ -996,11 +1008,16 @@ class CeresApp {
                 const resultEl = document.getElementById('fert-result');
                 const detailsEl = document.getElementById('fert-details');
 
+                // Handle both old and new API response formats
+                const quantities = data.fertilizer_quantities || data;
+                const npk = data.per_hectare || { N: 0, P: 0, K: 0 };
+
                 detailsEl.innerHTML = `
-                    <div class="flex justify-between p-2 bg-white rounded"><span>Urea</span><span class="font-bold">${data.urea_kg} kg</span></div>
-                    <div class="flex justify-between p-2 bg-white rounded"><span>DAP</span><span class="font-bold">${data.dap_kg} kg</span></div>
-                    <div class="flex justify-between p-2 bg-white rounded"><span>MOP</span><span class="font-bold">${data.mop_kg} kg</span></div>
-                    <p class="text-xs text-gray-500 mt-2">Based on ${data.per_hectare.N}-${data.per_hectare.P}-${data.per_hectare.K} kg/ha requirement</p>
+                    <div class="flex justify-between p-2 bg-white rounded"><span>Urea</span><span class="font-bold">${quantities.urea_kg} kg</span></div>
+                    <div class="flex justify-between p-2 bg-white rounded"><span>DAP</span><span class="font-bold">${quantities.dap_kg} kg</span></div>
+                    <div class="flex justify-between p-2 bg-white rounded"><span>MOP</span><span class="font-bold">${quantities.mop_kg} kg</span></div>
+                    <p class="text-xs text-gray-500 mt-2">Based on ${npk.N}-${npk.P}-${npk.K} kg/ha requirement</p>
+                    ${data.method === 'ml' ? '<p class="text-xs text-green-600 mt-1">ML-powered recommendation</p>' : ''}
                 `;
                 resultEl.classList.remove('hidden');
             }
@@ -1011,15 +1028,122 @@ class CeresApp {
 
     // Crop Calendar
     async loadCropCalendar() {
+        const container = document.getElementById('calendar-content');
+        const currentMonth = new Date().toLocaleString('en-US', { month: 'long' });
+        const currentSeason = this.getCurrentSeason();
+
+        // Show basic calendar info first
+        container.innerHTML = `
+            <div class="p-4 bg-green-50 rounded-xl mb-4">
+                <h4 class="font-bold text-green-800 mb-2">${currentMonth} - ${currentSeason}</h4>
+                <p class="text-sm text-green-700 mb-3" data-i18n="smart_crop_planning">Smart crop planning with ML predictions</p>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="select_crop">Select Crop</label>
+                        <select id="calendar-crop" class="w-full p-2 border-2 border-gray-200 rounded-lg">
+                            <option value="rice">Rice</option>
+                            <option value="wheat">Wheat</option>
+                            <option value="maize">Maize</option>
+                            <option value="cotton">Cotton</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="planting_date">Planting Date</label>
+                        <input type="date" id="calendar-date" class="w-full p-2 border-2 border-gray-200 rounded-lg" 
+                               value="${new Date().toISOString().split('T')[0]}">
+                    </div>
+                    <button onclick="app.generateDetailedCalendar()" 
+                            class="w-full py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700"
+                            data-i18n="generate_growth_calendar">
+                        Generate Growth Calendar
+                    </button>
+                </div>
+            </div>
+            <div id="calendar-results" class="space-y-3"></div>
+        `;
+
+        // Apply translations
+        if (window.updateTranslations) {
+            window.updateTranslations();
+        }
+    }
+
+    async generateDetailedCalendar() {
+        const crop = document.getElementById('calendar-crop').value;
+        const plantingDate = document.getElementById('calendar-date').value;
+        const resultsEl = document.getElementById('calendar-results');
+
+        const loadingMsg = this.getTranslation('calculating_growth_stages') || 'Calculating growth stages...';
+        resultsEl.innerHTML = `<p class="text-center text-gray-500">${loadingMsg}</p>`;
+
         try {
-            const response = await fetch(`/api/crop-calendar?lang=${this.currentLang}`);
+            const response = await fetch('/api/crop-calendar/detailed', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    crop,
+                    planting_date: plantingDate,
+                    latitude: this.userData.latitude || 20,
+                    longitude: this.userData.longitude || 77
+                })
+            });
+
             const data = await response.json();
 
             if (data.success) {
-                this.renderCropCalendar(data);
+                const cropName = this.getCropTranslation(crop);
+                const maturityLabel = this.getTranslation('maturity') || 'Maturity';
+                const daysLabel = this.getTranslation('days') || 'days';
+                const gddLabel = this.getTranslation('growing_degree_days') || 'Growing Degree Days';
+                const timelineLabel = this.getTranslation('growth_timeline') || 'Growth Timeline';
+                const tipsLabel = this.getTranslation('management_tips') || 'Management Tips';
+                const dayLabel = this.getTranslation('day') || 'Day';
+
+                // Render growth stages
+                let stagesHtml = '<div class="bg-white rounded-xl p-4 shadow-sm mb-3">';
+                stagesHtml += `<h5 class="font-bold text-gray-800 mb-3">${cropName} ${timelineLabel}</h5>`;
+                stagesHtml += `<p class="text-sm text-gray-600 mb-2">${maturityLabel}: ${data.estimated_maturity} (${data.total_days} ${daysLabel})</p>`;
+                stagesHtml += `<p class="text-xs text-gray-500 mb-3">${gddLabel}: ${data.avg_daily_gdd}/${dayLabel}</p>`;
+
+                stagesHtml += '<div class="space-y-2">';
+                data.growth_stages.forEach((stage, idx) => {
+                    const isNext = idx === 0;
+                    // Translate stage name
+                    const stageKey = stage.stage.toLowerCase().replace(/ /g, '_');
+                    const stageName = this.getTranslation(stageKey) || stage.stage;
+                    stagesHtml += `
+                        <div class="p-3 rounded-lg ${isNext ? 'bg-green-50 border-2 border-green-300' : 'bg-gray-50'}">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold text-gray-700">${stageName}</span>
+                                <span class="text-sm text-gray-600">${stage.date}</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">${dayLabel} ${stage.days_from_planting} • ${stage.gdd_accumulated} GDD</p>
+                        </div>
+                    `;
+                });
+                stagesHtml += '</div></div>';
+
+                // Render recommendations
+                if (data.recommendations && data.recommendations.length > 0) {
+                    stagesHtml += '<div class="bg-blue-50 rounded-xl p-4">';
+                    stagesHtml += `<h5 class="font-bold text-blue-800 mb-2">${tipsLabel}</h5>`;
+                    stagesHtml += '<ul class="space-y-2">';
+                    data.recommendations.forEach(rec => {
+                        stagesHtml += `
+                            <li class="text-sm text-blue-900">
+                                <span class="font-semibold">${rec.stage}:</span> ${rec.activity}
+                            </li>
+                        `;
+                    });
+                    stagesHtml += '</ul></div>';
+                }
+
+                resultsEl.innerHTML = stagesHtml;
             }
         } catch (error) {
-            console.error('Failed to load crop calendar:', error);
+            console.error('Failed to generate crop calendar:', error);
+            resultsEl.innerHTML = '<p class="text-center text-red-500"> Failed to generate calendar</p>';
         }
     }
 
@@ -1034,7 +1158,7 @@ class CeresApp {
         const monthEl = document.createElement('div');
         monthEl.className = 'p-4 bg-green-50 rounded-xl mb-4';
         monthEl.innerHTML = `
-            <h4 class="font-bold text-green-800 mb-2">📅 ${currentMonth} - ${currentSeason}</h4>
+            <h4 class="font-bold text-green-800 mb-2">${currentMonth} - ${currentSeason}</h4>
             <p class="text-sm text-green-700">Best crops to sow now:</p>
         `;
         container.appendChild(monthEl);
@@ -1100,11 +1224,11 @@ class CeresApp {
         }
 
         const activityIcons = {
-            sowing: '🌱',
+            sowing: '',
             irrigation: '💧',
             fertilizer: '🌿',
             pesticide: '🧪',
-            harvest: '🌾',
+            harvest: '',
             other: '📝'
         };
 
@@ -1273,7 +1397,7 @@ class CeresApp {
         if (data.recommendations && data.recommendations.length > 0) {
             html += `
                 <div class="p-4 bg-blue-50 rounded-xl">
-                    <p class="font-semibold text-blue-800 mb-2">💡 ${this.getTranslation('recommendations')}</p>
+                    <p class="font-semibold text-blue-800 mb-2"> ${this.getTranslation('recommendations')}</p>
                     <ul class="text-sm text-blue-700 space-y-1">
                         ${data.recommendations.map(r => `<li>• ${r}</li>`).join('')}
                     </ul>
@@ -1287,7 +1411,7 @@ class CeresApp {
                 <div class="p-4 bg-orange-50 rounded-xl">
                     <p class="font-semibold text-orange-800 mb-2">🧪 Spray Schedule</p>
                     <p class="text-sm text-orange-700"><strong>Timing:</strong> ${data.spray_schedule.recommended_timing || 'N/A'}</p>
-                    ${data.spray_schedule.avoid_spraying_if ? `<p class="text-xs text-orange-600 mt-1">⚠️ ${data.spray_schedule.avoid_spraying_if}</p>` : ''}
+                    ${data.spray_schedule.avoid_spraying_if ? `<p class="text-xs text-orange-600 mt-1"> ${data.spray_schedule.avoid_spraying_if}</p>` : ''}
                 </div>
             `;
         }
@@ -1353,7 +1477,7 @@ class CeresApp {
             </div>
             
             <div class="p-4 bg-blue-50 rounded-xl">
-                <p class="font-semibold text-blue-800 mb-2">📊 ${this.getTranslation('confidence_level')}: ${(data.confidence || 0).toFixed(1)}%</p>
+                <p class="font-semibold text-blue-800 mb-2"> ${this.getTranslation('confidence_level')}: ${(data.confidence || 0).toFixed(1)}%</p>
                 <div class="w-full bg-blue-200 rounded-full h-3">
                     <div class="bg-blue-600 h-3 rounded-full" style="width: ${data.confidence || 0}%"></div>
                 </div>
@@ -1383,7 +1507,7 @@ class CeresApp {
 
             html += `
                 <div class="flex items-center gap-2">
-                    <span class="text-sm w-28 ${isLimiting ? 'text-red-600 font-bold' : 'text-gray-600'}">${label} ${isLimiting ? '⚠️' : ''}</span>
+                    <span class="text-sm w-28 ${isLimiting ? 'text-red-600 font-bold' : 'text-gray-600'}">${label} ${isLimiting ? '' : ''}</span>
                     <div class="flex-1 bg-gray-200 rounded-full h-2">
                         <div class="${pct >= 90 ? 'bg-green-500' : pct >= 70 ? 'bg-yellow-500' : 'bg-red-500'} h-2 rounded-full" style="width: ${pct}%"></div>
                     </div>
@@ -1486,7 +1610,7 @@ class CeresApp {
         if (data.component_scores) {
             html += `
                 <div class="p-4 bg-gray-50 rounded-xl">
-                    <p class="font-semibold text-gray-700 mb-3">📊 ${this.getTranslation('component_scores')}</p>
+                    <p class="font-semibold text-gray-700 mb-3"> ${this.getTranslation('component_scores')}</p>
                     <div class="space-y-2">
             `;
 
@@ -1521,7 +1645,7 @@ class CeresApp {
         if (data.recommendations && data.recommendations.length > 0) {
             html += `
                 <div class="p-4 bg-blue-50 rounded-xl">
-                    <p class="font-semibold text-blue-800 mb-2">💡 ${this.getTranslation('improvement_recommendations')}</p>
+                    <p class="font-semibold text-blue-800 mb-2"> ${this.getTranslation('improvement_recommendations')}</p>
                     <ul class="text-sm text-blue-700 space-y-1">
                         ${data.recommendations.map(r => `<li>• ${r}</li>`).join('')}
                     </ul>
@@ -1533,7 +1657,7 @@ class CeresApp {
         if (data.suitable_crops && data.suitable_crops.length > 0) {
             html += `
                 <div class="p-4 bg-green-50 rounded-xl">
-                    <p class="font-semibold text-green-800 mb-2">🌾 Suitable Crops</p>
+                    <p class="font-semibold text-green-800 mb-2"> Suitable Crops</p>
                     <div class="flex flex-wrap gap-2">
                         ${data.suitable_crops.map(crop => `<span class="px-3 py-1 bg-white rounded-full text-sm text-green-700">${this.getCropTranslation(crop)}</span>`).join('')}
                     </div>
@@ -1624,7 +1748,7 @@ class CeresApp {
         if (data.schedule && data.schedule.length > 0) {
             html += `
                 <div class="p-4 bg-gray-50 rounded-xl">
-                    <p class="font-semibold text-gray-700 mb-3">📅 7-Day Irrigation Schedule</p>
+                    <p class="font-semibold text-gray-700 mb-3"> 7-Day Irrigation Schedule</p>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
@@ -1665,7 +1789,7 @@ class CeresApp {
         if (data.recommendations && data.recommendations.length > 0) {
             html += `
                 <div class="p-4 bg-blue-50 rounded-xl">
-                    <p class="font-semibold text-blue-800 mb-2">💡 Recommendations</p>
+                    <p class="font-semibold text-blue-800 mb-2"> Recommendations</p>
                     <ul class="text-sm text-blue-700 space-y-1">
                         ${data.recommendations.map(r => `<li>• ${r}</li>`).join('')}
                     </ul>
@@ -1773,7 +1897,7 @@ class CeresApp {
             </div>
             
             <div class="p-4 ${verdictColor} rounded-xl text-center">
-                <p class="text-sm opacity-75 mb-1">${isProfit ? '✅ Profitable!' : '⚠️ Loss Expected'}</p>
+                <p class="text-sm opacity-75 mb-1">${isProfit ? ' Profitable!' : ' Loss Expected'}</p>
                 <p class="text-4xl font-bold">${isProfit ? '+' : '-'}₹${Math.abs(data.financials?.net_profit || 0).toLocaleString()}</p>
                 <p class="text-sm mt-1">Net ${isProfit ? 'Profit' : 'Loss'}</p>
             </div>
@@ -1794,7 +1918,7 @@ class CeresApp {
         if (data.yield) {
             html += `
                 <div class="p-4 bg-amber-50 rounded-xl text-center">
-                    <p class="text-lg font-semibold text-amber-800">🌾 Expected Harvest</p>
+                    <p class="text-lg font-semibold text-amber-800"> Expected Harvest</p>
                     <p class="text-3xl font-bold text-amber-700 mt-1">${(data.yield.total_kg || 0).toLocaleString()} kg</p>
                     <p class="text-xs text-amber-600 mt-1">(${(data.yield.predicted_kg_per_ha || 0).toLocaleString()} kg per hectare)</p>
                 </div>
@@ -1805,7 +1929,7 @@ class CeresApp {
         if (data.financials) {
             html += `
                 <div class="p-4 bg-gray-50 rounded-xl">
-                    <p class="font-semibold text-gray-700 mb-2">📊 Summary</p>
+                    <p class="font-semibold text-gray-700 mb-2"> Summary</p>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
                             <span class="text-gray-600">Return on Investment</span>
@@ -2504,7 +2628,7 @@ class DiseaseScanner {
         } else {
             html += `
                 <div class="p-4 bg-green-50 rounded-xl text-center">
-                    <p class="text-4xl mb-2">✅</p>
+                    <p class="text-4xl mb-2"></p>
                     <p class="text-green-700 font-medium">Your plant looks healthy!</p>
                     <p class="text-sm text-green-600 mt-1">Continue with regular care and monitoring.</p>
                 </div>
@@ -2574,16 +2698,27 @@ const RAINFALL_PRESETS = {
 
 // Crop emoji mapping for visual display
 const CROP_EMOJIS = {
-    rice: '🌾', wheat: '🌾', maize: '🌽', corn: '🌽',
-    cotton: '☁️', sugarcane: '🎋', soybean: '🫘', soya: '🫘',
-    groundnut: '🥜', peanut: '🥜', potato: '🥔', tomato: '🍅',
-    onion: '🧅', chilli: '🌶️', pepper: '🌶️', mango: '🥭',
-    banana: '🍌', orange: '🍊', apple: '🍎', grape: '🍇',
-    coconut: '🥥', coffee: '☕', tea: '🍵', mustard: '🌻',
-    sunflower: '🌻', turmeric: '🟡', ginger: '🫚', garlic: '🧄',
-    cabbage: '🥬', carrot: '🥕', cucumber: '🥒', watermelon: '🍉',
-    pumpkin: '🎃', lentil: '🫘', chickpea: '🫘', millet: '🌾',
-    jowar: '🌾', bajra: '🌾', ragi: '🌾', default: '🌱'
+    rice: '/static/images/crops/rice.png',
+    wheat: '/static/images/crops/wheat.png',
+    maize: '/static/images/crops/maize.png',
+    corn: '/static/images/crops/maize.png',
+    cotton: '/static/images/crops/cotton.png',
+    sugarcane: '/static/images/crops/sugarcane.png',
+    soybean: '/static/images/crops/soybean.png',
+    soya: '/static/images/crops/soybean.png',
+    groundnut: '/static/images/crops/groundnut.png',
+    peanut: '/static/images/crops/groundnut.png',
+    potato: '/static/images/crops/potato.png',
+    tomato: '',
+    onion: '', chilli: '', pepper: '', mango: '',
+    banana: '', orange: '', apple: '', grape: '',
+    coconut: '', coffee: '', tea: '', mustard: '',
+    sunflower: '', turmeric: '', ginger: '', garlic: '',
+    cabbage: '', carrot: '', cucumber: '', watermelon: '',
+    pumpkin: '', lentil: '', chickpea: '', millet: '',
+    jowar: '', bajra: '', ragi: '', default: '',
+    brinjal: '', cauliflower: '', lettuce: '', spinach: '',
+    peas: '', beans: '', melon: '', millets: '', barley: '', oats: ''
 };
 
 function setSoilPreset(type) {
@@ -2914,7 +3049,8 @@ async function analyzeDiseaseImage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 image: diseaseImageData,
-                lang: app.currentLang
+                lang: app.currentLang,
+                ts: Date.now()
             })
         });
 
@@ -2953,7 +3089,7 @@ function renderDiseaseResults(data) {
     if (data.disease_key === 'healthy' || data.disease_name === 'Healthy Plant') {
         container.innerHTML = `
             <div class="p-6 bg-green-50 rounded-xl text-center">
-                <span class="text-6xl mb-4 block">✅</span>
+                <span class="text-6xl mb-4 block"></span>
                 <h3 class="text-2xl font-bold text-green-700 mb-2">${app.getTranslation('healthy_plant') || 'Healthy Plant!'}</h3>
                 <p class="text-green-600">${app.getTranslation('no_disease_detected') || 'No disease detected. Your plant looks healthy.'}</p>
             </div>
@@ -3000,7 +3136,7 @@ function renderDiseaseResults(data) {
             
             ${data.symptoms ? `
             <div class="p-4 bg-orange-50 rounded-xl">
-                <h4 class="font-semibold text-orange-700 mb-2">⚠️ ${app.getTranslation('symptoms') || 'Symptoms'}</h4>
+                <h4 class="font-semibold text-orange-700 mb-2"> ${app.getTranslation('symptoms') || 'Symptoms'}</h4>
                 <p class="text-sm text-orange-600">${data.symptoms}</p>
             </div>
             ` : ''}
@@ -3223,7 +3359,7 @@ function renderPlotAnalysis(data) {
                     <span class="text-sm text-gray-600">${zone.area_percent}% (${zone.area_hectares} Ha)</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <span class="text-3xl">🌾</span>
+                    <span class="text-3xl"></span>
                     <div>
                         <p class="font-semibold text-gray-800">${zone.recommended_crop_translated}</p>
                         <p class="text-sm text-gray-600">Expected: ${zone.expected_yield_kg.toLocaleString()} kg</p>
@@ -3256,6 +3392,27 @@ document.addEventListener('keydown', (e) => {
 
 // AI Chat Enter key
 document.addEventListener('DOMContentLoaded', () => {
+    // Set user's soil type image
+    const userSoilImageEl = document.getElementById('user-soil-image');
+    const userSoilNameEl = document.getElementById('user-soil-name');
+
+    if (userSoilImageEl && userSoilNameEl) {
+        // Extract soil type from the text (e.g., "Alluvial Soil" -> "alluvial")
+        const soilText = userSoilNameEl.textContent.trim().toLowerCase();
+        let soilType = 'alluvial'; // default
+
+        for (const type of ['alluvial', 'black', 'red', 'laterite', 'arid', 'forest', 'saline', 'peaty']) {
+            if (soilText.includes(type)) {
+                soilType = type;
+                break;
+            }
+        }
+
+        // Set the image
+        const imagePath = soilPresets[soilType]?.emoji || '/static/images/soils/alluvial_soil.png';
+        userSoilImageEl.innerHTML = `<img src="${imagePath}" alt="${soilType} soil" class="w-full h-full object-cover">`;
+    }
+
     const aiInput = document.getElementById('ai-chat-input');
     if (aiInput) {
         aiInput.addEventListener('keypress', (e) => {

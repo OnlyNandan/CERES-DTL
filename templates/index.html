@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,88 +7,64 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-
+        * { font-family: 'Inter', sans-serif; }
+        
         .card {
             background: white;
             border-radius: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.2s ease;
         }
-
+        
         .card:hover {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-
+        
         .gradient-header {
             background: linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%);
         }
-
-        .weather-icon {
-            width: 80px;
-            height: 80px;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.4s ease-out;
-        }
-
+        
+        .weather-icon { width: 80px; height: 80px; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
+        
         .skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 200% 100%;
             animation: skeleton-loading 1.5s infinite;
         }
-
+        
         @keyframes skeleton-loading {
-            0% {
-                background-position: 200% 0;
-            }
-
-            100% {
-                background-position: -200% 0;
-            }
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
-
-        .table-row:nth-child(even) {
-            background-color: #f9fafb;
-        }
-
+        
+        .table-row:nth-child(even) { background-color: #f9fafb; }
+        
         .recommendation-card {
             background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
             border: 2px solid #10b981;
         }
-
-        .confidence-bar {
-            transition: width 0.5s ease-out;
-        }
-
+        
+        .confidence-bar { transition: width 0.5s ease-out; }
+        
         /* Soil & Rainfall Selection Styles */
-        .soil-card input:checked+.soil-option,
+        .soil-card input:checked + .soil-option,
         .soil-option.selected {
             border-color: #10b981;
             background: #ecfdf5;
         }
-
         .rainfall-option.selected,
-        input[name="rainfall-preset"]:checked+.rainfall-option {
+        input[name="rainfall-preset"]:checked + .rainfall-option {
             border-color: #3b82f6;
             background: #eff6ff;
         }
-
+        
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
@@ -97,7 +72,7 @@
             border-radius: 4px;
             background: #e5e7eb;
         }
-
+        
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 20px;
@@ -106,39 +81,17 @@
             background: #059669;
             cursor: pointer;
         }
-
-        .tab-btn {
-            transition: all 0.2s;
-        }
-
-        .tab-btn.active {
-            background: #059669;
-            color: white;
-        }
-
-        .alert-high {
-            border-left: 4px solid #dc2626;
-            background: #fef2f2;
-        }
-
-        .alert-medium {
-            border-left: 4px solid #f59e0b;
-            background: #fffbeb;
-        }
-
-        .alert-low {
-            border-left: 4px solid #3b82f6;
-            background: #eff6ff;
-        }
-
-        .scheme-card {
-            transition: transform 0.2s;
-        }
-
-        .scheme-card:hover {
-            transform: translateY(-2px);
-        }
-
+        
+        .tab-btn { transition: all 0.2s; }
+        .tab-btn.active { background: #059669; color: white; }
+        
+        .alert-high { border-left: 4px solid #dc2626; background: #fef2f2; }
+        .alert-medium { border-left: 4px solid #f59e0b; background: #fffbeb; }
+        .alert-low { border-left: 4px solid #3b82f6; background: #eff6ff; }
+        
+        .scheme-card { transition: transform 0.2s; }
+        .scheme-card:hover { transform: translateY(-2px); }
+        
         .modal {
             display: none;
             position: fixed;
@@ -146,23 +99,19 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             z-index: 100;
             align-items: center;
             justify-content: center;
             overflow-y: auto;
             padding: 20px 0;
         }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal>div {
+        .modal.active { display: flex; }
+        .modal > div {
             max-height: calc(100vh - 40px);
             overflow-y: auto;
         }
-
+        
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -174,47 +123,24 @@
         }
     </style>
 </head>
-
 <body class="bg-gray-50 min-h-screen pb-20 md:pb-0">
     <!-- Mobile Bottom Navigation -->
     <div class="md:hidden bottom-nav px-2 py-2">
         <div class="flex justify-around">
-            <button onclick="scrollToSection('weather-section')"
-                class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z">
-                    </path>
-                </svg>
-                <span class="text-xs" data-i18n="weather">Weather</span>
+            <button onclick="scrollToSection('weather-section')" class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                <span class="text-xs">Weather</span>
             </button>
-            <button onclick="scrollToSection('market-section')"
-                class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                    </path>
-                </svg>
+            <button onclick="scrollToSection('market-section')" class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                 <span class="text-xs" data-i18n="prices">Prices</span>
             </button>
-            <button onclick="scrollToSection('recommend-section')"
-                class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
-                    </path>
-                </svg>
+            <button onclick="scrollToSection('recommend-section')" class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
                 <span class="text-xs" data-i18n="crops">Crops</span>
             </button>
-            <button onclick="scrollToSection('tools-section')"
-                class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                    </path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
+            <button onclick="scrollToSection('tools-section')" class="flex flex-col items-center p-2 text-gray-600 hover:text-green-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 <span class="text-xs" data-i18n="tools">Tools</span>
             </button>
         </div>
@@ -226,17 +152,14 @@
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
                     <h1 class="text-xl font-bold hidden md:block" data-i18n="app_name">CERES</h1>
                 </div>
-
+                
                 <div class="flex items-center gap-4">
-                    <select id="language-selector" onchange="changeLanguage(this.value)"
-                        class="bg-white/20 border border-white/30 rounded-lg px-3 py-2 text-white text-sm focus:outline-none">
+                    <select id="language-selector" onchange="changeLanguage(this.value)" class="bg-white/20 border border-white/30 rounded-lg px-3 py-2 text-white text-sm focus:outline-none">
                         <option value="en" class="text-gray-900">English</option>
                         <option value="hi" class="text-gray-900">हिंदी</option>
                         <option value="kn" class="text-gray-900">ಕನ್ನಡ</option>
@@ -244,15 +167,12 @@
                         <option value="ta" class="text-gray-900">தமிழ்</option>
                         <option value="mr" class="text-gray-900">मराठी</option>
                     </select>
-
+                    
                     <div class="flex items-center gap-2 text-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                         </svg>
-                        <span id="user-location" class="hidden md:inline">{{ user.city or user.district }}, {{
-                            user.state }}</span>
+                        <span id="user-location" class="hidden md:inline">{{ user.city or user.district }}, {{ user.state }}</span>
                     </div>
                 </div>
             </div>
@@ -269,16 +189,13 @@
                 <div id="weather-section" class="card p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-xl font-bold text-gray-900" data-i18n="current_weather">Current Weather</h2>
-                        <button onclick="refreshWeather()"
-                            class="text-green-600 hover:text-green-700 p-2 hover:bg-green-50 rounded-lg">
+                        <button onclick="refreshWeather()" class="text-green-600 hover:text-green-700 p-2 hover:bg-green-50 rounded-lg">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                             </svg>
                         </button>
                     </div>
-
+                    
                     <div id="weather-loading" class="space-y-4">
                         <div class="flex items-center gap-6">
                             <div class="skeleton w-20 h-20 rounded-xl"></div>
@@ -288,7 +205,7 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <div id="weather-content" class="hidden">
                         <div class="flex flex-col md:flex-row md:items-center gap-6 mb-6">
                             <div class="flex items-center gap-4">
@@ -302,7 +219,7 @@
                                     <p id="weather-city" class="text-sm text-gray-500"></p>
                                 </div>
                             </div>
-
+                            
                             <div class="flex-1 grid grid-cols-2 gap-2 text-sm">
                                 <div class="flex items-center gap-2 text-gray-600">
                                     <span>🌅</span>
@@ -316,7 +233,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
                             <div class="bg-blue-50 rounded-xl p-3 text-center">
                                 <p class="text-xs text-gray-500 mb-1" data-i18n="humidity">Humidity</p>
@@ -340,11 +257,10 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <div id="weather-error" class="hidden text-center py-8">
                         <p class="text-gray-600" data-i18n="error_weather">Unable to fetch weather data.</p>
-                        <button onclick="refreshWeather()"
-                            class="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Retry</button>
+                        <button onclick="refreshWeather()" class="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Retry</button>
                     </div>
                 </div>
 
@@ -355,8 +271,7 @@
                 </div>
 
                 <!-- Smart Daily Tips Section -->
-                <div id="daily-tips-section"
-                    class="card p-6 bg-gradient-to-br from-emerald-50 to-green-50 border-2 border-emerald-200">
+                <div id="daily-tips-section" class="card p-6 bg-gradient-to-br from-emerald-50 to-green-50 border-2 border-emerald-200">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
                             <span class="text-xl">💡</span>
@@ -368,24 +283,21 @@
                             <span class="text-2xl">🌤️</span>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="weather_tip_title">Weather Advice</p>
-                                <p class="text-sm text-gray-600" id="weather-tip-text">Loading tips based on your
-                                    weather...</p>
+                                <p class="text-sm text-gray-600" id="weather-tip-text">Loading tips based on your weather...</p>
                             </div>
                         </div>
                         <div class="p-4 bg-white rounded-xl border border-emerald-100 flex items-start gap-3">
                             <span class="text-2xl">🌱</span>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="farming_tip_title">Farming Tip</p>
-                                <p class="text-sm text-gray-600" id="farming-tip-text">Check soil moisture before
-                                    irrigation today.</p>
+                                <p class="text-sm text-gray-600" id="farming-tip-text">Check soil moisture before irrigation today.</p>
                             </div>
                         </div>
                         <div class="p-4 bg-white rounded-xl border border-emerald-100 flex items-start gap-3">
                             <span class="text-2xl">🛡️</span>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="pest_tip_title">Pest Alert</p>
-                                <p class="text-sm text-gray-600" id="pest-tip-text">Monitor for aphids in humid
-                                    conditions.</p>
+                                <p class="text-sm text-gray-600" id="pest-tip-text">Monitor for aphids in humid conditions.</p>
                             </div>
                         </div>
                     </div>
@@ -397,17 +309,14 @@
                         <h2 class="text-xl font-bold text-gray-900" data-i18n="market_prices">Market Prices</h2>
                         <button onclick="refreshMarketPrices()" class="p-2 text-green-600 hover:bg-green-50 rounded-lg">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                             </svg>
                         </button>
                     </div>
-
+                    
                     <div class="mb-4">
-                        <select id="market-commodity-filter" onchange="filterMarketPrices()"
-                            class="w-full md:w-auto p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
-                            <option value="" data-i18n="all_commodities">All Commodities</option>
+                        <select id="market-commodity-filter" onchange="filterMarketPrices()" class="w-full md:w-auto p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
+                            <option value="">All Commodities</option>
                             <option value="Rice">Rice</option>
                             <option value="Wheat">Wheat</option>
                             <option value="Cotton">Cotton</option>
@@ -417,21 +326,19 @@
                             <option value="Potato">Potato</option>
                         </select>
                     </div>
-
+                    
                     <div id="market-loading" class="space-y-3">
                         <div class="skeleton h-12 rounded"></div>
                         <div class="skeleton h-12 rounded"></div>
                         <div class="skeleton h-12 rounded"></div>
                     </div>
-
+                    
                     <div id="market-content" class="hidden overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b-2 border-gray-200">
-                                    <th class="text-left py-3 px-2 font-semibold text-gray-700" data-i18n="commodity">
-                                        Commodity</th>
-                                    <th class="text-left py-3 px-2 font-semibold text-gray-700 hidden md:table-cell"
-                                        data-i18n="market">Market</th>
+                                    <th class="text-left py-3 px-2 font-semibold text-gray-700" data-i18n="commodity">Commodity</th>
+                                    <th class="text-left py-3 px-2 font-semibold text-gray-700 hidden md:table-cell" data-i18n="market">Market</th>
                                     <th class="text-right py-3 px-2 font-semibold text-gray-700">Min ₹</th>
                                     <th class="text-right py-3 px-2 font-semibold text-gray-700">Max ₹</th>
                                     <th class="text-right py-3 px-2 font-semibold text-gray-700">Modal ₹</th>
@@ -440,7 +347,7 @@
                             <tbody id="market-table-body"></tbody>
                         </table>
                     </div>
-
+                    
                     <div id="market-error" class="hidden text-center py-8">
                         <p class="text-gray-600" data-i18n="error_market">Unable to fetch market prices.</p>
                     </div>
@@ -456,27 +363,23 @@
             <div class="space-y-6">
                 <!-- Crop Recommendation Section -->
                 <div id="recommend-section" class="card p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="crop_recommendation">🌾 What Should I
-                        Grow?</h2>
-
+                    <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="crop_recommendation">🌾 What Should I Grow?</h2>
+                    
                     <form id="crop-form" onsubmit="getCropRecommendation(event)" class="space-y-4">
                         <!-- Soil Type Display - Shows user's soil from setup with emoji -->
                         <div class="p-4 bg-amber-50 border-2 border-amber-200 rounded-xl">
                             <div class="flex items-center gap-3">
-                                <div id="user-soil-image"
-                                    class="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-300 to-yellow-200 flex items-center justify-center">
+                                <div id="user-soil-image" class="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-300 to-yellow-200 flex items-center justify-center">
                                     <span class="text-2xl">🌾</span>
                                 </div>
                                 <div>
                                     <p class="text-sm text-amber-700" data-i18n="your_soil">Your Soil Type</p>
-                                    <p class="font-bold text-amber-900" id="user-soil-name">{{
-                                        user.soil_type|default('alluvial')|title }} Soil</p>
+                                    <p class="font-bold text-amber-900" id="user-soil-name">{{ user.soil_type|default('alluvial')|title }} Soil</p>
                                 </div>
-                                <a href="/setup" class="ml-auto text-xs text-amber-600 underline"
-                                    data-i18n="change">Change</a>
+                                <a href="/setup" class="ml-auto text-xs text-amber-600 underline" data-i18n="change">Change</a>
                             </div>
                         </div>
-
+                        
                         <!-- Hidden inputs for soil params - auto-set based on user's soil type -->
                         <input type="hidden" id="nitrogen" value="80">
                         <input type="hidden" id="phosphorus" value="40">
@@ -484,7 +387,7 @@
                         <input type="hidden" id="ph" value="6.5">
                         <input type="hidden" id="rainfall-input" value="100">
                         <input type="hidden" id="user-soil-type" value="{{ user.soil_type|default('alluvial') }}">
-
+                        
                         <!-- Auto Rainfall from Weather -->
                         <div id="rainfall-auto-section" class="p-4 bg-blue-50 border-2 border-blue-200 rounded-xl">
                             <div class="flex items-center gap-3">
@@ -492,8 +395,7 @@
                                     <span class="text-2xl">🌧️</span>
                                 </div>
                                 <div class="flex-1">
-                                    <p class="text-sm text-blue-700" data-i18n="rainfall_from_weather">Rainfall (from
-                                        weather forecast)</p>
+                                    <p class="text-sm text-blue-700" data-i18n="rainfall_from_weather">Rainfall (from weather forecast)</p>
                                     <p class="font-bold text-blue-900 text-lg" id="auto-rainfall-display">Loading...</p>
                                 </div>
                                 <div class="text-right">
@@ -501,51 +403,44 @@
                                 </div>
                             </div>
                         </div>
-
-                        <button type="submit"
-                            class="w-full py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg text-lg">
-                            🌱 <span data-i18n="find_best_crop">Find Best Crop</span>
+                        
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg text-lg">
+                            🌱 Find Best Crop
                         </button>
                     </form>
-
+                    
                     <div id="recommendation-loading" class="hidden mt-6">
                         <div class="flex items-center justify-center gap-3">
-                            <div
-                                class="w-6 h-6 border-3 border-green-500 border-t-transparent rounded-full animate-spin">
-                            </div>
-                            <span class="text-gray-600 font-medium" data-i18n="finding_best_crops">Finding best
-                                crops...</span>
+                            <div class="w-6 h-6 border-3 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                            <span class="text-gray-600 font-medium">Finding best crops...</span>
                         </div>
                     </div>
-
+                    
                     <div id="recommendation-result" class="hidden mt-6">
                         <div class="recommendation-card rounded-xl p-6 text-center">
-                            <div id="crop-image"
-                                class="w-24 h-24 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center text-5xl">
+                            <div id="crop-image" class="w-24 h-24 mx-auto mb-3 rounded-full bg-green-100 flex items-center justify-center text-5xl">
                                 🌾
                             </div>
-                            <p class="text-sm text-green-700 mb-1" data-i18n="best_crop_for_you">Best Crop For You</p>
+                            <p class="text-sm text-green-700 mb-1" data-i18n="recommended_crop">Best Crop For You</p>
                             <h3 id="recommended-crop" class="text-3xl font-bold text-green-800 mb-2"></h3>
                             <div class="flex items-center justify-center gap-2 mb-4">
                                 <span class="px-3 py-1 bg-green-200 text-green-800 rounded-full text-sm font-medium">
-                                    <span id="confidence-value"></span> <span data-i18n="match">match</span>
+                                    <span id="confidence-value"></span> match
                                 </span>
                             </div>
                             <div class="w-full bg-green-200 rounded-full h-3">
-                                <div id="confidence-bar" class="confidence-bar bg-green-600 h-3 rounded-full"
-                                    style="width: 0%"></div>
+                                <div id="confidence-bar" class="confidence-bar bg-green-600 h-3 rounded-full" style="width: 0%"></div>
                             </div>
                         </div>
-
+                        
                         <div id="crop-info-panel" class="mt-4 p-4 bg-gray-50 rounded-xl hidden">
-                            <h4 class="font-semibold text-gray-700 mb-2">📋 <span data-i18n="crop_details">Crop
-                                    Details</span></h4>
+                            <h4 class="font-semibold text-gray-700 mb-2">📋 Crop Details</h4>
                             <div id="crop-details" class="space-y-2 text-sm"></div>
                         </div>
-
+                        
                         <div id="top-recommendations" class="mt-4 space-y-2"></div>
                     </div>
-
+                    
                     <div id="recommendation-error" class="hidden mt-6 p-4 bg-red-50 rounded-xl text-center">
                         <p class="text-red-600" data-i18n="error_recommendation">Unable to get crop recommendation.</p>
                     </div>
@@ -554,54 +449,45 @@
                 <!-- Farm Tools Section -->
                 <div id="tools-section" class="card p-6">
                     <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="farm_tools">🛠️ Farm Tools</h2>
-
+                    
                     <div class="space-y-3">
-                        <button onclick="openModal('plot-modal'); initPlotMap();"
-                            class="w-full p-4 bg-indigo-50 rounded-xl text-left hover:bg-indigo-100 transition-colors flex items-center gap-3">
+                        <button onclick="openModal('plot-modal'); initPlotMap();" class="w-full p-4 bg-indigo-50 rounded-xl text-left hover:bg-indigo-100 transition-colors flex items-center gap-3">
                             <div class="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">🗺️</span>
                             </div>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="plot_mapper">Plot Mapper</p>
-                                <p class="text-sm text-gray-600" data-i18n="plot_mapper_desc">Draw your field for smart
-                                    recommendations</p>
+                                <p class="text-sm text-gray-600" data-i18n="plot_mapper_desc">Draw your field for smart recommendations</p>
                             </div>
                         </button>
-
-                        <button onclick="openWaterCalculator()"
-                            class="w-full p-4 bg-blue-50 rounded-xl text-left hover:bg-blue-100 transition-colors flex items-center gap-3">
+                        
+                        <button onclick="openWaterCalculator()" class="w-full p-4 bg-blue-50 rounded-xl text-left hover:bg-blue-100 transition-colors flex items-center gap-3">
                             <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">💧</span>
                             </div>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="water_calculator">Water Calculator</p>
-                                <p class="text-sm text-gray-600" data-i18n="water_calculator_desc">Calculate irrigation
-                                    needs</p>
+                                <p class="text-sm text-gray-600" data-i18n="water_calculator_desc">Calculate irrigation needs</p>
                             </div>
                         </button>
-
-                        <button onclick="openFertilizerCalculator()"
-                            class="w-full p-4 bg-green-50 rounded-xl text-left hover:bg-green-100 transition-colors flex items-center gap-3">
+                        
+                        <button onclick="openFertilizerCalculator()" class="w-full p-4 bg-green-50 rounded-xl text-left hover:bg-green-100 transition-colors flex items-center gap-3">
                             <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">🌿</span>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-900" data-i18n="fertilizer_calculator">Fertilizer
-                                    Calculator</p>
-                                <p class="text-sm text-gray-600" data-i18n="fertilizer_calculator_desc">NPK
-                                    recommendations</p>
+                                <p class="font-semibold text-gray-900" data-i18n="fertilizer_calculator">Fertilizer Calculator</p>
+                                <p class="text-sm text-gray-600" data-i18n="fertilizer_calculator_desc">NPK recommendations</p>
                             </div>
                         </button>
-
-                        <button onclick="openCropCalendar()"
-                            class="w-full p-4 bg-orange-50 rounded-xl text-left hover:bg-orange-100 transition-colors flex items-center gap-3">
+                        
+                        <button onclick="openCropCalendar()" class="w-full p-4 bg-orange-50 rounded-xl text-left hover:bg-orange-100 transition-colors flex items-center gap-3">
                             <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">📅</span>
                             </div>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="crop_calendar">Crop Calendar</p>
-                                <p class="text-sm text-gray-600" data-i18n="crop_calendar_desc">Sowing & harvest times
-                                </p>
+                                <p class="text-sm text-gray-600" data-i18n="crop_calendar_desc">Sowing & harvest times</p>
                             </div>
                         </button>
                     </div>
@@ -609,89 +495,68 @@
 
                 <!-- AI-Powered Tools Section -->
                 <div class="card p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="ai_powered_tools">🤖 AI-Powered Tools
-                    </h2>
-
+                    <h2 class="text-xl font-bold text-gray-900 mb-4" data-i18n="ai_powered_tools">🤖 AI-Powered Tools</h2>
+                    
                     <div class="space-y-3">
-                        <button onclick="openModal('ai-chat-modal')"
-                            class="w-full p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl text-left hover:from-purple-100 hover:to-indigo-100 transition-colors flex items-center gap-3 border-2 border-purple-200">
-                            <div
-                                class="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                        <button onclick="openModal('ai-chat-modal')" class="w-full p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl text-left hover:from-purple-100 hover:to-indigo-100 transition-colors flex items-center gap-3 border-2 border-purple-200">
+                            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">🤖</span>
                             </div>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="ai_assistant">AI Farm Assistant</p>
-                                <p class="text-sm text-gray-600" data-i18n="ai_assistant_desc">Chat with Gemma AI for
-                                    farming advice</p>
+                                <p class="text-sm text-gray-600" data-i18n="ai_assistant_desc">Chat with Gemma AI for farming advice</p>
                             </div>
-                            <span
-                                class="ml-auto px-2 py-1 bg-purple-200 text-purple-700 text-xs font-medium rounded-full"
-                                data-i18n="new">NEW</span>
+                            <span class="ml-auto px-2 py-1 bg-purple-200 text-purple-700 text-xs font-medium rounded-full">NEW</span>
                         </button>
-
-                        <button onclick="openModal('plant-disease-modal')"
-                            class="w-full p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl text-left hover:from-green-100 hover:to-emerald-100 transition-colors flex items-center gap-3 border-2 border-green-200">
-                            <div
-                                class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                        
+                        <button onclick="openModal('plant-disease-modal')" class="w-full p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl text-left hover:from-green-100 hover:to-emerald-100 transition-colors flex items-center gap-3 border-2 border-green-200">
+                            <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">🔬</span>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-900" data-i18n="disease_scanner">Plant Disease Scanner
-                                </p>
-                                <p class="text-sm text-gray-600" data-i18n="disease_scanner_desc">Upload leaf photo to
-                                    detect diseases</p>
+                                <p class="font-semibold text-gray-900" data-i18n="disease_scanner">Plant Disease Scanner</p>
+                                <p class="text-sm text-gray-600" data-i18n="disease_scanner_desc">Upload leaf photo to detect diseases</p>
                             </div>
-                            <span class="ml-auto px-2 py-1 bg-green-200 text-green-700 text-xs font-medium rounded-full"
-                                data-i18n="new">NEW</span>
+                            <span class="ml-auto px-2 py-1 bg-green-200 text-green-700 text-xs font-medium rounded-full">NEW</span>
                         </button>
-
-                        <button onclick="openYieldPredictor()"
-                            class="w-full p-4 bg-amber-50 rounded-xl text-left hover:bg-amber-100 transition-colors flex items-center gap-3">
+                        
+                        <button onclick="openYieldPredictor()" class="w-full p-4 bg-amber-50 rounded-xl text-left hover:bg-amber-100 transition-colors flex items-center gap-3">
                             <div class="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">📊</span>
                             </div>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="yield_predictor">Yield Predictor</p>
-                                <p class="text-sm text-gray-600" data-i18n="yield_predictor_desc">ML-based yield
-                                    forecast</p>
+                                <p class="text-sm text-gray-600" data-i18n="yield_predictor_desc">ML-based yield forecast</p>
                             </div>
                         </button>
-
-                        <button onclick="openDiseaseRiskAnalyzer()"
-                            class="w-full p-4 bg-red-50 rounded-xl text-left hover:bg-red-100 transition-colors flex items-center gap-3">
+                        
+                        <button onclick="openDiseaseRiskAnalyzer()" class="w-full p-4 bg-red-50 rounded-xl text-left hover:bg-red-100 transition-colors flex items-center gap-3">
                             <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">🦠</span>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-900" data-i18n="disease_risk_analyzer">Disease Risk
-                                    Analyzer</p>
-                                <p class="text-sm text-gray-600" data-i18n="disease_risk_desc">Weather-based disease
-                                    alerts</p>
+                                <p class="font-semibold text-gray-900" data-i18n="disease_risk_analyzer">Disease Risk Analyzer</p>
+                                <p class="text-sm text-gray-600" data-i18n="disease_risk_desc">Weather-based disease alerts</p>
                             </div>
                         </button>
-
-                        <button onclick="openSoilHealthAnalyzer()"
-                            class="w-full p-4 bg-amber-100 rounded-xl text-left hover:bg-amber-200 transition-colors flex items-center gap-3">
+                        
+                        <button onclick="openSoilHealthAnalyzer()" class="w-full p-4 bg-amber-100 rounded-xl text-left hover:bg-amber-200 transition-colors flex items-center gap-3">
                             <div class="w-10 h-10 bg-amber-700 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">🌍</span>
                             </div>
                             <div>
-                                <p class="font-semibold text-gray-900" data-i18n="soil_health_index">Soil Health Index
-                                </p>
-                                <p class="text-sm text-gray-600" data-i18n="soil_health_desc">Composite soil analysis
-                                </p>
+                                <p class="font-semibold text-gray-900" data-i18n="soil_health_index">Soil Health Index</p>
+                                <p class="text-sm text-gray-600" data-i18n="soil_health_desc">Composite soil analysis</p>
                             </div>
                         </button>
-
-                        <button onclick="openIrrigationScheduler()"
-                            class="w-full p-4 bg-cyan-50 rounded-xl text-left hover:bg-cyan-100 transition-colors flex items-center gap-3">
+                        
+                        <button onclick="openIrrigationScheduler()" class="w-full p-4 bg-cyan-50 rounded-xl text-left hover:bg-cyan-100 transition-colors flex items-center gap-3">
                             <div class="w-10 h-10 bg-cyan-600 rounded-lg flex items-center justify-center">
                                 <span class="text-xl">🚿</span>
                             </div>
                             <div>
                                 <p class="font-semibold text-gray-900" data-i18n="smart_irrigation">Smart Irrigation</p>
-                                <p class="text-sm text-gray-600" data-i18n="smart_irrigation_desc">7-day irrigation
-                                    schedule</p>
+                                <p class="text-sm text-gray-600" data-i18n="smart_irrigation_desc">7-day irrigation schedule</p>
                             </div>
                         </button>
                     </div>
@@ -699,7 +564,7 @@
 
                 <!-- Air Quality Widget -->
                 <div class="card p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4" data-i18n="air_quality">Air Quality</h3>
+                        <h3 class="text-lg font-bold text-gray-900 mb-4" data-i18n="air_quality">Air Quality</h3>
                     <div id="air-quality-content" class="text-center">
                         <div id="aqi-value" class="text-4xl font-bold text-gray-900 mb-2">--</div>
                         <p id="aqi-label" class="text-sm text-gray-500 mb-4">Loading...</p>
@@ -729,8 +594,7 @@
                             <span class="font-semibold text-gray-900 capitalize">{{ user.soil_type }}</span>
                         </div>
                     </div>
-                    <a href="/setup"
-                        class="block mt-4 text-center text-green-600 hover:text-green-700 font-semibold text-sm">
+                    <a href="/setup" class="block mt-4 text-center text-green-600 hover:text-green-700 font-semibold text-sm">
                         <span data-i18n="settings">Settings</span> →
                     </a>
                 </div>
@@ -743,15 +607,12 @@
         <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4 fade-in">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-bold text-gray-900" data-i18n="water_calculator">Water Calculator</h3>
-                <button onclick="closeModal('water-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <button onclick="closeModal('water-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             <form onsubmit="calculateWater(event)" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="select_crop">Select
-                        Crop</label>
-                    <select id="water-crop"
-                        class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="select_crop">Select Crop</label>
+                    <select id="water-crop" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none">
                         <option value="rice">Rice</option>
                         <option value="wheat">Wheat</option>
                         <option value="maize">Maize</option>
@@ -763,14 +624,10 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="area_hectares">Area
-                        (Hectares)</label>
-                    <input type="number" id="water-area" value="1" min="0.1" step="0.1"
-                        class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="area_hectares">Area (Hectares)</label>
+                    <input type="number" id="water-area" value="1" min="0.1" step="0.1" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none">
                 </div>
-                <button type="submit"
-                    class="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
-                    data-i18n="calculate">Calculate</button>
+                <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors" data-i18n="calculate">Calculate</button>
             </form>
             <div id="water-result" class="hidden mt-4 p-4 bg-blue-50 rounded-xl">
                 <p class="text-sm text-gray-600 mb-2" data-i18n="water_needed">Water Needed:</p>
@@ -785,14 +642,12 @@
         <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4 fade-in">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-bold text-gray-900" data-i18n="fertilizer_calculator">Fertilizer Calculator</h3>
-                <button onclick="closeModal('fertilizer-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <button onclick="closeModal('fertilizer-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             <form onsubmit="calculateFertilizer(event)" class="space-y-4">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Select Crop</label>
-                    <select id="fert-crop"
-                        class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
+                    <select id="fert-crop" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
                         <option value="rice">Rice</option>
                         <option value="wheat">Wheat</option>
                         <option value="maize">Maize</option>
@@ -804,17 +659,13 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="area_hectares">Area
-                        (Hectares)</label>
-                    <input type="number" id="fert-area" value="1" min="0.1" step="0.1"
-                        class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="area_hectares">Area (Hectares)</label>
+                    <input type="number" id="fert-area" value="1" min="0.1" step="0.1" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
                 </div>
-                <button type="submit"
-                    class="w-full py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors"
-                    data-i18n="calculate">Calculate</button>
+                <button type="submit" class="w-full py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors" data-i18n="calculate">Calculate</button>
             </form>
             <div id="fert-result" class="hidden mt-4 p-4 bg-green-50 rounded-xl space-y-3">
-                <p class="font-semibold text-gray-700" data-i18n="required_fertilizers">Required Fertilizers:</p>
+                <p class="font-semibold text-gray-700">Required Fertilizers:</p>
                 <div id="fert-details" class="space-y-2 text-sm"></div>
             </div>
         </div>
@@ -825,8 +676,7 @@
         <div class="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 max-h-[80vh] overflow-y-auto fade-in">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-bold text-gray-900" data-i18n="crop_calendar">Crop Calendar</h3>
-                <button onclick="closeModal('calendar-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <button onclick="closeModal('calendar-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             <div id="calendar-content" class="space-y-4"></div>
         </div>
@@ -837,46 +687,36 @@
         <div class="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 max-h-[80vh] overflow-y-auto fade-in">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-bold text-gray-900" data-i18n="farm_diary">Farm Diary</h3>
-                <button onclick="closeModal('diary-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <button onclick="closeModal('diary-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
-
+            
             <form onsubmit="addDiaryEntry(event)" class="space-y-3 mb-6 p-4 bg-gray-50 rounded-xl">
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-1">Date</label>
-                        <input type="date" id="diary-date"
-                            class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                        <input type="date" id="diary-date" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 mb-1"
-                            data-i18n="activity_type">Activity</label>
-                        <select id="diary-activity"
-                            class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1" data-i18n="activity_type">Activity</label>
+                        <select id="diary-activity" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
                             <option value="sowing">Sowing</option>
                             <option value="irrigation">Irrigation</option>
                             <option value="fertilizer">Fertilizer</option>
                             <option value="pesticide">Pesticide</option>
                             <option value="harvest">Harvest</option>
-                            <option value="other" data-i18n="other">Other</option>
+                            <option value="other">Other</option>
                         </select>
                     </div>
                 </div>
-                <input type="text" id="diary-crop" data-i18n="crop_name" placeholder="Crop name"
-                    class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
-                <textarea id="diary-notes" placeholder="Notes" rows="2"
-                    class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none"></textarea>
+                <input type="text" id="diary-crop" placeholder="Crop name" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                <textarea id="diary-notes" placeholder="Notes" rows="2" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none"></textarea>
                 <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="diary-expense" data-i18n="expense_rs" placeholder="Expense ₹"
-                        class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
-                    <input type="number" id="diary-income" data-i18n="income_rs" placeholder="Income ₹"
-                        class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                    <input type="number" id="diary-expense" placeholder="Expense ₹" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
+                    <input type="number" id="diary-income" placeholder="Income ₹" class="w-full p-2 border-2 border-gray-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none">
                 </div>
-                <button type="submit"
-                    class="w-full py-2 bg-purple-600 text-white font-semibold rounded-lg text-sm hover:bg-purple-700 transition-colors"
-                    data-i18n="add_entry">Add Entry</button>
+                <button type="submit" class="w-full py-2 bg-purple-600 text-white font-semibold rounded-lg text-sm hover:bg-purple-700 transition-colors" data-i18n="add_entry">Add Entry</button>
             </form>
-
+            
             <div id="diary-summary" class="grid grid-cols-3 gap-2 mb-4 text-center text-sm">
                 <div class="p-3 bg-red-50 rounded-lg">
                     <p class="text-xs text-gray-500" data-i18n="total_expense">Expense</p>
@@ -891,7 +731,7 @@
                     <p id="profit-loss" class="font-bold text-blue-600">₹0</p>
                 </div>
             </div>
-
+            
             <div id="diary-entries" class="space-y-2 max-h-60 overflow-y-auto"></div>
         </div>
     </div>
@@ -900,16 +740,13 @@
     <div id="disease-risk-modal" class="modal">
         <div class="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 max-h-[85vh] overflow-y-auto fade-in">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold text-gray-900" data-i18n="disease_risk_analyzer">🦠 Disease Risk Analyzer
-                </h3>
-                <button onclick="closeModal('disease-risk-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <h3 class="text-xl font-bold text-gray-900">🦠 Disease Risk Analyzer</h3>
+                <button onclick="closeModal('disease-risk-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             <form onsubmit="analyzeDiseaseRisk(event)" class="space-y-4">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Select Crop</label>
-                    <select id="disease-crop"
-                        class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none">
+                    <select id="disease-crop" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none">
                         <option value="rice">Rice</option>
                         <option value="wheat">Wheat</option>
                         <option value="cotton">Cotton</option>
@@ -920,35 +757,25 @@
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2"
-                            data-i18n="temperature">Temperature (°C)</label>
-                        <input type="number" id="disease-temp" value="28" min="5" max="50"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="temperature">Temperature (°C)</label>
+                        <input type="number" id="disease-temp" value="28" min="5" max="50" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="humidity">Humidity
-                            (%)</label>
-                        <input type="number" id="disease-humidity" value="75" min="0" max="100"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="humidity">Humidity (%)</label>
+                        <input type="number" id="disease-humidity" value="75" min="0" max="100" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="rainfall">Rainfall
-                            (mm)</label>
-                        <input type="number" id="disease-rainfall" value="10" min="0" max="500"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="rainfall">Rainfall (mm)</label>
+                        <input type="number" id="disease-rainfall" value="10" min="0" max="500" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="wet_days">Wet
-                            Days</label>
-                        <input type="number" id="disease-wetdays" value="3" min="0" max="14"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="wet_days">Wet Days</label>
+                        <input type="number" id="disease-wetdays" value="3" min="0" max="14" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none">
                     </div>
                 </div>
-                <button type="submit"
-                    class="w-full py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors"
-                    data-i18n="analyze_disease_risk">Analyze Disease Risk</button>
+                <button type="submit" class="w-full py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors" data-i18n="analyze_disease_risk">Analyze Disease Risk</button>
             </form>
             <div id="disease-result" class="hidden mt-4 space-y-4"></div>
         </div>
@@ -958,16 +785,14 @@
     <div id="yield-modal" class="modal">
         <div class="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 max-h-[85vh] overflow-y-auto fade-in">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold text-gray-900" data-i18n="yield_predictor">📊 AI Yield Predictor</h3>
-                <button onclick="closeModal('yield-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <h3 class="text-xl font-bold text-gray-900">📊 AI Yield Predictor</h3>
+                <button onclick="closeModal('yield-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             <form onsubmit="predictYield(event)" class="space-y-4">
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Crop</label>
-                        <select id="yield-crop"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                        <select id="yield-crop" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
                             <option value="rice">Rice</option>
                             <option value="wheat">Wheat</option>
                             <option value="cotton">Cotton</option>
@@ -978,68 +803,53 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="area_hectares">Area
-                            (Ha)</label>
-                        <input type="number" id="yield-area" value="2" min="0.1" step="0.1"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="area_hectares">Area (Ha)</label>
+                        <input type="number" id="yield-area" value="2" min="0.1" step="0.1" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
                     </div>
                 </div>
                 <div class="grid grid-cols-3 gap-3">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">N (kg/ha)</label>
-                        <input type="number" id="yield-n" value="120" min="0" max="300"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                        <input type="number" id="yield-n" value="120" min="0" max="300" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">P (kg/ha)</label>
-                        <input type="number" id="yield-p" value="60" min="0" max="200"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                        <input type="number" id="yield-p" value="60" min="0" max="200" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">K (kg/ha)</label>
-                        <input type="number" id="yield-k" value="40" min="0" max="200"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                        <input type="number" id="yield-k" value="40" min="0" max="200" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="soil_ph">Soil
-                            pH</label>
-                        <input type="number" id="yield-ph" value="6.5" min="4" max="9" step="0.1"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Soil pH</label>
+                        <input type="number" id="yield-ph" value="6.5" min="4" max="9" step="0.1" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2"
-                            data-i18n="irrigation">Irrigation</label>
-                        <select id="yield-irrigation"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
-                            <option value="good" data-i18n="irrigation_good">Good (Drip/Sprinkler)</option>
-                            <option value="moderate" data-i18n="irrigation_moderate">Moderate (Canal)</option>
-                            <option value="poor" data-i18n="irrigation_poor">Poor (Rainfed)</option>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="irrigation">Irrigation</label>
+                        <select id="yield-irrigation" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                            <option value="good">Good (Drip/Sprinkler)</option>
+                            <option value="moderate">Moderate (Canal)</option>
+                            <option value="poor">Poor (Rainfed)</option>
                         </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="pest_pressure">Pest
-                            Pressure</label>
-                        <select id="yield-pest"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
-                            <option value="low" data-i18n="low">Low</option>
-                            <option value="moderate" data-i18n="moderate">Moderate</option>
-                            <option value="high" data-i18n="high">High</option>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="pest_pressure">Pest Pressure</label>
+                        <select id="yield-pest" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                            <option value="low">Low</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="high">High</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2"
-                            data-i18n="temperature">Temperature (°C)</label>
-                        <input type="number" id="yield-temp" value="28" min="10" max="45"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="temperature">Temperature (°C)</label>
+                        <input type="number" id="yield-temp" value="28" min="10" max="45" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:outline-none">
                     </div>
                 </div>
-                <button type="submit"
-                    class="w-full py-3 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700 transition-colors"
-                    data-i18n="predict_yield">Predict Yield</button>
+                <button type="submit" class="w-full py-3 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700 transition-colors" data-i18n="predict_yield">Predict Yield</button>
             </form>
             <div id="yield-result" class="hidden mt-4 space-y-4"></div>
         </div>
@@ -1049,50 +859,37 @@
     <div id="soil-modal" class="modal">
         <div class="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 max-h-[85vh] overflow-y-auto fade-in">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold text-gray-900" data-i18n="soil_health_index">🌍 Soil Health Index</h3>
-                <button onclick="closeModal('soil-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <h3 class="text-xl font-bold text-gray-900">🌍 Soil Health Index</h3>
+                <button onclick="closeModal('soil-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             <form onsubmit="analyzeSoilHealth(event)" class="space-y-4">
                 <div class="grid grid-cols-3 gap-3">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="n_kg_ha">N
-                            (kg/ha)</label>
-                        <input type="number" id="soil-n" value="280" min="0" max="600"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="n_kg_ha">N (kg/ha)</label>
+                        <input type="number" id="soil-n" value="280" min="0" max="600" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="p_kg_ha">P
-                            (kg/ha)</label>
-                        <input type="number" id="soil-p" value="25" min="0" max="150"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="p_kg_ha">P (kg/ha)</label>
+                        <input type="number" id="soil-p" value="25" min="0" max="150" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="k_kg_ha">K
-                            (kg/ha)</label>
-                        <input type="number" id="soil-k" value="200" min="0" max="500"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="k_kg_ha">K (kg/ha)</label>
+                        <input type="number" id="soil-k" value="200" min="0" max="500" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="ph_level">pH
-                            Level</label>
-                        <input type="number" id="soil-ph" value="6.8" min="3" max="10" step="0.1"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="ph_level">pH Level</label>
+                        <input type="number" id="soil-ph" value="6.8" min="3" max="10" step="0.1" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="organic_carbon">Organic
-                            Carbon (%)</label>
-                        <input type="number" id="soil-oc" value="0.6" min="0" max="5" step="0.01"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="organic_carbon">Organic Carbon (%)</label>
+                        <input type="number" id="soil-oc" value="0.6" min="0" max="5" step="0.01" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="soil_type">Soil
-                        Type</label>
-                    <select id="soil-type"
-                        class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="soil_type">Soil Type</label>
+                    <select id="soil-type" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-amber-700 focus:outline-none">
                         <option value="loamy">Loamy</option>
                         <option value="black">Black (Regur)</option>
                         <option value="red">Red</option>
@@ -1101,9 +898,7 @@
                         <option value="clayey">Clayey</option>
                     </select>
                 </div>
-                <button type="submit"
-                    class="w-full py-3 bg-amber-700 text-white font-semibold rounded-xl hover:bg-amber-800 transition-colors"
-                    data-i18n="analyze_soil_health">Analyze Soil Health</button>
+                <button type="submit" class="w-full py-3 bg-amber-700 text-white font-semibold rounded-xl hover:bg-amber-800 transition-colors" data-i18n="analyze_soil_health">Analyze Soil Health</button>
             </form>
             <div id="soil-result" class="hidden mt-4 space-y-4"></div>
         </div>
@@ -1113,17 +908,14 @@
     <div id="irrigation-modal" class="modal">
         <div class="bg-white rounded-2xl p-6 w-full max-w-2xl mx-4 max-h-[85vh] overflow-y-auto fade-in">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold text-gray-900" data-i18n="smart_irrigation">🚿 Smart Irrigation Scheduler
-                </h3>
-                <button onclick="closeModal('irrigation-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <h3 class="text-xl font-bold text-gray-900">🚿 Smart Irrigation Scheduler</h3>
+                <button onclick="closeModal('irrigation-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             <form onsubmit="getIrrigationSchedule(event)" class="space-y-4">
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Crop</label>
-                        <select id="irr-crop"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none">
+                        <select id="irr-crop" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none">
                             <option value="rice">Rice</option>
                             <option value="wheat">Wheat</option>
                             <option value="cotton">Cotton</option>
@@ -1134,43 +926,33 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="growth_stage">Growth
-                            Stage</label>
-                        <select id="irr-stage"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none">
-                            <option value="vegetative" data-i18n="vegetative">Vegetative</option>
-                            <option value="flowering" data-i18n="flowering">Flowering</option>
-                            <option value="maturity" data-i18n="maturity">Maturity</option>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="growth_stage">Growth Stage</label>
+                        <select id="irr-stage" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none">
+                            <option value="vegetative">Vegetative</option>
+                            <option value="flowering">Flowering</option>
+                            <option value="maturity">Maturity</option>
                         </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-3 gap-3">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="field_size">Field Size
-                            (Ha)</label>
-                        <input type="number" id="irr-area" value="2" min="0.1" step="0.1"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="field_size">Field Size (Ha)</label>
+                        <input type="number" id="irr-area" value="2" min="0.1" step="0.1" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="soil_type">Soil
-                            Type</label>
-                        <select id="irr-soil"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none">
-                            <option value="loamy" data-i18n="loamy">Loamy</option>
-                            <option value="sandy" data-i18n="sandy">Sandy</option>
-                            <option value="clayey" data-i18n="clayey">Clayey</option>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Soil Type</label>
+                        <select id="irr-soil" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none">
+                            <option value="loamy">Loamy</option>
+                            <option value="sandy">Sandy</option>
+                            <option value="clayey">Clayey</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="soil_moisture">Soil
-                            Moisture (%)</label>
-                        <input type="number" id="irr-moisture" value="40" min="0" max="100"
-                            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-i18n="soil_moisture">Soil Moisture (%)</label>
+                        <input type="number" id="irr-moisture" value="40" min="0" max="100" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:outline-none">
                     </div>
                 </div>
-                <button type="submit"
-                    class="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl hover:bg-cyan-700 transition-colors"
-                    data-i18n="generate_schedule">Generate 7-Day Schedule</button>
+                <button type="submit" class="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl hover:bg-cyan-700 transition-colors" data-i18n="generate_schedule">Generate 7-Day Schedule</button>
             </form>
             <div id="irrigation-result" class="hidden mt-4 space-y-4"></div>
         </div>
@@ -1181,109 +963,94 @@
         <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4 max-h-[85vh] overflow-y-auto fade-in">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-bold text-gray-900" data-i18n="profit_calculator">💰 Profit Calculator</h3>
-                <button onclick="closeModal('profit-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <button onclick="closeModal('profit-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             <form onsubmit="calculateProfit(event)" class="space-y-4">
                 <!-- Simple Crop Selection with Visual Cards -->
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-3" data-i18n="select_crop">Select
-                        Crop</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3" data-i18n="select_crop">Select Crop</label>
                     <div class="grid grid-cols-3 gap-2">
                         <label class="cursor-pointer">
                             <input type="radio" name="profit-crop-radio" value="rice" class="hidden peer" checked>
-                            <div
-                                class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
                                 <span class="text-2xl">🌾</span>
                                 <p class="text-xs font-medium mt-1">Rice</p>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="profit-crop-radio" value="wheat" class="hidden peer">
-                            <div
-                                class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
                                 <span class="text-2xl">🌾</span>
                                 <p class="text-xs font-medium mt-1">Wheat</p>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="profit-crop-radio" value="cotton" class="hidden peer">
-                            <div
-                                class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
                                 <span class="text-2xl">☁️</span>
                                 <p class="text-xs font-medium mt-1">Cotton</p>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="profit-crop-radio" value="maize" class="hidden peer">
-                            <div
-                                class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
                                 <span class="text-2xl">🌽</span>
                                 <p class="text-xs font-medium mt-1">Maize</p>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="profit-crop-radio" value="sugarcane" class="hidden peer">
-                            <div
-                                class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
                                 <span class="text-2xl">🎋</span>
                                 <p class="text-xs font-medium mt-1">Sugarcane</p>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="profit-crop-radio" value="soybean" class="hidden peer">
-                            <div
-                                class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
                                 <span class="text-2xl">🫘</span>
                                 <p class="text-xs font-medium mt-1">Soybean</p>
                             </div>
                         </label>
                     </div>
                 </div>
-
+                
                 <!-- Simple Area Selection -->
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-3" data-i18n="farm_size">Farm
-                        Size</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-3" data-i18n="farm_size">Farm Size</label>
                     <div class="grid grid-cols-4 gap-2">
                         <label class="cursor-pointer">
                             <input type="radio" name="profit-area-radio" value="1" class="hidden peer">
-                            <div
-                                class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
                                 <p class="text-lg font-bold">1</p>
                                 <p class="text-xs text-gray-500" data-i18n="hectare">Hectare</p>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="profit-area-radio" value="2" class="hidden peer" checked>
-                            <div
-                                class="p-3 border-2 border-emerald-500 bg-emerald-50 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                            <div class="p-3 border-2 border-emerald-500 bg-emerald-50 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
                                 <p class="text-lg font-bold">2</p>
                                 <p class="text-xs text-gray-500" data-i18n="hectares">Hectares</p>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="profit-area-radio" value="5" class="hidden peer">
-                            <div
-                                class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
                                 <p class="text-lg font-bold">5</p>
                                 <p class="text-xs text-gray-500">Hectares</p>
                             </div>
                         </label>
                         <label class="cursor-pointer">
                             <input type="radio" name="profit-area-radio" value="10" class="hidden peer">
-                            <div
-                                class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
+                            <div class="p-3 border-2 border-gray-200 rounded-xl text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-50 hover:border-emerald-300 transition-all">
                                 <p class="text-lg font-bold">10</p>
                                 <p class="text-xs text-gray-500">Hectares</p>
                             </div>
                         </label>
                     </div>
                 </div>
-
-                <button type="submit"
-                    class="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-xl hover:from-emerald-700 hover:to-green-700 transition-all text-lg shadow-lg"
-                    data-i18n="calculate_profit">
+                
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-xl hover:from-emerald-700 hover:to-green-700 transition-all text-lg shadow-lg" data-i18n="calculate_profit">
                     💵 Calculate My Profit
                 </button>
             </form>
@@ -1294,31 +1061,26 @@
     <!-- AI Chat Modal -->
     <div id="ai-chat-modal" class="modal">
         <div class="bg-white rounded-2xl w-full max-w-2xl mx-4 max-h-[90vh] flex flex-col fade-in">
-            <div
-                class="flex items-center justify-between p-4 border-b bg-gradient-to-r from-purple-600 to-indigo-600 rounded-t-2xl">
+            <div class="flex items-center justify-between p-4 border-b bg-gradient-to-r from-purple-600 to-indigo-600 rounded-t-2xl">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                         <span class="text-xl">🤖</span>
                     </div>
                     <div>
                         <h3 class="text-lg font-bold text-white" data-i18n="ai_assistant">AI Farm Assistant</h3>
-                        <p class="text-xs text-white/80" id="ai-status" data-i18n="powered_by">Powered by Gemma 3</p>
+                        <p class="text-xs text-white/80" id="ai-status">Powered by Gemma 3</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="clearAIChat()"
-                        class="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg" title="Clear Chat">
+                    <button onclick="clearAIChat()" class="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg" title="Clear Chat">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                         </svg>
                     </button>
-                    <button onclick="closeModal('ai-chat-modal')"
-                        class="text-white/80 hover:text-white text-2xl px-2">&times;</button>
+                    <button onclick="closeModal('ai-chat-modal')" class="text-white/80 hover:text-white text-2xl px-2">&times;</button>
                 </div>
             </div>
-
+            
             <!-- Chat Messages -->
             <div id="ai-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 min-h-[300px] max-h-[50vh]">
                 <!-- Welcome message -->
@@ -1327,52 +1089,39 @@
                         <span class="text-sm">🤖</span>
                     </div>
                     <div class="bg-gray-100 rounded-2xl rounded-tl-none p-4 max-w-[80%]">
-                        <p class="text-gray-800" data-i18n="ai_welcome">Hello! I'm your AI farming assistant. Ask me
-                            anything about crops, soil, weather, diseases, or farming practices!</p>
+                        <p class="text-gray-800" data-i18n="ai_welcome">Hello! I'm your AI farming assistant. Ask me anything about crops, soil, weather, diseases, or farming practices!</p>
                     </div>
                 </div>
             </div>
-
+            
             <!-- Quick Suggestions -->
             <div id="ai-suggestions" class="px-4 pb-2">
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="sendAISuggestion('What crops should I plant this season?')"
-                        class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
+                    <button onclick="sendAISuggestion('What crops should I plant this season?')" class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
                         🌱 Seasonal crops
                     </button>
-                    <button onclick="sendAISuggestion('How to improve soil health?')"
-                        class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
+                    <button onclick="sendAISuggestion('How to improve soil health?')" class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
                         🌍 Soil health
                     </button>
-                    <button onclick="sendAISuggestion('What are common crop diseases?')"
-                        class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
+                    <button onclick="sendAISuggestion('What are common crop diseases?')" class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
                         🦠 Crop diseases
                     </button>
-                    <button onclick="sendAISuggestion('Tips for water management')"
-                        class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
+                    <button onclick="sendAISuggestion('Tips for water management')" class="px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm hover:bg-purple-100 transition-colors">
                         💧 Water tips
                     </button>
                 </div>
             </div>
-
+            
             <!-- Input Area -->
             <div class="p-4 border-t bg-gray-50 rounded-b-2xl">
                 <form onsubmit="sendAIMessage(event)" class="flex gap-3">
-                    <button type="button" onclick="toggleVoiceInput()" id="voice-input-btn"
-                        class="p-3 bg-gray-200 text-gray-600 rounded-xl hover:bg-gray-300 transition-colors"
-                        title="Voice Input">
+                    <button type="button" onclick="toggleVoiceInput()" id="voice-input-btn" class="p-3 bg-gray-200 text-gray-600 rounded-xl hover:bg-gray-300 transition-colors" title="Voice Input">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
-                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
                         </svg>
                     </button>
-                    <input type="text" id="ai-chat-input" data-i18n="ask_anything"
-                        placeholder="Ask me anything about farming..."
-                        class="flex-1 p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none">
-                    <button type="submit" id="ai-send-btn"
-                        class="px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors font-medium"
-                        data-i18n="send">
+                    <input type="text" id="ai-chat-input" placeholder="Ask me anything about farming..." class="flex-1 p-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none">
+                    <button type="submit" id="ai-send-btn" class="px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors font-medium">
                         Send
                     </button>
                 </form>
@@ -1388,71 +1137,53 @@
                     <span class="text-2xl">🔬</span>
                     <h3 class="text-xl font-bold text-gray-900" data-i18n="disease_scanner">Plant Disease Scanner</h3>
                 </div>
-                <button onclick="closeModal('plant-disease-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <button onclick="closeModal('plant-disease-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
-
+            
             <!-- Upload Area -->
-            <div id="disease-upload-area"
-                class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-green-500 transition-colors cursor-pointer"
-                onclick="document.getElementById('disease-file-input').click()">
-                <input type="file" id="disease-file-input" accept="image/*" class="hidden"
-                    onchange="handleDiseaseImageSelect(event)">
+            <div id="disease-upload-area" class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-green-500 transition-colors cursor-pointer" onclick="document.getElementById('disease-file-input').click()">
+                <input type="file" id="disease-file-input" accept="image/*" class="hidden" onchange="handleDiseaseImageSelect(event)">
                 <div class="space-y-4">
                     <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
                         <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
                     </div>
                     <div>
-                        <p class="text-gray-700 font-medium" data-i18n="drop_leaf_image">Drop a leaf image here or click
-                            to upload</p>
-                        <p class="text-sm text-gray-500 mt-1" data-i18n="take_clear_photo">Take a clear photo of the
-                            affected plant leaf</p>
+                        <p class="text-gray-700 font-medium" data-i18n="drop_leaf_image">Drop a leaf image here or click to upload</p>
+                        <p class="text-sm text-gray-500 mt-1" data-i18n="take_clear_photo">Take a clear photo of the affected plant leaf</p>
                     </div>
                 </div>
             </div>
-
+            
             <!-- Camera Button -->
             <div class="flex gap-3 mt-4">
-                <button onclick="openDiseaseCamera()"
-                    class="flex-1 flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
+                <button onclick="openDiseaseCamera()" class="flex-1 flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
-                        </path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                     <span data-i18n="use_camera">Use Camera</span>
                 </button>
             </div>
-
+            
             <!-- Camera Preview -->
             <div id="disease-camera-container" class="hidden mt-4">
                 <video id="disease-camera-video" class="w-full rounded-xl" autoplay playsinline></video>
                 <div class="flex gap-3 mt-3">
-                    <button onclick="captureDiseaseImage()"
-                        class="flex-1 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 font-medium"
-                        data-i18n="capture">📸 Capture</button>
-                    <button onclick="closeDiseaseCamera()"
-                        class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 font-medium"
-                        data-i18n="cancel">Cancel</button>
+                        <button onclick="captureDiseaseImage()" class="flex-1 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 font-medium" data-i18n="capture">📸 Capture</button>
+                        <button onclick="closeDiseaseCamera()" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 font-medium" data-i18n="cancel">Cancel</button>
                 </div>
             </div>
-
+            
             <!-- Image Preview -->
             <div id="disease-image-preview" class="hidden mt-4">
                 <img id="disease-preview-img" class="w-full rounded-xl" src="" alt="Plant image">
-                <button onclick="analyzeDiseaseImage()" id="analyze-btn"
-                    class="w-full mt-3 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 font-medium"
-                    data-i18n="analyze_plant">
+                <button onclick="analyzeDiseaseImage()" id="analyze-btn" class="w-full mt-3 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 font-medium" data-i18n="analyze_plant">
                     🔍 Analyze Plant
                 </button>
             </div>
-
+            
             <!-- Results -->
             <div id="disease-results" class="hidden mt-4 space-y-4">
                 <!-- Results will be rendered here -->
@@ -1468,37 +1199,30 @@
                     <span class="text-2xl">🗺️</span>
                     <div>
                         <h3 class="text-xl font-bold text-gray-900" data-i18n="plot_mapper">Plot Mapper</h3>
-                        <p class="text-sm text-gray-500" data-i18n="draw_field_boundaries">Draw your field boundaries to
-                            get personalized recommendations</p>
+                        <p class="text-sm text-gray-500">Draw your field boundaries to get personalized recommendations</p>
                     </div>
                 </div>
-                <button onclick="closeModal('plot-modal')"
-                    class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                <button onclick="closeModal('plot-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
-
+            
             <!-- Map Container -->
             <div id="plot-map" class="flex-1 min-h-[400px]"></div>
-
+            
             <!-- Instructions & Actions -->
             <div class="p-4 border-t bg-gray-50 rounded-b-2xl">
                 <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                     <div class="text-sm text-gray-600">
                         <p class="font-medium text-gray-800" data-i18n="instructions">📍 Instructions:</p>
-                        <p data-i18n="plot_instructions">Use the drawing tools on the map to mark your field boundaries.
-                            Click to add points, close the shape to finish.</p>
+                        <p data-i18n="plot_instructions">Use the drawing tools on the map to mark your field boundaries. Click to add points, close the shape to finish.</p>
                     </div>
                     <div class="flex gap-3">
-                        <button onclick="clearPlotDrawing()"
-                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium"
-                            data-i18n="clear">Clear</button>
-                        <button onclick="analyzePlot()" id="analyze-plot-btn"
-                            class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium disabled:opacity-50"
-                            disabled data-i18n="get_recommendations">
+                        <button onclick="clearPlotDrawing()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium" data-i18n="clear">Clear</button>
+                        <button onclick="analyzePlot()" id="analyze-plot-btn" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium disabled:opacity-50" disabled data-i18n="get_recommendations">
                             🌱 Get Recommendations
                         </button>
                     </div>
                 </div>
-
+                
                 <!-- Plot Analysis Results -->
                 <div id="plot-analysis-results" class="hidden mt-4 p-4 bg-white rounded-xl border">
                     <!-- Results will be rendered here -->
@@ -1510,29 +1234,20 @@
     <!-- Floating Action Buttons -->
     <div class="fixed bottom-24 md:bottom-6 right-4 flex flex-col gap-3 z-40">
         <!-- Voice Assistant Button -->
-        <button onclick="toggleVoiceAssistant()" id="voice-fab"
-            class="w-14 h-14 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group"
-            title="Voice Assistant">
-            <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
-                </path>
+        <button onclick="toggleVoiceAssistant()" id="voice-fab" class="w-14 h-14 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group" title="Voice Assistant">
+            <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
             </svg>
             <span class="voice-pulse hidden absolute w-full h-full rounded-full bg-blue-400 animate-ping"></span>
         </button>
-
+        
         <!-- AI Chat Button -->
-        <button onclick="openModal('ai-chat-modal')" id="ai-fab"
-            class="w-14 h-14 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group"
-            title="AI Assistant">
+        <button onclick="openModal('ai-chat-modal')" id="ai-fab" class="w-14 h-14 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group" title="AI Assistant">
             <span class="text-2xl group-hover:scale-110 transition-transform">🤖</span>
         </button>
-
+        
         <!-- Disease Scanner Button -->
-        <button onclick="openModal('plant-disease-modal')" id="disease-fab"
-            class="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group"
-            title="Plant Disease Scanner">
+        <button onclick="openModal('plant-disease-modal')" id="disease-fab" class="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center group" title="Plant Disease Scanner">
             <span class="text-2xl group-hover:scale-110 transition-transform">🔬</span>
         </button>
     </div>
@@ -1540,33 +1255,29 @@
     <!-- Voice Assistant Overlay -->
     <div id="voice-overlay" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center">
         <div class="text-center text-white max-w-lg mx-auto px-4">
-            <div
-                class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center voice-listening-animation">
+            <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center voice-listening-animation">
                 <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
-                    </path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
                 </svg>
             </div>
             <p class="text-2xl font-medium mb-2" id="voice-status-text" data-i18n="listening">Listening...</p>
-            <p class="text-gray-400 mb-4" id="voice-transcript" data-i18n="speak_question">Speak your question</p>
-
+            <p class="text-gray-400 mb-4" id="voice-transcript">Speak your question</p>
+            
             <!-- Voice Command Hints -->
             <div class="mb-6 text-left bg-white/10 rounded-xl p-4">
-                <p class="text-sm font-medium text-blue-300 mb-2" data-i18n="try_saying">💡 Try saying:</p>
+                <p class="text-sm font-medium text-blue-300 mb-2">💡 Try saying:</p>
                 <div class="grid grid-cols-2 gap-2 text-sm text-gray-300">
-                    <div class="p-2 bg-white/5 rounded-lg" data-i18n="show_weather">"Show weather"</div>
+                    <div class="p-2 bg-white/5 rounded-lg">"Show weather"</div>
                     <div class="p-2 bg-white/5 rounded-lg">"Market prices"</div>
-                    <div class="p-2 bg-white/5 rounded-lg" data-i18n="what_to_grow">"What should I grow?"</div>
-                    <div class="p-2 bg-white/5 rounded-lg" data-i18n="check_disease">"Check disease"</div>
+                    <div class="p-2 bg-white/5 rounded-lg">"What should I grow?"</div>
+                    <div class="p-2 bg-white/5 rounded-lg">"Check disease"</div>
                     <div class="p-2 bg-white/5 rounded-lg">"Water calculator"</div>
                     <div class="p-2 bg-white/5 rounded-lg">"Government schemes"</div>
                 </div>
             </div>
-
+            
             <div class="flex gap-4 justify-center">
-                <select id="voice-language-select" onchange="changeVoiceLanguage(this.value)"
-                    class="bg-white/20 border border-white/30 rounded-lg px-4 py-2 text-white">
+                <select id="voice-language-select" onchange="changeVoiceLanguage(this.value)" class="bg-white/20 border border-white/30 rounded-lg px-4 py-2 text-white">
                     <option value="en-IN" class="text-gray-900">English</option>
                     <option value="hi-IN" class="text-gray-900">हिंदी</option>
                     <option value="kn-IN" class="text-gray-900">ಕನ್ನಡ</option>
@@ -1574,8 +1285,7 @@
                     <option value="ta-IN" class="text-gray-900">தமிழ்</option>
                     <option value="mr-IN" class="text-gray-900">मराठी</option>
                 </select>
-                <button onclick="stopVoiceAssistant()"
-                    class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium" data-i18n="stop">
+                <button onclick="stopVoiceAssistant()" class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium">
                     Stop
                 </button>
             </div>
@@ -1593,33 +1303,22 @@
         .voice-listening-animation {
             animation: voice-pulse 1.5s ease-in-out infinite;
         }
-
         @keyframes voice-pulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
-            }
-
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 0 0 20px rgba(59, 130, 246, 0);
-            }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); }
         }
-
+        
         /* Chat Message Styles */
         .ai-message-user {
             background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
             color: white;
             border-radius: 1rem 1rem 0 1rem;
         }
-
         .ai-message-assistant {
             background: #f3f4f6;
             border-radius: 1rem 1rem 1rem 0;
         }
-
+        
         /* Typing indicator */
         .typing-indicator span {
             width: 8px;
@@ -1630,36 +1329,16 @@
             margin: 0 2px;
             animation: typing-bounce 1.4s infinite ease-in-out;
         }
-
-        .typing-indicator span:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .typing-indicator span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-indicator span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes typing-bounce {
-
-            0%,
-            80%,
-            100% {
-                transform: translateY(0);
-            }
-
-            40% {
-                transform: translateY(-6px);
-            }
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
         }
-
+        
         /* FAB hover effects */
-        #voice-fab:hover,
-        #ai-fab:hover,
-        #disease-fab:hover {
+        #voice-fab:hover, #ai-fab:hover, #disease-fab:hover {
             transform: scale(1.1);
         }
     </style>
@@ -1670,5 +1349,4 @@
     </script>
     <script src="/static/js/main.js"></script>
 </body>
-
 </html>

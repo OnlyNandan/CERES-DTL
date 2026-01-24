@@ -528,7 +528,7 @@ class DiseaseDetector:
         except Exception as e:
             return {'error': str(e)}
     
-    def detect_disease_rule_based(self, image_data: bytes) -> Dict[str, Any]:
+    def detect_disease_rule_based(self, image_data: bytes, language: str = 'en') -> Dict[str, Any]:
         """Rule-based disease detection when model is not available"""
         colors = self.analyze_image_colors(image_data)
         
@@ -626,15 +626,23 @@ class DiseaseDetector:
         
         disease_info = DISEASE_DATABASE.get(top_disease, DISEASE_DATABASE['healthy'])
         
+        # Get localized fields
+        name_key = f'name_{language}' if language != 'en' else 'name'
+        symptoms_key = f'symptoms_{language}' if language != 'en' else 'symptoms'
+        treatment_key = f'treatment_{language}' if language != 'en' else 'treatment'
+        prevention_key = f'prevention_{language}' if language != 'en' else 'prevention'
+        
+        print(f"[DEBUG RULE-BASED] Language: {language}, symptoms_key: {symptoms_key}")
+        
         return {
             'success': True,
             'disease_key': top_disease,
-            'disease_name': disease_info['name'],
+            'disease_name': disease_info.get(name_key, disease_info['name']),
             'confidence': confidence,
             'severity': disease_info['severity'],
-            'symptoms': disease_info['symptoms'],
-            'treatment': disease_info['treatment'],
-            'prevention': disease_info['prevention'],
+            'symptoms': disease_info.get(symptoms_key, disease_info['symptoms']),
+            'treatment': disease_info.get(treatment_key, disease_info['treatment']),
+            'prevention': disease_info.get(prevention_key, disease_info['prevention']),
             'all_scores': scores,
             'method': 'rule_based',
             'color_analysis': colors
@@ -672,6 +680,13 @@ class DiseaseDetector:
                 treatment_key = f'treatment_{language}' if language != 'en' else 'treatment'
                 prevention_key = f'prevention_{language}' if language != 'en' else 'prevention'
                 
+                # DEBUG LOGGING
+                print(f"[DEBUG] Language: {language}")
+                print(f"[DEBUG] symptoms_key: {symptoms_key}")
+                print(f"[DEBUG] symptoms_kn exists: {'symptoms_kn' in disease_info}")
+                print(f"[DEBUG] disease_key: {disease_key}")
+                print(f"[DEBUG] Returning symptoms: {disease_info.get(symptoms_key, 'FALLBACK')[:50]}...")
+                
                 # Get top 3 predictions
                 top_3_idx = np.argsort(predictions[0])[-3:][::-1]
                 alternatives = []
@@ -698,7 +713,7 @@ class DiseaseDetector:
                 }
             else:
                 # Fallback to rule-based detection
-                return self.detect_disease_rule_based(image_data)
+                return self.detect_disease_rule_based(image_data, language)
                 
         except Exception as e:
             return {

@@ -35,7 +35,7 @@ os.makedirs(DATA_DIR, exist_ok=True)
 
 def generate_crop_recommendation_data(n_samples=3000):
     """Generate synthetic data for crop recommendation model"""
-    print("📊 Generating crop recommendation dataset...")
+    print("  Generating crop recommendation dataset...")
     
     np.random.seed(42)
     
@@ -108,8 +108,8 @@ def train_crop_recommendation_model():
         X_scaled, y_encoded, test_size=0.2, random_state=42, stratify=y_encoded
     )
     
-    print(f"📈 Training samples: {len(X_train)}")
-    print(f"📊 Test samples: {len(X_test)}")
+    print(f"  Training samples: {len(X_train)}")
+    print(f"  Test samples: {len(X_test)}")
     print(f"🌿 Number of crops: {len(label_encoder.classes_)}")
     
     # Hyperparameter tuning
@@ -126,13 +126,13 @@ def train_crop_recommendation_model():
     grid_search.fit(X_train, y_train)
     
     best_model = grid_search.best_estimator_
-    print(f"✅ Best parameters: {grid_search.best_params_}")
+    print(f"  Best parameters: {grid_search.best_params_}")
     
     # Evaluate
     y_pred = best_model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
     
-    print(f"\n📊 Model Performance:")
+    print(f"\n  Model Performance:")
     print(f"   Accuracy: {accuracy * 100:.2f}%")
     
     # Cross-validation
@@ -142,7 +142,7 @@ def train_crop_recommendation_model():
     # Feature importance
     feature_names = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']
     importance = best_model.feature_importances_
-    print(f"\n📊 Feature Importance:")
+    print(f"\n  Feature Importance:")
     for name, imp in sorted(zip(feature_names, importance), key=lambda x: x[1], reverse=True):
         print(f"   {name}: {imp*100:.1f}%")
     
@@ -151,14 +151,14 @@ def train_crop_recommendation_model():
     joblib.dump(scaler, os.path.join(MODELS_DIR, 'scaler.pkl'))
     joblib.dump(label_encoder, os.path.join(MODELS_DIR, 'label_encoder.pkl'))
     
-    print(f"\n✅ Models saved to {MODELS_DIR}")
+    print(f"\n  Models saved to {MODELS_DIR}")
     return accuracy
 
 
 def train_yield_prediction_model():
     """Train yield prediction model using GradientBoosting"""
     print("\n" + "="*60)
-    print("📈 TRAINING YIELD PREDICTION MODEL")
+    print("  TRAINING YIELD PREDICTION MODEL")
     print("="*60)
     
     # Try to load real dataset
@@ -168,10 +168,10 @@ def train_yield_prediction_model():
         print(f"📁 Loading dataset from {dataset_path}")
         df = pd.read_csv(dataset_path)
     else:
-        print("📊 Generating synthetic yield dataset...")
+        print("  Generating synthetic yield dataset...")
         df = generate_yield_data(1500)
     
-    print(f"📈 Dataset size: {len(df)} records")
+    print(f"  Dataset size: {len(df)} records")
     print(f"🌾 Crops: {df['crop'].nunique()}")
     
     # Feature engineering
@@ -218,7 +218,7 @@ def train_yield_prediction_model():
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
     
-    print(f"\n📊 Model Performance:")
+    print(f"\n  Model Performance:")
     print(f"   R² Score: {r2:.4f}")
     print(f"   RMSE: {rmse:.2f} kg/ha")
     print(f"   MAE: {mae:.2f} kg/ha")
@@ -226,7 +226,7 @@ def train_yield_prediction_model():
     print(f"   Error %: {(mae/y.mean())*100:.1f}%")
     
     # Feature importance
-    print(f"\n📊 Feature Importance:")
+    print(f"\n  Feature Importance:")
     for name, imp in sorted(zip(features, model.feature_importances_), 
                             key=lambda x: x[1], reverse=True)[:8]:
         print(f"   {name}: {imp*100:.1f}%")
@@ -240,7 +240,7 @@ def train_yield_prediction_model():
         'irrigation': le_irrigation
     }, os.path.join(MODELS_DIR, 'yield_encoders.pkl'))
     
-    print(f"\n✅ Yield model saved to {MODELS_DIR}")
+    print(f"\n  Yield model saved to {MODELS_DIR}")
     return r2
 
 
@@ -338,10 +338,10 @@ def train_disease_risk_model():
         print(f"📁 Loading dataset from {dataset_path}")
         df = pd.read_csv(dataset_path)
     else:
-        print("📊 Generating synthetic disease risk dataset...")
+        print("  Generating synthetic disease risk dataset...")
         df = generate_disease_data(1000)
     
-    print(f"📈 Dataset size: {len(df)} records")
+    print(f"  Dataset size: {len(df)} records")
     print(f"🦠 Diseases: {df['disease'].nunique()}")
     
     # Feature engineering
@@ -383,7 +383,7 @@ def train_disease_risk_model():
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
     
-    print(f"\n📊 Model Performance:")
+    print(f"\n  Model Performance:")
     print(f"   R² Score: {r2:.4f}")
     print(f"   RMSE: {rmse:.2f}")
     print(f"   MAE: {mae:.2f}")
@@ -396,7 +396,7 @@ def train_disease_risk_model():
         'disease': le_disease
     }, os.path.join(MODELS_DIR, 'disease_encoders.pkl'))
     
-    print(f"\n✅ Disease risk model saved to {MODELS_DIR}")
+    print(f"\n  Disease risk model saved to {MODELS_DIR}")
     return r2
 
 
@@ -477,7 +477,7 @@ def generate_disease_data(n_samples):
 def train_soil_health_model():
     """Train soil health index prediction model"""
     print("\n" + "="*60)
-    print("🌱 TRAINING SOIL HEALTH MODEL")
+    print("  TRAINING SOIL HEALTH MODEL")
     print("="*60)
     
     # Try to load real dataset
@@ -487,10 +487,10 @@ def train_soil_health_model():
         print(f"📁 Loading dataset from {dataset_path}")
         df = pd.read_csv(dataset_path)
     else:
-        print("📊 Generating synthetic soil health dataset...")
+        print("  Generating synthetic soil health dataset...")
         df = generate_soil_health_data(800)
     
-    print(f"📈 Dataset size: {len(df)} records")
+    print(f"  Dataset size: {len(df)} records")
     
     # Feature engineering
     le_soil = LabelEncoder()
@@ -531,13 +531,13 @@ def train_soil_health_model():
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
     
-    print(f"\n📊 Model Performance:")
+    print(f"\n  Model Performance:")
     print(f"   R² Score: {r2:.4f}")
     print(f"   RMSE: {rmse:.2f}")
     print(f"   MAE: {mae:.2f}")
     
     # Feature importance
-    print(f"\n📊 Feature Importance:")
+    print(f"\n  Feature Importance:")
     for name, imp in sorted(zip(features, model.feature_importances_), 
                             key=lambda x: x[1], reverse=True):
         print(f"   {name}: {imp*100:.1f}%")
@@ -550,7 +550,7 @@ def train_soil_health_model():
         'texture': le_texture
     }, os.path.join(MODELS_DIR, 'soil_health_encoders.pkl'))
     
-    print(f"\n✅ Soil health model saved to {MODELS_DIR}")
+    print(f"\n  Soil health model saved to {MODELS_DIR}")
     return r2
 
 
@@ -646,12 +646,12 @@ def main():
     
     # Summary
     print("\n" + "="*60)
-    print("📊 TRAINING SUMMARY")
+    print("  TRAINING SUMMARY")
     print("="*60)
-    print(f"✅ Crop Recommendation Accuracy: {results['crop_recommendation']*100:.2f}%")
-    print(f"✅ Yield Prediction R²: {results['yield_prediction']:.4f}")
-    print(f"✅ Disease Risk Prediction R²: {results['disease_risk']:.4f}")
-    print(f"✅ Soil Health Prediction R²: {results['soil_health']:.4f}")
+    print(f"  Crop Recommendation Accuracy: {results['crop_recommendation']*100:.2f}%")
+    print(f"  Yield Prediction R²: {results['yield_prediction']:.4f}")
+    print(f"  Disease Risk Prediction R²: {results['disease_risk']:.4f}")
+    print(f"  Soil Health Prediction R²: {results['soil_health']:.4f}")
     print("\n🎉 All models trained and saved successfully!")
     print(f"📁 Models location: {MODELS_DIR}")
 
