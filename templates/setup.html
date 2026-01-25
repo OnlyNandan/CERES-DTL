@@ -656,10 +656,16 @@
 
                                 if (data.state) {
                                     const stateSelect = document.getElementById('state-select');
+                                    // Try exact match first, then partial match
+                                    let matched = false;
                                     for (let i = 0; i < stateSelect.options.length; i++) {
-                                        if (stateSelect.options[i].value.toLowerCase().includes(data.state.toLowerCase()) ||
-                                            data.state.toLowerCase().includes(stateSelect.options[i].value.toLowerCase())) {
+                                        const optionValue = stateSelect.options[i].value.toLowerCase();
+                                        const stateLower = data.state.toLowerCase();
+                                        if (optionValue === stateLower ||
+                                            optionValue.includes(stateLower) ||
+                                            stateLower.includes(optionValue)) {
                                             stateSelect.selectedIndex = i;
+                                            matched = true;
                                             break;
                                         }
                                     }
@@ -716,10 +722,7 @@
 
         function selectSoil(soil) {
             selectedSoil = soil;
-            document.querySelectorAll('.soil-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            document.querySelector(`[data-soil="${soil}"]`).classList.add('selected');
+            // Enable the next button
             document.getElementById('soil-next-btn').disabled = false;
         }
 

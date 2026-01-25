@@ -908,7 +908,15 @@ class CeresApp {
         // Update crop image/emoji
         const cropImageEl = document.getElementById('crop-image');
         if (cropImageEl) {
-            cropImageEl.textContent = getCropEmoji(data.recommended_crop);
+            const emoji = getCropEmoji(data.recommended_crop);
+            // Check if it's an image path or an emoji
+            if (emoji && emoji.startsWith('/static/')) {
+                // It's an image path, create an img element
+                cropImageEl.innerHTML = `<img src="${emoji}" alt="${data.recommended_crop}" class="w-full h-full object-cover rounded-full">`;
+            } else {
+                // It's an emoji or text
+                cropImageEl.textContent = emoji || '🌾';
+            }
         }
 
         const confidenceBar = document.getElementById('confidence-bar');
@@ -926,9 +934,20 @@ class CeresApp {
         data.top_recommendations.slice(1, 4).forEach((rec, index) => {
             const recEl = document.createElement('div');
             recEl.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg';
+
+            const emoji = getCropEmoji(rec.crop);
+            let emojiHtml = '';
+            if (emoji && emoji.startsWith('/static/')) {
+                // It's an image path
+                emojiHtml = `<img src="${emoji}" alt="${rec.crop}" class="w-8 h-8 object-cover rounded-full">`;
+            } else {
+                // It's an emoji or text
+                emojiHtml = `<span class="text-2xl">${emoji || '🌾'}</span>`;
+            }
+
             recEl.innerHTML = `
                 <div class="flex items-center gap-2">
-                    <span class="text-2xl">${getCropEmoji(rec.crop)}</span>
+                    ${emojiHtml}
                     <span class="font-medium text-gray-700">${rec.crop_translated || this.getCropTranslation(rec.crop)}</span>
                 </div>
                 <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">${rec.confidence.toFixed(0)}%</span>
