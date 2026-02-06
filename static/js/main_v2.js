@@ -2808,7 +2808,8 @@ function openAIChat() {
     openModal('ai-chat-modal');
 }
 
-function sendAIMessage() {
+function sendAIMessage(event) {
+    event.preventDefault();
     const input = document.getElementById('ai-chat-input');
     if (input && input.value.trim()) {
         aiChat.sendMessage(input.value.trim());
